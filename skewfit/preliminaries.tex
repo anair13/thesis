@@ -1,0 +1,34 @@
+To ensure that an unsupervised reinforcement learning agent learns to reach all possible states in a controllable way, we maximize the mutual information between the state $\SF$ and the goal $\G$, $I(\SF; \G)$, as stated in \Eqref{eq:hg-hgs}. This section discusses how to optimize \Eqref{eq:hg-hgs} by splitting the optimization into two parts: minimizing $\gH(\G \mid \SF)$ and maximizing $\gH(\G)$.
+
+\subsection{Minimizing $\gH(\G \mid \SF)$: Goal-Conditioned Reinforcement Learning}
+Standard RL considers a Markov decision process (MDP), which has a state space $\Ss$, action space $\As$, and unknown dynamics $\dyn: \Ss \times \Ss \times \As \mapsto [0, +\infty)$.
+Goal-conditioned RL also includes a goal space $\Gs$. For simplicity, we will assume in our derivation that the goal space matches the state space, such that $\Gs = \Ss$, though the approach extends trivially to the case where $\Gs$ is a hand-specified subset of $\Ss$, such as the global XY position of a robot.
+A goal-conditioned policy $\pi(\at \mid \st, \g)$ maps a state $\st \in \Ss$ and goal $\g \in \Ss$ to a distribution over actions $\at \in \As$, and its objective is to reach the goal, i.e., to make the current state equal to the goal.
+
+Goal-reaching can be formulated as minimizing $\gH(\G \mid \SF)$, and many practical goal-reaching algorithms~\citep{kaelbling1993goals,lillicrap2015continuous, schaul2015uva, andrychowicz2017her, nair2018rig, pong2018tdm,florensa2018selfsupervised} can be viewed as approximations to this objective by observing that the optimal goal-conditioned policy will deterministically reach the goal, resulting in a conditional entropy of zero: $\gH(\G \mid \SF) = 0$.
+See \autoref{sec:analysis-appendix} for more details.
+Our method may thus be used in conjunction with any of these prior goal-conditioned RL methods in order to jointly minimize $\gH(\G \mid \SF)$ and maximize $\gH(\G)$.
+
+\subsection{Maximizing $\gH(\G)$: Setting Diverse Goals}\label{sec:prelim-max-ent}
+We now turn to the problem of setting diverse goals or, mathematically, maximizing the entropy of the goal distribution $\gH(\G)$.
+Let $\U$ be the uniform distribution over $\Imgs$, where we assume $\Imgs$ has finite volume so that the uniform distribution is well-defined.
+Let $\pg$ be the goal distribution from which goals $\G$ are sampled, parameterized by $\pgparam$.
+Our goal is to maximize the entropy of $\pg$, which we write as $\gH(\G)$.
+Since the maximum entropy distribution over $\Imgs$ is the uniform distribution $\U$, maximizing $\gH(\G)$ may seem as simple as choosing the uniform distribution to be our goal distribution: $\pg = \U$.
+However, this requires knowing the uniform distribution over valid states, which may be difficult to obtain when $\Imgs$ is a subset of $\FullSpace$, for some $\FullSpaceDim$.
+For example, if the states correspond to images viewed through a robot's camera, $\Imgs$ corresponds to the (unknown) set of valid images of the robot's environment, while $\FullSpace$ corresponds to all possible arrays of pixel values of a particular size.
+In such environments, sampling from the uniform distribution $\FullSpace$ is unlikely to correspond to a valid image of the real world.
+Sampling uniformly from $\Imgs$ would require knowing the set of all possible valid images, which we assume the agent does not know when starting to explore the environment.
+
+While we cannot sample arbitrary states from $\Imgs$, we can sample states by performing goal-directed exploration.
+To derive and analyze our method, we introduce a simple model of this process:
+a goal $\G \sim \pg$ is sampled from the goal distribution $\pg$, and
+then the goal-conditioned policy $\pi$ attempts to achieve this goal, which results in a distribution of terminal states $\SF \in \Imgs$.
+We abstract this entire process by writing the resulting marginal distribution over $\SF$ as \mbox{$\pstate (\SF) \triangleq \int_\mathcal{G} \pg(\G) p(\SF \mid \G) d\G$}, where the subscript $\pgparam$ indicates that the marginal $\pstate$ depends indirectly on $\pg$ via the goal-conditioned policy $\pi$.
+We assume that $\pstate$ has full support, which can be accomplished with an epsilon-greedy goal reaching policy in a communicating MDP.
+We also assume that the entropy of the resulting state distribution $\gH(\pstate)$ is no less than the entropy of the goal distribution $\gH(\pg)$.
+Without this assumption, a policy could ignore the goal and stay in a single state, no matter how diverse and realistic the goals are.
+\footnote{
+Note that this assumption does \textbf{not} require that the entropy of $\pstate$ is strictly larger than the entropy of the goal distribution, $\pg$.
+}
+This simplified model allows us to analyze the behavior of our goal-setting scheme separately from any specific goal-reaching algorithm. We will however show in Section~\ref{sec:experiments} that we can instantiate this approach into a practical algorithm that jointly learns the goal-reaching policy. In summary, our goal is to acquire a maximum-entropy goal distribution $\pg$ over valid states $\Imgs$, while only having access to state samples from $\pstate$.

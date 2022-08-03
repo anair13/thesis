@@ -1,0 +1,15 @@
+Many prior methods in the goal-conditioned reinforcement learning literature focus on training goal-conditioned policies and assume that a goal distribution is available to sample from during exploration~\citep{kaelbling1993goals,schaul2015uva,andrychowicz2017her,pong2018tdm}, or use a heuristic to design a non-parametric~\citep{colas2018gep,wardefarley2018discern,florensa2018selfsupervised} or parametric~\citep{pere2018unsupervised,nair2018rig} goal distribution based on previously visited states.
+These methods are largely complementary to our work:
+rather than proposing a better method for training goal-reaching policies, we propose a principled method for maximizing the entropy of a goal sampling distribution, $\gH(\G)$, such that these policies cover a wide range of states.
+
+Our method learns without any task rewards, directly acquiring a policy that can be reused to reach user-specified goals.
+This stands in contrast to exploration methods that modify the reward based on state visitation frequency~\citep{bellemare2016unifying,ostrovski2017count,tang2017hashtag,chentanez2005intrinsically,lopes2012exploration,stadie2016exploration,pathak2017curiosity,burda2018exploration,burda2018large,mohamed2015variational,tang2017hashtag,fu2017ex2}.
+While these methods can also be used without a task reward, they provide no mechanism for distilling the knowledge gained from visiting diverse states into flexible policies that can be applied to accomplish new goals at test-time: their policies visit novel states, and they quickly forget about them as other states become more novel.
+Similarly, methods that provably maximize state entropy without using goal-directed exploration~\citep{hazan2019provably} or methods that define new rewards to capture measures of intrinsic motivation~\citep{mohamed2015variational} and reachability~\citep{savinov2018episodic} do not produce reusable policies.
+
+Other prior methods extract reusable skills in the form of latent-variable-conditioned policies, where
+latent variables are interpreted as options~\citep{sutton1999between} or abstract skills~\citep{hausman2018skillembedding,gupta2018structuredexploration,eysenbach2018diayn,gupta2018unsupervised,florensa2017stochastic}.
+The resulting skills are diverse, but have no grounded interpretation, while \METHOD policies can be used immediately after unsupervised training to reach diverse user-specified goals.
+
+Some prior methods propose to choose goals based on heuristics such as learning progress~\citep{baranes2012, veeriah2018many, colas2018curious}, how off-policy the goal is~\citep{nachum2018hiro}, level of difficulty~\citep{held2018goalgan}, or likelihood ranking~\citep{zhao2019rankweight}.
+In contrast, our approach provides a principled framework for optimizing a concrete and well-motivated exploration objective, can provably maximize this objective under regularity assumptions, and empirically outperforms many of these prior work (see \autoref{sec:experiments}).

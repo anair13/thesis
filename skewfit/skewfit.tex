@@ -1,0 +1,128 @@
+% \documentclass{article} % For LaTeX2e
+% % if you need to pass options to natbib, use, e.g.:
+% %\PassOptionsToPackage{numbers, compress}{natbib}
+
+% \usepackage[utf8]{inputenc} % allow utf-8 input
+% \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+% \usepackage{hyperref}       % hyperlinks
+% \usepackage{url}            % simple URL typesetting
+% \usepackage{booktabs}       % professional-quality tables
+% \usepackage{amsfonts}       % blackboard math symbols
+% \usepackage{nicefrac}       % compact symbols for 1/2, etc.
+% \usepackage{microtype}      % microtypography
+% \usepackage{graphicx}
+% \usepackage{subcaption}
+
+% % hyperref makes hyperlinks in the resulting PDF.
+% % If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% % please comment out the following usepackage line and replace
+% % \usepackage{icml2020} with \usepackage[nohyperref]{icml2020} above.
+% \usepackage{hyperref}
+
+% % Attempt to make hyperref and algorithmic work together better:
+% \newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+
+% % Use the following line for the initial blind version submitted for review:
+% % \usepackage{icml2020}
+
+% % If accepted, instead use the following line for the camera-ready submission:
+% \usepackage[accepted]{icml2020}
+
+% \icmltitlerunning{\METHOD: State-Covering Self-Supervised Reinforcement Learning}
+
+% \input{skewfit/math_commands.tex}
+% \input{skewfit/paper_specific_commands_and_packages.tex}
+%  \PassOptionsToPackage{numbers, compress}{natbib}
+
+
+% \begin{document}
+% \twocolumn[
+% \icmltitle{\METHOD: State-Covering Self-Supervised\\Reinforcement Learning}
+% % It is OKAY to include author information, even for blind
+% % submissions: the style file will automatically remove it for you
+% % unless you've provided the [accepted] option to the icml2020
+% % package.
+
+% % List of affiliations: The first argument should be a (short)
+% % identifier you will use later to specify author affiliations
+% % Academic affiliations should list Department, University, City, Region, Country
+% % Industry affiliations should list Company, City, Region, Country
+
+% % You can specify symbols, otherwise they are numbered in order.
+% % Ideally, you should not use this facility. Affiliations will be numbered
+% % in order of appearance and this is the preferred way.
+% \icmlsetsymbol{equal}{*}
+
+% \begin{icmlauthorlist}
+% \icmlauthor{Vitchyr H. Pong}{equal,berk}
+% \icmlauthor{Murtaza Dalal}{equal,berk}
+% \icmlauthor{Steven Lin}{equal,berk}
+% \icmlauthor{Ashvin Nair}{berk}
+% \icmlauthor{Shikhar Bahl}{berk}
+% \icmlauthor{Sergey Levine}{berk}
+% \end{icmlauthorlist}
+
+% \icmlaffiliation{berk}{University of California, Berkeley}
+
+% \icmlcorrespondingauthor{Vitchyr H. Pong}{vitchyr@eecs.berkeley.edu}
+
+% % You may provide any keywords that you
+% % find helpful for describing your paper; these are used to populate
+% % the "keywords" metadata in the PDF but will not be shown in the document
+% \icmlkeywords{deep reinforcement learning, goal-conditioned reinforcement learning, goals, exploration, goal-directed exploration}
+
+% \vskip 0.3in
+% ]
+% \printAffiliationsAndNotice{\icmlEqualContribution}
+
+% \begin{abstract}
+% Autonomous agents that must exhibit flexible and broad capabilities will need to be equipped with large repertoires of skills.
+% Defining each skill with a manually-designed reward function limits this repertoire and imposes a manual engineering burden.
+% Self-supervised agents that set their own goals can automate this process, but designing appropriate goal setting objectives can be difficult, and often involves heuristic design decisions.
+% In this paper, we propose a formal exploration objective for goal-reaching policies that maximizes state coverage.
+% We show that this objective is equivalent to maximizing goal reaching performance together with the entropy of the goal distribution, where goals correspond to full state observations.
+% To instantiate this principle, we present an algorithm called \METHOD for learning a maximum-entropy goal distributions and prove that, under regularity conditions, \METHOD converges to a uniform distribution over the set of valid states, even when we do not know this set beforehand.
+% Our experiments show that combining \METHOD for learning goal distributions with existing goal-reaching methods outperforms a variety of prior methods on open-sourced visual goal-reaching tasks and that \METHOD enables a real-world robot to learn to open a door, entirely from scratch, from pixels, and without any manually-designed reward function.
+% \end{abstract}
+
+\section{Introduction}\label{sec:introduction}
+\input{skewfit/introduction.tex}
+
+\setlength{\textfloatsep}{0.5\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
+\setlength{\dbltextfloatsep}{0.5\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
+
+\section{Problem Formulation}\label{sec:background}
+\input{skewfit/preliminaries.tex}
+
+\section{\METHOD: Learning a Maximum Entropy Goal Distribution}
+\label{sec:method}
+\input{skewfit/method.tex}
+
+\section{Training Goal-Conditioned Policies with \METHOD}
+\label{sec:train-policy}
+\input{skewfit/training_policy.tex}
+
+\section{Related Work}\label{sec:related_work}
+\input{skewfit/related_work.tex}
+
+\section{Experiments}\label{sec:experiments}
+\input{skewfit/experiments.tex}
+
+\section{Conclusion}\label{sec:conclusion}
+\input{skewfit/conclusion.tex}
+
+% \section{Acknowledgement}
+% This research was supported by Berkeley DeepDrive, Huawei, ARL DCIST CRA W911NF-17-2-0181, NSF IIS-1651843, and the Office of Naval Research, as well as Amazon, Google, and NVIDIA.
+% We thank Aviral Kumar, Carlos Florensa, Aurick Zhou, Nilesh Tripuraneni, Vickie Ye, Dibya Ghosh, Coline Devin, Rowan McAllister, John D. Co-Reyes, various members of the Berkeley Robotic AI \& Learning (RAIL) lab, and anonymous reviewers for their insightful discussions and feedback.
+
+% {\small
+% \bibliographystyle{corlabbrvnat}
+% \bibliography{main.bib}
+% }
+
+% \clearpage
+% \newpage
+% \input{skewfit/appendix.tex}
+
+% \end{document}

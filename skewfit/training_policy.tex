@@ -1,0 +1,33 @@
+Thus far, we have presented \METHOD assuming that we have access to a goal-reaching policy, allowing us to separately analyze how we can maximize $\HG$.
+However, in practice we do not have access to such a policy, and this section discusses how we concurrently train a goal-reaching policy.
+
+Maximizing $I(\SF; \G)$ can be done by simultaneously performing \METHOD and training a goal-conditioned policy to minimize $\HGS$, or, equivalently, maximize $-\HGS$.
+Maximizing $-\HGS$ requires computing the density $\log p(\G \mid \SF)$, which may be difficult to compute without strong modeling assumptions.
+However, for any distribution $q$, the following lower bound on $-\HGS$:
+\begin{align}\nonumber
+-\HGS
+    &= \E_{(\G, \SF) \sim q}\left[
+        \log q(\G \mid \SF)
+    \right]
++ \kld{p}{q}
+\\\nonumber
+&
+    \geq \E_{(\G, \SF) \sim q}\left[
+        \log q(\G \mid \SF)
+    \right],
+\end{align}
+where $\KL$ denotes Kullback–Leibler divergence as discussed by \citet{barber2004information}.
+Thus, to minimize $\HGS$, we train a policy to maximize the reward
+\begin{align}\nonumber
+    r(\SF, \G) = \log q(\G \mid \SF).
+\end{align}
+
+The RL algorithm we use is reinforcement learning with imagined goals (RIG)~\citep{nair2018rig}, though in principle any goal-conditioned method could be used.
+RIG is an efficient off-policy goal-conditioned method that solves vision-based RL problems in a learned latent space.
+In particular, RIG fits a $\beta$-VAE~\citep{higgins2016beta} and uses it to encode observations and goals into a latent space, which it uses as the state representation.
+RIG also uses the $\beta$-VAE to compute rewards, $\log q(\G \mid \SF)$.
+Unlike RIG, we use the goal distribution from \METHOD to sample goals for exploration and for relabeling goals during training~\citep{andrychowicz2017her}.
+Since RIG already trains a generative model over states, we reuse this $\beta$-VAE for the generative model $\pg$ of \METHOD.
+To make the most use of the data, we train $\pg$ on all visited state rather than only the terminal states, which we found to work well in practice.
+To prevent the estimated state likelihoods from collapsing to zero, we model the posterior of the $\beta$-VAE as a multivariate Gaussian distribution with a fixed variance and only learn the mean.
+We summarize RIG and provide details for how we combine \METHOD and RIG in \autoref{sec:rig-and-full-method} and describe how we estimate the likelihoods given the $\beta$-VAE in \autoref{sec:likelihood-estimation-vae}.
