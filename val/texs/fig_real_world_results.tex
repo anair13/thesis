@@ -1,41 +1,27 @@
+
+
+
+
 \begin{figure*}[t]
-    \renewcommand{\arraystretch}{1.5}
-    \begin{subfigure}[t]{0.6\textwidth}
-        \raisebox{2.1cm}{
-        
-        \begin{tabular}{ l||m{2.8cm}|m{2.5cm}  }
-            \centering
-            Task & VAL (Ours) \; \; \; \; Offline $\rightarrow$ Online & CCRIG  \; \; \; \; \; \; Offline $\rightarrow$ Online \\
+\tikz{
+\node[inner sep=0pt] (A) {\resizebox{.6\textwidth}{!}{\small\begin{tabular}{ l||m{2.99cm}|m{2.95cm}  }
+            Task & VAL (Ours) \; \; \; \; Offline $\rightarrow$ Online & CCRIG  \; \;\;\; \; \; \; \; Offline $\rightarrow$ Online \\
             \hline
             (1) Pickup shoe & $12.5\%$ $\rightarrow$ $\textbf{50\%}$ & $0\%$ $\rightarrow$ $16.6\%$ \\
             (2) Drawer closing & $25\%$ $\rightarrow$ $\textbf{100\%}$ & $0\%$ $\rightarrow$ $12.5\%$ \\
             (3) Drawer opening & $62.5\%$ $\rightarrow$ $\textbf{100\%}$ & $0\%$ $\rightarrow$ $0\%$ \\
             (4) Place object in tray & $25\%$ $\rightarrow$ $\textbf{75\%}$ & $0\%$ $\rightarrow$ $0\%$ \\
             (5) Lid on pot & $37.5\%$ $\rightarrow$ $\textbf{87.5\%}$ & $0\%$ $\rightarrow$ $0\%$ \\
-        \end{tabular}
-        }
-    \end{subfigure}
-    \begin{subfigure}[t]{0.05\textwidth}
-        \vspace{-3.3cm}
-        (1)
-        \vspace{0.3cm}
-        
-        (2)
-        \vspace{0.3cm}
-        
-        (3)
-        \vspace{0.3cm}
-        
-        (4)
-        \vspace{0.3cm}
-        
-        (5)
-    \end{subfigure}
-    \begin{subfigure}[t]{0.34\textwidth}
-        \includegraphics[width=0.99\textwidth]{val/imgs/fig_rollouts_v3.pdf}
-    \end{subfigure}
-    
-    \caption{Real-world results. Left, success rates per method for the five tasks tested. We report the offline performance, followed by the performance after five minutes of online fine-tuning. With VAL, we see reasonable initial offline performance followed by significant improvement on all tasks. Meanwhile CCRIG fails to succeed any of the tasks. Right, film strips of VAL during training (left, with decoded affordance proposals) and testing (right, with goal images) are visualized. Videos are available at \url{https://sites.google.com/view/val-rl}}
+        \end{tabular}}};
+\node[right=10mm of A] (B)
+{\includegraphics[width=0.32\textwidth]{val/imgs/fig_rollouts_v3.pdf}};
+\node[left, yshift=-1.35cm] (1) at (B.north west) {\footnotesize (1)};
+\node[below=0mm of 1] (2)  {\footnotesize (2)};
+\node[below=0mm of 2] (3)  {\footnotesize (3)};
+\node[below=0mm of 3] (4)  {\footnotesize (4)};
+\node[below=0mm of 4] (5)  {\footnotesize (5)};
+
+}
+ \caption{Real-world results. Left, success rates per method for the five tasks tested. We report the offline performance, followed by the performance after five minutes of online fine-tuning. With VAL, we see reasonable initial offline performance followed by significant improvement on all tasks. Meanwhile CCRIG fails to succeed any of the tasks. Right, film strips of VAL during training (left, with decoded affordance proposals) and testing (right, with goal images) are visualized. Videos are available at \url{https://sites.google.com/view/val-rl}}
     \label{fig:real-world-results}
-    % \vspace{-0.5cm}
 \end{figure*}
