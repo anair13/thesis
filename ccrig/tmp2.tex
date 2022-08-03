@@ -1,0 +1,23 @@
+
+% To be able to learn skills in visually diverse environments in a self-supervised way, we extend reinforcement learning with imagined goals (RIG), described in Section \ref{sec:rig}.
+% In RIG, a self-supervised policy is trained to reach visually indicated goals by using a VAE for state representation, goal proposals, and a distance metric that can be used as a goal reaching reward function.
+We propose to use our context-conditioned VAE in the RIG framework to learn policies over environments with visual diversity, where each episode might involve interacting with a different scene and different objects.
+We first collect a dataset of trajectories $\mathcal D = \{\tau^{(i)}\}$ using a random policy. We then train the CC-VAE, as detailed in Section~\ref{sec:ccvae}. We condition on the first image $s_0$ of each trajectory $\tau^{(i)}$ during training.
+Let $\bar{z} = (z, z_c)$ denote the concatenated context vector,
+% $\begin{bmatrix}z \\ z_c\end{bmatrix}$
+and let $\hat{\bar{z}} \leftarrow \mu(s, s_0)$ denote the mean of $q_\phi(z|s, s_0)$ from the CC-VAE. We can then use $\bar{z}$ in RIG by encoding observations with \mbox{$\hat{z} \leftarrow \mu(s, s_0)$}.
+We train the goal-conditioned policy $\pi(\hat{\bar{z}}, \hat{\bar{z}}_g)$ and a goal-conditioned Q-function $Q(\hat{\bar{z}}, \hat{\bar{z}}_g)$ based on this encoding.
+%%SL.10.7: I found the above paragraph pretty hard to follow. Is it describing the VAE training procedure, or is it walking through the pseodocode, or something else? It kind of reads as though parts of the text were deleted (perhaps to save on space), but as a result it's quite indecipherable. Maybe take a few more passes over the above paragraph to make sure it's easier to read.
+
+To collect data, we sample a latent goal for each rollout from the prior $z_g \sim N(0, I)$, as in RIG. For every observation $s_t$, we compute the mean encoding $\hat{\bar{z}} \leftarrow \mu(s_t, s_0)$. We then obtain a rollout of the policy by executing $\pi(\hat{\bar{z}}, \hat{\bar{z}}_g)$. The reward at each timestep is the latent distance $|| \mu(s_t, s_0) - \hat{\bar{z}}_g||$.
+% GB.06.16: Stopped here
+
+The policy and Q-function can be trained with any off-policy reinforcement learning algorithm. We use TD3 in our implementation \cite{fujimoto2018td3}. Our policy and Q-function are goal-conditioned, and we take advantage of being able to relabel the goals for each transition to improve sample efficiency \cite{andrychowicz2017her, nair2018rig, pong2019skewfit}. When relabeling a goal $\bar{z}_g$ with a random goal from the environment, the context-conditioning is still preserved. That is, if $z_g' \sim N(0, 1)$ is the new sampled goal, we use $\bar{z}_g' = (z_g', z_c)$. This ensures that the relabeled goal is compatible with the scene for each transition.
+
+After training, we can use the learned policy $\pi$ to reach a visually indicated goal. 
+Given a goal image $s_g$, we encode it into a latent goal $z_g = \mu(s_g, s_0)$. 
+Then, we execute the policy with the latent goal $\bar{z}_g$, just as during the training phase.
+The full method is summarized in Algorithm \ref{alg:tbd}.
+
+%%SL.7.5: Overall, it feels like the algorithm description is very terse right now, and you'll be left with less than a page of description for the full technical method. Perhaps a more in-depth explanation of how the method works would be suitable.
+%%AVN.7.7 Expanded the method in full detail but I feel like it may have got a bit confusing, please let me know if you have suggestions on how to simplify it (or what to expand on)

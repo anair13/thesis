@@ -1,0 +1,47 @@
+In this chapter we define and formalize the meta-learning problem.
+Broadly defined, a meta-learning agent is an agent whose performance at a task improves not only with experience, but also with the number of \emph{tasks} being learned~\citep{thrun1998learning}. 
+A task $\task$ can be any decision-making problem, from predicting the category of an object in an image to controlling an autonomous vehicle.
+In the next section, we formalize meta-learning for supervised learning problems, while in Section~\ref{sec:meta-learning-rl} we apply meta-learning to reinforcement learning.
+
+\section{Supervised Meta-Learning}
+% I'm confused if p(y|x) should be the model or is the ground truth label distribution
+Let $X$ represent the space of data points, $Y$ the space of labels, $\mathcal{D} = \{(x, y)_n\}$ the available data, and $\phi$ the parameters of the model.
+A task is distinguished by a data distribution $p(x)$, an (unknown) distribution mapping data points to labels $p(y|x)$, and a loss function $\mathcal{L}(\phi, \mathcal{D})$.
+Formally then, a task $\task$ is defined as the tuple $\tau = (\mathcal{L}(\theta, \mathcal{D}), p(x), p(y|x))$. 
+We assume that tasks are drawn from a distribution $p(\task)$, and that all tasks in the distribution share input spaces but may have different output spaces.
+For example, the task distribution may be all possible semantic segmentations of objects in natural images. 
+The input space is the space of natural images, and the output space is the space of possible pixel-wise labels for any number of objects or concepts.
+Note that this differs from conventional few-shot learning settings described in prior work~\citep{vinyals2016matching, finn2017model} which assume a fixed ``shot" (how many training examples per class) and ``way'' (the number of classes to be distinguished). 
+We argue that all few-shot learners should be able to handle varying shot and way, since in realistic applications it is rare that tasks would all have the same shot and way; for example, one might want to add a new class to an existing classifier. 
+%it is very rare that in realistic applications one would want to classify the same number of classes and have the same number of data points available per class.
+
+Modern meta-learning methods work by casting the meta-learning problem into a supervised learning problem, in which tasks (each one itself a supervised learning problem) take the place of data points.
+To see this, consider a standard discriminative machine learning method that trains a model $q_{\phi}(y|x)$ on training data $\mathcal{D}^{train} = \{(x^{tr}, y^{tr})_n\}$.
+%The model can then be evaluated on $\mathcal{D}^{test} = \{(x^{te}, y^{te})_m\}$.
+In meta-learning, we have access to a set of meta-training tasks sampled from the task distribution $p(\tau)$. 
+For each task $i$, we split the data available into $\mathcal{D}_i^{train}$ and $\mathcal{D}_i^{test}$.
+A discriminative meta-learning method would then learn the function, $q_{\phi}(y| \mathcal{D}_i^{train}, x)$, where $(x, y) \sim \mathcal{D}_i^{test}$.
+The resulting function $q_{\phi}$ can thus adapt the model to a \emph{new} task given a small amount of labeled data.
+
+While this framing illuminates the connection to standard supervised learning, it obscures how $\mathcal{D}_i^{train}$ is used for adaptation.
+Instead, we will write the meta-learning optimization problem as consisting of two loops: an inner adaptation loop that summarizes $\mathcal{D}_i^{train}$ into an adaptation procedure $z_i$ that adapts the model, and an outer meta-training loop that maximizes the performance of the adapted model with respect to the parameters $\phi$ of the inner loop across the set of meta-training tasks.
+\begin{align}
+\phi^* = \max_{\phi} \sum_{i=0}^N \mathcal{L}(z_i, \mathcal{D}_i^{test}) 
+ \hspace{5pt} \text{where} \hspace{5pt} z_i = f_{\phi}(\mathcal{D}_i^{train})
+\label{meta-learning-eq}
+\end{align}
+
+While the meta-training objective is typically optimized with gradient descent, many options are possible for the design of the adaptation procedure -- the only requirement for our purposes is that it must be differentiable.
+The many designs that have been proposed for a myriad of applications can be broadly classified into two categories of approaches. 
+\emph{Context-based} methods summarize $\mathcal{D}_i^{train}$ into a latent vector $z_i$, and then condition the predictive model on $z_i$, often by feeding it as an input. 
+Within the category of context-based methods, we can distinguish between black-box approaches that employ a recurrent network~\citep{ravi2017optimization} or other memory mechanism~\citep{santoro2016meta}, and those that make additional assumptions such as learning a metric space~\citep{vinyals2016matching, snell2017prototypical, sung2018learning}. 
+\emph{Gradient-based} methods~\citep{finn2017model} interpret $f_{\phi}$ as several steps of gradient descent on the model parameters that adapts them to the task (in this case $z_i$ can be interpreted as the adapted model parameters for task $i$, with pre-adapted parameters $\phi$).
+
+Gradient-based methods enjoy the benefit of consistency, meaning that as the amount of data used for adaptation increases, the meta-learner will converge on the same solution as if the task had been learned from scratch.
+% this might be kind of weakly supported, I only have evidence for it in RL....few-shot image classification is a mess of a field, it looks like in NLP they have only tried MAML
+However, particularly for small amounts of data, context-based methods are often faster, easier to optimize, and achieve higher accuracy~\citep{rakelly2019efficient, ren2020ocean}.
+The best approach often depends on the application.
+For applications such as structured output prediction considered in Chapter~\ref{chapter:revolver}, very large convolutional networks that have millions of parameters are required, making a gradient-based approach extremely slow.
+Additionally, due to memory constraints, these models are typically trained with very small batch sizes, which when combined with gradient-based meta-learning can result in thrashing between parameter settings rather than converging to a solution. 
+In Chapter~\ref{chapter:revolver}, we propose a context-based meta-learning method for meta-learning few-shot image segmentation.
+

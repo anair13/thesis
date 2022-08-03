@@ -1,0 +1,18 @@
+\section{Experiments}\label{sec:experiments}
+
+We evaluate our method, which combines residual RL with easy-to-obtain reward signals, on a variety of connector assembly tasks performed on a real robot. In this section, we consider two types of natural rewards that are intuitive for users to provide: an image directly specifying a goal and a binary sparse reward indicating success. For both cases, we report success rates on tasks they solve.  We aim to answer the following questions:  (1)~Can such trained policies provide comparable performance to policies that are trained with densely-shaped rewards? (2)~Are these trained policies robust to small variations and noise? 
+
+\textbf{5.1 Vision-based Learning.} For the vision-based learning experiments, we use only raw image observations and $\ell_1$ distance between the current image and goal image as the reward signal. Sample images that the robot received are shown in Fig.~\ref{fig:vision_insertion_sequence}. We evaluate this type of reward on all three connectors. In our experiments, we use $32 \times 32$ grayscale images. 
+
+\textbf{5.2 Learning from Sparse Rewards.} In the sparse reward experiment, we use the binary signal of the connector being electrically connected as the reward signal. This experiment is most applicable to electronic manufacturing settings where the electrical connection between connectors can be directly measured. We only evaluate the sparse reward setting on the USB connector, as it was straightforward to obtain the electrical connection signal.
+
+\textbf{5.3 Perfect State Information.} After evaluating the tasks in the above settings, we further evaluate with full state information with a dense and carefully shaped reward signal, given in Eq.~\ref{eq:shaped_reward_function}, that incorporates distance to the goal and force information. Evaluating in this setting gives us an ``oracle'' that can be compared to the previous experiments in order to understand how much of a challenge sparse or image rewards pose for various algorithms.
+
+\textbf{5.4 Robustness.} For safe and reliable future usage, it is required that the insertion controller is robust against small measurement or calibration errors that can occur when disassembling and reassembling a mechanical system. In this experiment, small goal perturbations are introduced in order to uncover the required setup precision of our algorithms. 
+
+
+\textbf{5.5 Exploration Comparison.} One advantage of using reinforcement learning is the exploratory behavior that allows the controller to adapt from new experiences unlike a deterministic control law.
+The two RL algorithms we consider in this paper, SAC and TD3, explore differently. SAC maintains a stochastic policy, and the algorithm also adapts the stochasticity through training. TD3 has a deterministic policy, but uses another noise process (in our case Gaussian) to inject exploratory behavior during training time.
+We compare the two algorithms, as well as when they are used in conjunction with residual RL, in order to evaluate the effect of the different exploration schemes.
+
+

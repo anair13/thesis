@@ -1,0 +1,76 @@
+
+
+%%SL.05.13: Here is my attempt at rewriting the introduction, perhaps we can incorporate this in:
+% Paragraph 1 (general motivation)
+Reinforcement learning (RL) algorithms hold the promise of allowing autonomous agents, such as robots, to learn to complete arbitrary tasks. However, the standard RL framework involves learning policies that are specific to individual tasks, which are defined by a hand-specified reward functions. Agents that exist persistently in the world can prepare to solve diverse tasks by setting their own goals, practicing complex behaviors, and learning about the world around them. In fact, humans are very proficient at setting abstract goals for themselves, and evidence shows that this behavior is already present from early infancy~\cite{smith2005development}, albeit with very simple goals such as reaching. The behavior and representation of goals grows more complex over time as they learn how to manipulate objects and locomote. How can we begin to devise a reinforcement learning system that sets its own goals and learns from experience with minimal outside intervention and manual engineering?
+
+In this paper, we take a step toward this goal by designing a reinforcement learning framework that jointly learns representations of raw sensory inputs and policies that achieve arbitrary goals under this representation, by practicing self-specified random goals during training. In order to begin reasoning about automated and flexible goal-setting, we must first understand how a goal can be specified for a general agent interacting with a complex and highly variable environment. Even inputting such an environment into a policy is a profound challenge: for instance, a robot that might need to manipulate various objects cannot represent the world by enumerating the objects directly, since the resulting representation would vary in length and composition depending on the current scene. Raw sensory signals, such as images, provide an appealing avenue to abstract away this complexity, but at the cost of producing a substantially harder learning problem. With raw sensory observations, Euclidean distance does not provide a good reward function -- for example, pixelwise distance between images does not correspond meaningful to distances between world states. Furthermore, although end-to-end model-free reinforcement learning can handle image observations, at least in simulated environments, this comes at a huge cost in sample complexity, making it difficult to use in the real world.
+
+We propose to address both challenges by incorporating unsupervised representation learning into reinforcement learning with goal-conditioned policies. In our method, which is schematically illustrated in Figure~\ref{fig:fig1}, a representation of raw sensory inputs is learned by means of a latent variable model, which in our case is based on the variational autoencoder (VAE)~\cite{something}. This model serves three different purposes. First, it provides a substantially more structured representation of raw sensory inputs for reinforcement learning. Second, since this model can allow for sampling of new random states from the latent space, it can be used to set synthetic goals during training simply by sampling a latent variable and reconstructing the corresponding observation. The goal-conditioned policy can then attempt to reach this goal. Third, the learned representation provides a space where distances are significantly more meaningful than the original space of observations, and can therefore be used to provide well-shaped reward functions for learning to reach randomly sampled goals. By learning to reach random goals sampled from the learned model, the goal-conditioned policy learns about the world and can be used to achieve new, user-specified goals at test-time.
+
+The main contribution of our work is a framework for learning general-purpose ``universal'' policies that can achieve goals specified with target observations. Our method combines sample-efficient off-policy reinforcement learning with unsupervised representation learning to acquire a latent variable that can be used to sample goals for unsupervised practice, provide a well-shaped distance function for reinforcement learning, and provide a more structured representation for the value function and policy. Our experimental evaluation illustrates that this method substantially improves the performance and effectiveness of image-based reinforcement learning, and can effectively learn policies for complex image-based tasks, including real-world robotic manipulation skills.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{nips2018paper/img/tmp_reacher3d.png}
+    \caption{Fig 1 placeholder. Assuming we get something to work in the real world, we should try to capture our method in a picture and put it here.}
+    %%SL.05.13: good start; would be good to flesh out this diagram a bit more to schematically illustrate the method.
+    \label{fig:fig1}
+\end{figure}
+
+%%SL.05.13: This is the old introduction
+\iffalse
+
+% What's the problem? allow autonomous agents to also solve abstract tasks towards the level of humans.
+% quote, perhaps cliche, that ties well in here is Alan Turing's "Instead of trying to produce a programme to simulate the adult mind, why not rather try to produce one which simulates the child's? If this were then subjected to an appropriate course of education one would obtain the adult brain."
+While machine learning for robotics holds the promise of allowing autonomous agents to solve abstract tasks, we are currently far from human proficiency. Humans solve tasks by setting abstract
+%%SL.05.08: one might reasonably argue that the goals humans set for themselves are not abstract, or alternatively that often people just do stuff without setting concrete goals
+%%AVN Abstract in the sense that they 
+goals for themselves and executing policies to reach these goals. Evidence shows that this behavior is already present from early infancy \cite{smith2005development}, albeit with very simple goals such as reaching.
+The behavior and representation of goals grows more complex over time as they learn how to manipulate objects and locomote. 
+Furthermore, while robots require human-specified reward functions, infants seem to learn intentional behaviors such as reaching, flipping, and crawling without an external reward function.
+If we are able to reproduce this ability in robots, they can autonomously collect experience and learn behaviors by themselves without constantly needing human input, enabling continual lifelong learning.
+In this work, we show how we can develop such a self-supervised robot learning system:
+%%SL.05.13: let's scope the claim a bit more carefully. We are not proposing a continual lifelong learning system (we don't have the experiments to prove this), but you can more conservatively say something like: In this work, we propose a method that takes a step in this direction by learning a representation that can be used to propose goals for self-supervision, evaluate their completion, and simultaneously provide an effective representation for reinfrocement learning with raw visual perception.
+one that jointly improves its representations and policies through an intrinsic supervision signal.
+% this might be made more precise and deserve further citation
+% In this work, we show how we can develop such a self-supervised robot learning system: one that jointly improves its representations and policies by collecting its own data. 
+% Our system learns visual representations from experience, sets goals for itself by generating goal representations, and learns policies to reach its goals thereby producing intelligent behavior.
+%%SL.05.08: I think you should save the "Our system learns" bit for later, and for now focus on thoroughly motivating what you're doing and why.
+
+
+For a robotic system to capture the variance of the world, the amount of human involvement in the learning process needs to be very small. 
+Current methods are hard to apply practically due to this limitation. 
+Any method that requires task-specific perception is very hard to scale to unstructured environments which may have unknown number and type of objects, so the method must be able to process image observations directly. 
+Many methods require task-specific reward functions, but when moving beyond simulated and controlled environments, simply computing the reward function becomes a non-trivial task as extra instrumentation and human design is required. 
+Instead, we assume only image observations and learn to generate goals and reach them.
+
+% Why is interesting? Humans do it, gradually getting better over time, and they end up much smarter than robots. Existing approaches require too much human input.
+%%SL.05.08: I don't think we should scope the motivation as addressing reward specification. It's addressing generality (want a policy that does many things, not just one thing), connection to model-based (which is more flexible and efficient), and effective handling of perception (which poses a representation learning challenge). The exploration/reward specification benefits are arguably secondary to these benefits.
+%%SL.05.08: let's not overdo it with the infants. It's fine to have some of this in the first paragraph, but it's not particularly scientific to appeal to this too much, and it's some kind of blight on the ML community that some people feel the need to really hammer on the "infants" stuff as though they know anything about it. It's reasonable to motivate the work by saying "this is how people seem to learn, and machines can't do this yet" but we shouldn't rely on that entirely, and we shouldn't put too fine a point on it.
+%%SL.05.08: This is getting much closer to the salient point. Perhaps instead of focusing on infants, it would be good to insert a sentence before this to really explain this point about continual lifelong learning, and what the requirements for it are (and what are the benefits)
+
+% Motivate and describe the method
+However, if we assume no grounded state information, how does the system know when it has reached a goal? Distance in image space
+%%SL.05.08: This paragraph started out very well with a question, though you should make sure that the preceding paragraph covers what the reader needs to know to understand this question -- I'm not sure that's currently the case. The second sentence dives into something much more specific, and it might be overly specific at this point. Needs a little more setup before diving into this level of detail.
+such as pixel error is a very poor metric. Instead, the agent learns a latent representation for its observations where distances between representations correspond to the probability that two states are the same. Then, to generate goals in this space and learn a policy for reaching goals we use RL to maximize the probability that the state matches the goal.
+Our method addresses the need for goal representation and generation by training a variational autoencoder (VAE) on past observations. The VAE, a generative model, gives us a structured representation of observations and a way to generate goal representations in latent space. As RL is a general method for optimizing non-differentiable decision problems, we can tolerate imperfect representations. Furthermore, we can generate synthetic experience by relabeling transitions with varying goals, allowing practical sample efficiency to run our method on real robots.
+%%SL.05.08: One concern I have with this paragraph is that I'm not sure you ever actually stated what the problem is. The second paragraph I think was supposed to do that, but it left things kind of implicit. Without coherently stating the problem you want to solve, it's hard to appreciate the method you're proposing to solve it.
+
+The overall learning procedure alternates between updating the VAE and performing RL to maximize the probability of reaching a latent goal state.
+We call our method TBD and show that it learns useful policies comparable to those trained with ground truth state information, and outperforms existing methods that learn from observations
+%%SL.05.08: be explicit that you mean "pixels" or "image observations"; also, I think you missed a word (existing methods that learn from observations?)
+on several simulated robotics tasks.
+% In particular, we show that the self-supervised learning results in a policy that is able to learn to solve new tasks faster than directly trying to learn a task (even when accounting for the amount of unsupervised data used).
+We further test our method on real-world robotics tasks to show that TBD can be translated to real tasks. Unlike prior work, we need no extra instrumentation to apply our algorithm in the real world.
+% TODO: If we have some comparison of this:
+We also show that by continually updating our goal representations, we can explore the environment better than random exploration even without state information.
+In addition to our empirical results, we formalize self-supervised learning in a graphical models framework and situate prior work in our framework. Our alternating optimization procedure takes advantage of the structure of self-supervised learning and can be interpreted as performing EM to optimize the evidence lower bound on the probability of reaching a goal image.
+
+\fi
+
+%%SL.05.08: It would be nice if this intro talked a bit more about how the method actually works and the other things that I talk about in the comment in the second paragraph.
+
+%%SL.05.08: In general, I think that both versions of the intro will come across much better if we can discuss the image observations a bit more. In some ways, this is really the regime where representation learning is most important, and also the one that is essential for continual lifelong learning: if you want the robot to learn to interact with diverse and varied environments, encoding the whole environment into a fixed-length state vector is impractical, even if you had access to a perfect state estimator that could do this.
+
+

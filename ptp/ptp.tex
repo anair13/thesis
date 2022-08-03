@@ -1,0 +1,185 @@
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %2345678901234567890123456789012345678901234567890123456789012345678901234567890
+% %        1         2         3         4         5         6         7         8
+
+% \documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+
+% %\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+% \IEEEoverridecommandlockouts                              % This command is only needed if 
+%                                                           % you want to use the \thanks command
+
+% \overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+% %In case you encounter the following error:
+% %Error 1010 The PDF file may be corrupt (unable to open PDF file) OR
+% %Error 1000 An error occurred while parsing a contents stream. Unable to analyze the PDF file.
+% %This is a known problem with pdfLaTeX conversion filter. The file cannot be opened with acrobat reader
+% %Please use one of the alternatives below to circumvent this error by uncommenting one or the other
+% %\pdfobjcompresslevel=0
+% %\pdfminorversion=4
+
+% % See the \addtolength command later in the file to balance the column lengths
+% % on the last page of the document
+
+% % The following packages can be found on http:\\www.ctan.org
+% %\usepackage{graphics} % for pdf, bitmapped graphics files
+% %\usepackage{epsfig} % for postscript graphics files
+% %\usepackage{mathptmx} % assumes new font selection scheme installed
+% %\usepackage{times} % assumes new font selection scheme installed
+% %\usepackage{amsmath} % assumes amsmath package installed
+% %\usepackage{amssymb}  % assumes amsmath package installed
+
+% % ----------------------------------------------------------------------------------------
+% % Above content is from the RAS Latex template. 
+% % ----------------------------------------------------------------------------------------
+
+% % numbers option provides compact numerical references in the text. 
+% % \usepackage[numbers]{natbib}
+% \usepackage{multicol}
+% \usepackage[bookmarks=true]{hyperref}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%wa
+% % User commands.
+% \usepackage{mathtools}
+% \usepackage{amsfonts}  % for \mathbb
+% \usepackage{graphics}
+% \usepackage[pdftex]{graphicx}
+% \usepackage{wrapfig}
+% \usepackage{color}
+% \usepackage{dsfont}
+% % \usepackage[symbol]{footmisc}
+
+% % % Algorithm.
+% \usepackage{algorithmicx}
+% \usepackage[ruled]{algorithm}
+% \usepackage{algpseudocode}
+% \usepackage{amssymb}
+
+% % Caption
+% \usepackage{caption}
+% % \usepackage{subcaption}
+
+% % Figure
+% \usepackage{wrapfig}
+
+% % ---------------------------------
+% % User defined Macros
+% % ---------------------------------
+
+% \algnewcommand\algorithmicforeach{\textbf{for each}}
+% \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+% % KL Divergence 
+% \DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+%   #1\;\delimsize\|\;#2%
+% }
+% \newcommand{\infdiv}{\infdivx}
+% \newcommand{\kld}[2]{\ensuremath{D_{KL}\inf
+% divx{#1}{#2}}}
+
+% % Omit final dot from each def.
+% \usepackage{expl3}
+% \ExplSyntaxOn
+% \newcommand\latinabbrev[1]{
+%   \peek_meaning:NTF . {% Same as \@ifnextchar
+%     #1\@}%
+%   { \peek_catcode:NTF a {% Check whether next char has same catcode as \'a, i.e., is a letter
+%       #1.\@ }%
+%     {#1.\@}}}
+% \ExplSyntaxOff
+% \def\eg{\latinabbrev{e.g}}
+% \def\etal{\latinabbrev{et al}}
+% \def\etc{\latinabbrev{etc}}
+% \def\ie{\latinabbrev{i.e}}
+
+% % Vector.
+% \let\vec\mathbf
+
+% % Comments
+% \providecommand{\kuan}[1]{{\color{blue} [Kuan: #1]}}
+% \providecommand{\kuan}[1]{{\color{red} [Ashvin: #1]}}
+
+% % ----------------------------------------------------------------------------------------
+% % paper title
+% \title{
+% \LARGE \bf
+% Planning to Practice: Efficient Online Fine-Tuning \\by Composing Goals in Latent Space
+% }
+% %%SL.2.23: This is a really nice title, though I wonder if this title only works if we have something like the reset-free system working? Without the reset-free, not quite clear if it's really "planning to practice" or just "planning to do the task"...
+% %%AVN.2.21: I think "planning to practice" might be better for the reset-free story. Maybe something like "Scaffolding Online Fine-tuning of Long Horizon Tasks by Planning"?
+% %%SL.12.28: I think it's a nice starting point for the title! I guess the idea you want to get across is that the planning component is what enables the learning to be autonomous, which makes a lot of sense. There are a number of unfortunate potential misunderstandings though that we should try to avoid:
+% % 1. robotics people will tend to (mis)interpret "planning" as more traditional motion planning, which might make the title come across as kind of simplistic -- planning is a standard way to get autonomous robot behavior (and the autonomous *learning* part might be missed)
+% % 2. some people might not quite get what the "autonomous learning" bit means, or that the paper has anything to do with RL at all
+% % a few ideas for titles that kind of revolve around a similar theme but try to address some of these potential issues:
+% % - Automating Real-World Goal-Conditioned RL via Goal Planning
+% % - Planning with Goal-Conditioned Policies for Autonomous RL
+% % - Autonomous Robotic Reinforcement Learning via Goal Planning
+
+% \author{
+% % Albert Author$^{1}$ and Bernard D. Researcher$^{2}$% <-this % stops a space
+% % \thanks{*This work was not supported by any organization}% <-this % stops a space
+% % \thanks{$^{1}$Albert Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
+% %         University of Twente, 7500 AE Enschede, The Netherlands
+% %         {\tt\small albert.author@papercept.net}}%
+% % \thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
+% %         Dayton, OH 45435, USA
+% %         {\tt\small b.d.researcher@ieee.org}}%
+% Kuan Fang$^*$, Patrick Yin$^*$, Ashvin Nair, Sergey Levine\\
+% University of California, Berkeley
+% \thanks{$^{*}$Authors contributed equally to this work.}
+% }
+
+% \begin{document}
+
+% \maketitle
+% \thispagestyle{empty}
+% \pagestyle{empty}
+
+% \begin{abstract}
+% % Training a robot to solve goal-reaching tasks can be expensive and time-consuming in complicated manipulation domains.
+% %%AVN.2.21 I'm not sure about starting out with goal-reaching as the problem. In particular part of our novelty is realizing that goal-conditioning is a good solution to long horizon planning because you can be compositional. What do you think about the something like the following as motivation:
+% %%SL.2.23: I agree with Ashvin here -- it's not obvious why goal reaching tasks are inherently desirable, and some justification like this would really help
+% % Training a robot to solve long-horizon multi-step tasks can be expensive and time-consuming in complicated manipulation domains.
+% % In the traditional reinforcement learning paradigm, such multi-step tasks are expensive to train as it does not take into account the temporal and semantic compositionality of the skills involved.
+% % In this work, our key insight is that the combination of goal-conditioned RL, offline RL, and planning can allow agents to do so: temporal compositionality is achieved by planning over goals and semantic compositionality is achieved by the use of a goal-conditioned policy and contextual goal generator.
+% % To address this problem, encouraging progress has been made in offline reinforcement learning using data previously collected in the same or related tasks.
+% %%SL.2.23: At the level of the abstract, it's not quite clear to me what this is referring to or why offline RL is necessarily relevant (it becomes more obvious when reading the rest of the paper, but at this point in the writing, people might not get why you are talking about this)
+% % However, effective pre-training and fine-tuning of a goal-conditioned policy to reach distant goals still remains an open question. In this work, we propose Planning to Practice (PTP), an approach that scaffolds online fine-tuning by exploiting the compositional structure of the offline data. Instead of directly commanding the policy to reach the desired final goal, our approach uses a planner to compose a sequence of subgoals to guide the policy during online fine-tuning. To propose diverse and feasible candidates for the planner, we train conditional subgoal generators on the offline data to recursively generate sequences of subgoals in the learned latent space. Using conditional subgoal generators of different temporal resolutions, we design a hierarchical planning algorithm that efficiently reduces the search space by finding subgoals in a coarse-to-fine manner. To further enhance the robustness of the planner, a latent plan buffer is devised to re-use previously selected plans as initial guesses in new episodes. We evaluate our method by pre-training on short-horizon demonstration data and fine-tuning to solve unseen multi-stage manipulation tasks in both simulation and the real world. Compared with existing methods, our approach produces plans of better quality and significantly improves the efficiency of the online fine-tuning of the goal-conditioned policy. 
+% %%AVN.2.21 The abstract might be a little too detailed/go too low-level too soon
+% %%SL.2.23: One of the things that seems non-ideal about the current abstract is that it doesn't quite communicate what the exciting new idea is. Perhaps a good narrative structure might look something like this: (1) explain why goal reaching stuff is good; (2) explain why hierarchical approach is desirable; (3) explain how online finetuning fits. It seems like the general gist of the method amounts to showing that hierarchy + finetuning makes goal-conditioned RL work. So maybe we can phrase the abstract kind of like this:
+
+
+% % Reinforcement learning provides a promising approach for autonomously acquiring individual manipulation skills.
+% % However, general-purpose robots in real-world settings might require large repertoires of behaviors.
+% % In this case, an appealing proposition is to train multi-task policies that can perform a wide range of different behaviors on command.
+% % Goal-conditioned reinforcement learning addresses this problem by training policies that reach a configurable goal, but such policies are notoriously difficult and time consuming to train.
+
+% % Our experimental evaluation shows that we can learn temporally extended skills in the real-world after 60 minutes of finetuning.
+% % (e.g., taking out an object from a drawer and then closing the drawer).
+
+% General-purpose robots require diverse repertoires of behaviors to complete challenging tasks in real-world unstructured environments. To address this issue, goal-conditioned reinforcement learning aims to acquire policies that can reach configurable goals for a wide range of tasks on command. However, such goal-conditioned policies are notoriously difficult and time-consuming to train from scratch. In this paper, we propose Planning to Practice (PTP), a method that makes it practical to train goal-conditioned policies for long-horizon tasks that require multiple distinct types of interactions to solve. Our approach is based on two key ideas. First, we decompose the goal-reaching problem hierarchically, with a high-level planner that sets intermediate subgoals using conditional subgoal generators in the latent space for a low-level model-free policy. Second, we propose a hybrid approach which first pre-trains both the conditional subgoal generator and the policy on previously collected data through offline reinforcement learning, and then fine-tunes the policy via online exploration. This fine-tuning process is itself facilitated by the planned subgoals, which breaks down the original target task into short-horizon goal-reaching tasks that are significantly easier to learn. We conduct experiments in both the simulation and real world, in which the policy is pre-trained on demonstrations of short primitive behaviors and fine-tuned for temporally extended tasks that are unseen in the offline data. Our experimental results show that PTP can generate feasible sequences of subgoals that enable the policy to efficiently solve the target tasks.  
+% \footnote{Supplementary video: \href{https://sites.google.com/view/planning-to-practice}{sites.google.com/view/planning-to-practice}}
+
+% \end{abstract}
+
+\input{ptp/1-introduction}
+\input{ptp/2-related-work}
+\input{ptp/3-background}
+\input{ptp/4-method}
+\input{ptp/5-experiments}
+\input{ptp/6-conclusion}
+
+% \newpage
+
+{\small
+\bibliographystyle{bibtex/IEEEtran}
+\bibliography{bibtex/references}
+}
+
+\newpage
+\clearpage
+% \appendix
+% \input{ptp/7-appendix}
+
+\end{document}

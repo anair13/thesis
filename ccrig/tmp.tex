@@ -1,0 +1,92 @@
+
+\subsection{Dynamics Constraints \tmp{Still in the air if this is to be included}}
+To better shape the latent space and take advantage of the temporal consistency of trajectories, we enforce dynamics constraints. We evaluate the following three architectures following \cite{watter2015embed}:
+\begin{enumerate}
+    \item Global linear dynamics:
+        % $$z_{t+1} = A \begin{bmatrix} z_t \\ u_t \end{bmatrix}$$
+        $$\hat{z}_{t+1} = A z_t + B u_t$$
+    \item Locally linear dynamics:
+        $$\hat{z}_{t+1} = f_{\theta_1}(z_t, u_t) z_t + g_{\theta_2}(z_t, u_t) u_t$$
+    \item Neural network dynamics:
+        $$\hat{z}_{t+1} = f_\theta(z_t, u_t)$$
+\end{enumerate}
+We assume a Gaussian output distribution, so these constraints are enforced through a L2 loss: $\mathcal L_\text{dyn} = ||\hat{z}_{t+1} - z_{t+1}||^2$. 
+
+
+
+\subsection{Adversarial Learning for Disentangled Representations \tmp{Not using - probably deleting}}
+
+Although the optimal solution of the model specified above should not pass information about $s_0$ through the latent variable $z$, empirically we find that the optimization does not always find this optimum solution. This entangling of the representation causes issues during RIG. To actively disentangle $s_0$ and $z$ we additionally minimize $I(z; s_0)$ in our training objective.
+
+To do this, following [also cite Barber+Agakov] \cite{chen2016infogan} we introduce another decoder $Q$ and observe that:
+\begin{align}
+    I(z; s_0) &= H(s_0) + \E_{z} \E_{s_0 \sim P(s_0|z)} [\log P(s_0|z)] \\
+    &= H(s_0) + \E_{z} \E_{s_0 \sim P(s_0|z)} [\log Q(s_0|z) +  \\ & \hspace{2cm} D_\text{KL}( P(.|z) || Q(.|z) ] \\
+    &\geq H(s_0) + \E_{z} \E_{s_0 \sim P(s_0|z)} [\log Q(s_0|z)] \\ 
+    &= \mathcal L_\text{I}
+\end{align}
+
+We parametrize the $Q$ and train it to maximize $L_\text{I}$, which amounts to maximizing the log-likelihood of reconstructing $s_0$ from $z$, while the encoder minimizes the full objective:
+\begin{align} \label{eq:isc-vae-loss-adv}
+    \mathcal L = \E_{q_\phi(z|s, s_0)} [\log p(s|z, s_0)] - \beta D_{KL}(q_\phi(z|s, s_0)||p(s)) + \mathcal L_\text{I}
+\end{align}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=1\linewidth]{img/pointmass1_reward_curve.pdf}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \center
+        \includegraphics[width=1\linewidth]{img/pusher1_reward_curve.pdf}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \includegraphics[width=1\linewidth]{img/reward_curve_avg_cloth.png}
+    \end{subfigure}
+    \caption{Visualization of distance in latent space to last state in a trajectory - different representation learning methods.}
+    \label{fig:reward-curves}
+\end{figure}
+
+
+%%%% ABSTRACT COMMENTS:
+% To allow robots to perform useful tasks in unconstrained settings,
+% To allow robots to act in the wild,
+%%SL.1.20: kind of sounds like you want them to put on a play during a safari
+% they must be able to handle significant task and object diversity. 
+% Reinforcement learning (RL) may enable this by allowing robots to autonomously learn from data.
+% However, we face several challenges towards general robot learning in collecting interaction data that captures meaningful tasks, and providing supervision to the robot to learn useful skills. 
+%%SL.6.22: A suggestion for phrasing here could be something like this: 
+In order to create skilled robots that can perform a variety of manipulation skills in a wide range of real-world situations, with complex inputs such as images, they must learn behaviors that generalize effectively over rich and diverse datasets. To enable such a data-driven approach to scale, the robot must be able to collect its own experience without reliance on human labeling and supervision -- only then can such a method generalize broadly and effectively.
+% The supervision cost of RL has not been appreciated fully: RL requires a ground truth reward signal, and most RL algorithms assume an episodic setting of the problem with environment resets.
+%%SL.1.20: The episodic thing I think is something many people will object to... while it may be true, I think it's not obvious to many people that it is true.
+% Both are significant challenges in the real world. 
+% Second, to allow a robot to learn a variety of skills with different objects, the agent must be able to successfully explore skills with each object, and understand how to reuse these skills.
+%%SL.1.20: I think you'll get some argument as to whether "skill" is in fact the right word here
+% We investigate self-supervised learning to handle these challenges, and show that we can autonomously learn skills, such as pushing and grasping of various objects through interaction using goal-conditioned RL.
+% Using model-free learning, we are able to take advantage of large datasets to learn these skills in a sample efficient, off-policy manner.
+%%SL.6.22: Potential rephrasing here could go something like this: 
+Scalable robotic learning without supervision is difficult, the robot needs to be able to set its own goals to practice diverse skills, and incorporate large off-policy datasets into its learning process. 
+%%AVN.7.4 seems to assume goal-conditioned framework before introducing it
+%%SL.7.5: I think that's OK -- the "without supervision -> set its own goals" progression seems OK. I'm a bit more concerned about how, if we back off on the off policy training story, the datasets part might be no longer true.
+In this paper, we study how such a method can be instantiated for a real-world robotic system. Our method bootstraps off of a large off-policy dataset, and then uses autonomous interaction via a conditional goal proposal model to gather additional goal-directed experience. The conditional goal proposal model sets goals -- by generating image-based states -- that are feasible to reach in the current environment, while still being diverse enough to provide for useful skill learning and data collection. Our experiments show that such an approach learns policies that can achieve a wide variety of visually indicated goals at test time, including reaching, pushing, and grasping of diverse objects.
+%%SL.7.5: Perhaps if we end up having to cut the off-policy/data-driven story, we could go with something like this. Maybe you could also borrow parts of this to rewrite the intro if we go with that story.
+% While reinforcement learning provides an appealing formalism for learning individual skills, a truly general-purpose robotic system must be able to master a large repertoire of behaviors. Instead of learning a large collection of skills individually, can we instead enable a robot to propose and practice its own behaviors automatically, learning about the affordances and behaviors that it can perform in its environment, such that it can then repurpose this knowledge once a new task is commanded by the user? In this paper, we study this question in the context of self-supervised goal-conditioned reinforcement learning. A central challenge in this learning regime is the problem of goal setting: in order to practice useful skills, the robot must be able to autonomously set goals that are feasible but diverse. When the robot's environment and available objects vary, as they do in most open-world settings, the robot must propose to itself only those goals that it can actually accomplish in its present setting with the objects that are at hand. Previous work only studies self-supervised goal-conditioned RL in single-environment settings, where goal proposals from the robot's past experience or from a generative model are sufficient. In more diverse settings, this frequently leads to impossible goals and, as we show experimentally, prevents effective learning. We propose a conditional goal-setting model that aims to only propose goals that are feasible reachable from the robot's current state, and demonstrate that this enables self-supervised goal-conditioned learning with raw image observations both in varied simulated environments and a real-world cloth manipulation task.
+
+
+% Samples from 
+
+% For a particular environment, a dataset of 100 trajectories of length 100 with random actions is constructed and 10\% of the trajectories are set aside as the test set.
+% %%SL.7.1: It's better to use active voice. Also, what does "for a particular environment" mean? Which environment? Maybe fine if you're testing on all, but if it's one specific one, better to just say it.
+% Given a test trajectory, $\{s_0, s_1, ..., s_T\}$, the reconstruction of image $s_t$ is created by first computing $q_\phi(z|s_t, s_0)$, sampling $z \sim q_\psi(s|z, s_0)$, and computing $q_\psi(s|z, s_0)$. Samples are drawn for this trajectory by sampling $z \sim N(0, I)$ and generating image $q_\psi(s|z, s_0)$.
+%%SL.7.1: Discuss results? How do we measure/evaluate if they're good? What is the conclusion to be drawn from this?
+
+% \subsection{Context-Conditioned VAE Metric}
+% %%SL.7.1: One thing that makes me uneasy about this section is how it contributes to the overall message in the paper. Are we claiming that something about our contribution makes this better (vs prior work)? If so, can we present evidence of this?
+
+% In this experiment, we consider the distance metric induced by the learned encoder of our model. This is vital to use for RIG,
+% %%SL.7.1: Is it *actually* vital? It's not actually obvious (at least not to me).
+% as RIG uses the reward function $$r_t = ||z_t - z_g||.$$
+
+% %%SL.7.1: I think the paragraph below could be rearranged to put more of the rationale (what are you trying to evaluate?) first, and then the method, otherwise it first states the method (what you measure) and then the rationale (what are you trying to determine by measuring this)
+% To visualize the reward function for different methods, we consider a set of trajectories of optimal policies. For each trajectory $\{s_0, s_1, ... s_H \}$, we consider the distance $||\phi(z_t) - \phi(z_H)||$ for each value of $t$. We average these distances over the trajectories and report the average per timestep for each feature embedding $\phi$. Smoothly decreasing distances indicate a smooth latent space and a favorable dense reward signal, while a flat curve that sharply decreases near the final timestep indicates a poorly shaped latent space that will require RL to handle a sparse reward signal.

@@ -1,0 +1,72 @@
+\section{Problem Statement}
+
+In this paper, we consider the problem of learning to complete a long-horizon task specified by a goal image.
+The robot learns over a variety of initial configurations and goal distributions, which cover a range of behaviors such as opening or closing a drawer, and picking, placing, or pushing an object.
+% The robot learns over a distribution of training environments $p(\mathcal{E})$ which each afford a variety of behaviors such as opening or closing a drawer, picking and placing an object, or pushing an object.
+%%SL.2.27: the second sentence doesn't follow logically from the first one
+%%SL.2.27: consider giving a specific example in this paragraph and referencing a figure
+%%AVN.2.28 Tried to be more specific and connect the sentences
+As prior data, the robot has access to an offline dataset of trajectories $\mathcal{D}_\text{offline} = \{\tau_1, \tau_2, \dots, \tau_N\}$ for offline pre-training.
+% These trajectories are collected in a variety of training environments.
+In each trajectory, the robot is controlled by a human tele-operator or a scripted policy to achieve one of the goals the environment affords.
+A goal-conditioned policy is pre-trained on this dataset using offline RL algorithms. 
+% The robot may use these trajectories for offline pre-training.
+%%SL.2.27: what is this dataset? why is it relevant? what does it contain?
+%%KF.3.1: Fixed.
+
+After offline pre-training, the robot is
+%%SL.2.27: feels like you missed a step, "then" refers to this happening after something, but the previous sentence says you're given a dataset, so it seems like there is one missing sentence before this that says that we do some kind of training
+%%KF.3.1: Fxied.
+placed in a particular environment that it has online access to interact in.
+Even though the initial configuration of this environment may have been included in the set of training environments, the goal distribution for this environment at test time requires sequencing multiple skills together, which is not present in the offline data.
+% For instance, the robot could be placed in an environment with a closed drawer and object and be given a goal image which consists of an open drawer and the object in a different location.
+For instance, as shown in Fig.~\ref{fig:intro}, the robot would need to first slide away the can that blocks the drawer, then reaches the handle of the drawer, and finally opens the drawer. 
+%%SL.2.27: example feels rather contrived (but if that's the best we can do, ok, just good to reference a picture here in that case to make this more concrete)
+%%KF.3.1.: Fixed.
+
+Na\"ively running offline RL may not solve the long-horizon test tasks for two reasons.
+First, the robot is given a test goal distribution that is long horizon but offline dataset consists of individual skills.
+% To bridge the gap, we use sample-based planning.
+The method needs to somehow compose these individual skills autonomously in order to succeed at goals drawn from the test distribution.
+Second, offline RL may not solve the task due to distribution shift.
+Distribution shift appears in two forms: distribution shift between transitions in the prior data and transitions obtained by the actively rolling out the policy, and the distribution shift introduced when performing tasks sequentially.
+If the robot may actively interact in the new environment to improve its policy, how can the robot further practice and improve its performance?
+%%SL.2.27: Generally I think this has the right idea, but somehow the last two sentences feel a bit clumsy. I think you have the right idea in terms of saying that when we try to do this, we will fail... but maybe try to articulate this more clearly, so that the main concept is made more clear? Recall also my comment from before: we really need to make it clear to the reader that the *new* thing in the paper is the *combination* of planning and online finetuning (since neither is novel by itself), so it's very important that the problem statement specifically points toward this; if it appears to point just to planning or just to finetuning, then the work will be perceived as not novel. I do think the current statement goes in the right direction, but should be more explicit about this.
+%%AVN.3.1 rewritten to discuss distribution shift and describe the specific problems we solve
+
+\section{Preliminaries}
+\label{sec:preliminaries}
+
+%%SL.2.24: I wonder if it might be good to turn this into something like a "Problem Statement and Preliminaries" section and start with a short paragraph presenting the problem statement. Although the intro does explain it to a degree, I think many readers will feel that there is not much context about what the problem is. Maybe start the problem statement with a brief recap of the motivation behind goals, give some examples, and maybe reference a figure (e.g., Figure 1) that shows the setup (what the goals are, what it means for the task to be temporally extended, etc.), then present the assumptions on prior data, etc., and then the definitions.
+
+% ----------------------------------------------------------------------------------------
+%%SL.2.24: nitpick -- use sentence case for paragraph headings (also consider \noindent)
+% \textbf{Goal-Conditioned Reinforcement Learning.} 
+We consider a goal-conditioned Markov Decision Process (MDP) denoted by a tuple $M = (\mathcal{S},\mathcal{A}, \rho, P, \mathcal{G}, \gamma)$ with state space $\mathcal{S}$, action space $\mathcal{A}$, initial state probability $\rho$, transition probability $P$, a goal space $\mathcal{G}$, and discount factor $\gamma$. In each episode, a desired goal $s_g \in \mathcal{G}$ is sampled for the robot to reach. At each time step $t$, a goal-conditioned policy $\pi(a_t | s_t, s_g)$ selects an action $a_t \in \mathcal{A}$ conditioned on the current state $s_t$ and goal $s_g$. After each step, the robot receives the goal-reaching reward $r_t(s_{t+1}, s_g)$.
+% is defined with a threshold $\epsilon$. Specifically, $R(s_{t+1}, s_g)$ returns 0 when $|| s_{t+1}, s_g || < \epsilon$ and -1 otherwise.
+The robot aims to reach the goal by maximizing the average cumulative reward $\mathbb{E}[\Sigma_t \gamma^t r_t]$.
+% ----------------------------------------------------------------------------------------
+%%SL.2.27: I think it would help to put this right after the GCRL paragraph, and slightly reorient it. Right now the GCRL para is very online-centric, but we do offline pretraining, so putting this right after and explaining how the offline + fine-tune works will nicely walk the reader through the logic behind our method
+% \textbf{Offline reinforcement learning.} 
+%%KF.3.1: Fixed.
+Our approach learns a goal-conditioned policy $\pi$ for solving the target task specified by a desired final goal $s_g$. The goal-conditioned policy is pre-trained on a previously collected offline dataset $\mathcal{D}_\text{offline}$ and then fine-tuned to reach $s_g$ by accumulating data into an online replay buffer $\mathcal{D}_\text{online}$. $\mathcal{D}_\text{offline}$ contains diverse short-horizon interactions with objects in the environment. During online fine-tuning, we would like the policy to learn to improve and compose these short-horizon behavior for multi-stage tasks specified by $s_g$. 
+
+%%SL.2.27: do we actually need this paragraph? since space is at a premium, maybe we can simply omit this and briefly mention that we do relabeling in a tech section
+%%KF.3.1: Moved to implementation details.
+% Prior work has shown that off-policy relabeling of goals can significantly improve the sample efficiency of goal-conditioned RL algorithms~\cite{Andrychowicz2017HindsightER}. For any transition $(s_t, a_t, r_t, s_{t+1}, s_g)$, one can sample a new goal $s_g'$, recompute $r_t'(s_{t+1}, s_g)$, and use this relabeled transition for off-policy Bellman updates. The relabeled goal $s_g'$ may come from future states in a transition~\cite{Andrychowicz2017HindsightER}, a random sample from the replay buffer~\cite{pong2018tdm}, or a random sample from learned goal distribution~\cite{nair2018rig}.
+
+%%SL.2.27: This is reasonable, but I feel like we're kind of making a mountain out of molehill here -- all this is saying is "learn a latent space and use latent space eps-ball", but I'm not sure that's even that important? could go either way on this, just that some people will perceive this paragraph as cynically trying to ride the self-supervised hype train without much legitimate claim to that
+%%KF.3.1: Fixed. What about downplaying "self-supervised" but just explaining that we are using latent state representations as below?
+% \textbf{Self-Supervised Goal-Conditioned RL.} 
+Defining informative goal-reaching rewards and extracting useful state representations from high-dimensional raw observations such as images can be challenging. Following the practice in prior work~\cite{nair2018rig, Khazatsky2021WhatCI}, we pre-train a state encoder $h=\phi(s)$ to extract the latent state representation $h$. By encoding the states and goals to the latent space, we can obtain an informative goal-reaching reward function $r_t = R(h_{t+1}, h_g)$ by computing $h_{t+1} = \phi(s_{t+1})$ and $h_g = \phi(s_g)$. Specifically, $R(h_{t+1}, h_g)$ returns 0 when $||h_{t+1}, h_g || < \epsilon$ and -1 otherwise, where $\epsilon$ is a selected threshold. In addition, we also use $\phi(s_{t+1})$ as the backbone feature extractor in all of our models that take $s$ as an input. For simplicity, we directly use $s$ to denote $h$ in the rest of the paper. The details of the state encoder are explained in Sec.~\ref{sec:implementation_details}.
+
+% To learn policies with RL in open-world unstructured environments from raw observations such as images, obtaining the reward signal itself is a challenge. Prior work has proposed to use distance in the latent space of a generative model to evaluate rewards~\cite{nair2018rig}. Specifically, these methods learn an encoder $h=\phi(s)$.
+% % with a prior $p(z)$. % TODO: write out full VAE
+% This encoder is used to encode states and goals: $h_{t+1} = \phi(s_{t+1})$ and $h_g = \phi(s_g)$. Then rewards can be defined as $r_t = R(h_{t+1}, h_g)$ with a threshold $\epsilon$. Specifically, $R(h_{t+1}, h_g)$ returns 0 when $||h_{t+1}, h_g || < \epsilon$ and -1 otherwise. Following Khazatsky et al.~\cite{Khazatsky2021WhatCI}, we extract latent representations $h$ using a Vector Quantized Variational Autoencoder (VQ-VAE)~\cite{Oord2017NeuralDR}. The VQ-VAE is pre-trained on the offline dataset and its weights are fixed during online fine-tuning. We also use the pre-trained VQ-VAE as the backbone feature extractor in all of our models that takes $s$ as an input. For simplicity, we directly use $s$ to denote $h$ in the rest of the paper. 
+
+% \kuan{Ashvin, could you please add a paragraph on offline RL and IQL specifically?}
+
+% \textbf{Visuomotor affordance learning.} 
+
+% ----------------------------------------------------------------------------------------
+% \textbf{Conditional Variational Autoencoder}

@@ -1,0 +1,172 @@
+
+We formalize the problem with the graphical mode shown in Figure \ref{fig:pgm-v1}.
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+       \node[state] (s0) at (0,0) {$s_0$};
+       \node[state] (z0) at (0,1.5) {$z_0$};
+       \node[state] (o0) at (0,3) {$o_0$};
+       \node[state, fill=gray!25] (w0) at (0,4.5) {$\Omega_0$};
+       \node[state] (a0) at (1.5,1.5) {$a_0$};
+
+       \node[state] (s1) at (3,0) {$s_1$};
+       \node[state] (z1) at (3,1.5) {$z_1$};
+       \node[state] (o1) at (3,3) {$o_1$};
+       \node[state, fill=gray!25] (w1) at (3,4.5) {$\Omega_1$};
+       \node[state] (a1) at (4.5,1.5) {$a_1$};
+       
+       \node[state] (s2) at (6,0) {$\cdots$};
+       
+       \node[state] (z0g) at (0,7.5) {$z_0^g$};
+       \node[state] (o0g) at (0,6) {$o_0^g$};
+       
+       \node[state] (z1g) at (3,7.5) {$z_1^g$};
+       \node[state] (o1g) at (3,6) {$o_1^g$};
+
+       \draw[every loop]
+            (s0) edge node {} (z0)
+            (s0) edge node {} (s1)
+            (z0) edge node {} (o0)
+            (o0) edge node {} (a0)
+            (o0) edge node {} (w0)
+            (a0) edge node {} (s1)
+            
+            (s1) edge node {} (z1)
+            (s1) edge node {} (s2)
+            (z1) edge node {} (o1)
+            (o1) edge node {} (a1)
+            (o1) edge node {} (w1)
+            (a1) edge node {} (s2)
+            
+            (z0g) edge[bend left] node {} (a0)
+            (z1g) edge[bend left] node {} (a1)
+
+            (z0g) edge node {} (o0g)
+            (o0g) edge node {} (w0)
+            
+            (z1g) edge node {} (o1g)
+            (o1g) edge node {} (w1)
+            ;
+    \end{tikzpicture}
+    \caption{Version 1 graphical model for self-supervised learning}
+    \label{fig:pgm-v1}
+\end{figure}
+
+The parts of the graph are
+\begin{itemize}
+    \item $Z_t^g$ is a goal latent
+    \item $O_t^g$ is a goal observation
+    \item $\Omega_t^g$ is an optimality variable which equals $1$ if $O_t^g$ and $O_t$ are the same
+    \item $S_t$ is a true underlying state
+    \item $A_t$ is the action taken, whose distribution is the policy $\pi_\theta(\cdot \mid o_o, z_o^g)$.
+    \item $Z_t$ is a reached latent
+    \item $O_t$ is a reached observation
+\end{itemize}
+We assume that all the probability distributions are fixed (and unknown) except for $p_\theta(a_t \mid o_t, z^g_o)$ which we parameterize by $\theta$.
+We'll write $p_\theta(X=x)$ to mean the PDF of the random variable $X$ evaluated at the value $x$.
+We'll leave $\theta$ in the subscript to remind ourselves if the PDF (or expectation) depends on $\theta$.
+This might seem verbose, so we'll only use it when writing tricky equations like $\E_\theta[ p_\theta(O_t= O_t^g)]$ to remember that this should be read as
+\[
+\int_{\mathcal O_t} p_\theta(O_t = x) p_\theta(O_t^g = x) dx.
+\]
+If the meaning is obvious, we'll just write $p(x)$ to mean $p_\theta(X=x)$.
+
+We formalize the problem as
+\begin{align}
+\max_\theta \log \E_\theta [ p_\theta(\Omega_{1:T}=1)] . 
+\end{align}
+Remember that $\Omega_t$ is the event that $O_t^g$ and $O_t$ are the same.
+So, using this fact and Jensen's inequality, we can rewrite this as
+\begin{align}
+\max_\theta \log \E_\theta [ p_\theta(\Omega{1:T}=1)]
+&= \max_\theta \log \E_\theta [ \E_\theta [ p_\theta(\Omega_{1:T}=1) ] \mid O_{1:T}^g]
+\\&=\max_\theta \log \E_\theta [ \E_\theta [ p_\theta(O_{1:T} = O_{1:T}^g)] \mid O_{1:T}^g]
+\\&\geq\max_\theta \E_\theta [ \E_\theta [ \log p_\theta(O_{1:T} = O_{1:T}^g)] \mid O_{1:T}^g]
+\\&\triangleq \max_\theta \mathcal{F}(\theta)
+\end{align}
+Our method can be seen as performing EM \textbf{on this lower bound}, where the latents to marginalize out are the latents $z$.
+Note that EM has its own lower bound and should be not confused with the fact that $\mathcal F$ is a lower bound for our true objective.
+EM works by lower-bounding the inner $\log p_\theta(O_{1:T} = o_{1:T}^g)$ term.
+Here, we use a lower-case $o_{1:T}^g$ to remind ourselves that the goal observations should not be considered random variables inside the expectation.
+\begin{align}
+\log p_\theta(O_{1:T} = o_{1:T}^g)]
+&= \log \E_{\zeta_{1:T} \sim q}[
+    \frac{
+        p_\theta(O_{1:T} = o_{1:T}^g, Z_{1:T}=\zeta_{1:T})
+    }{
+        q(Z_{1:T} = \zeta_{1:T} \mid O_{1:T} = o_{1:T}^g)
+    }
+]
+\\
+&\geq \E_{\zeta_{1:T} \sim q}[ \log
+    \frac{
+        p_\theta(O_{1:T} = o_{1:T}^g, Z_{1:T}=\zeta_{1:T})
+    }{
+        q(Z_{1:T} = \zeta_{1:T} \mid O_{1:T} = o_{1:T}^g)
+    }
+]
+\\
+&\triangleq \mathcal L(q, \theta)
+\end{align}
+EM optimizes $\mathcal L(q, \theta)$ by alternating between optimizing the model parameters $\theta$ and the variational distribution $q$.
+In the ``E'' step does
+\[
+    q = \text{argmax}_q \mathcal L(q, \bar \theta)
+\]
+and the ``M'' step does
+\[
+    \theta = \text{argmax}_\theta \mathcal L(\bar q, \theta)
+\]
+with the bar indicating that the variable is treated as a constant.
+\subsection{E step}
+% The class of variational distributions is very important, with two natural candidates are
+% \begin{align}
+%     q(Z_{1:T} \mid O_{1:T}) = \begin{cases}
+%         \prod_t q(Z_t \mid O_t) & \text{VAE}\\
+%         \prod_t q(Z_t \mid O_{1:t}) & \text{RNN+VAE}
+%     \end{cases}
+% \end{align}
+The E step can be written as
+% \begin{align}\label{eq:lb-vae-term}
+% \mathcal L(q, \theta)
+% &= \E_{\zeta_{1:T} \sim q}[ \log
+%     p_\theta(O_{1:T} = o_{1:T}^g \mid Z_{1:T}=\zeta_{1:T})
+% ]
+% \\\nonumber
+% &\qquad
+% + KL(
+%     q(Z_{1:T} = \cdot \mid O_{1:T} = o_{1:T}^g)
+% ||
+%     p_\theta(Z_{1:T}=\cdot)
+% )
+% \end{align}
+% or simply
+\begin{align}\label{eq:lb-vae-term}
+\max_q \mathcal L(q, \theta)
+&=
+\max_q
+\E_q[ \log
+    p_\theta(o_{1:T}^g \mid \zeta_{1:T})
+]
++ KL(
+    q( \cdot \mid o_{1:T}^g)
+||
+    p_\theta(\cdot)
+) 
+\end{align}
+If we both $p_\theta$ and $q$ to factorize over time, we get
+\begin{align}
+\max_q \mathcal L(q, \theta)
+&=
+\max_q
+\sum_t \E_q[ \log
+    p_\theta(o_t^g \mid \zeta_t)
+]
++ KL(
+    q( \cdot \mid o_t^g)
+||
+    p_\theta(\cdot)
+) 
+\end{align}
+which is exactly the VAE loss.
+Note that just as in VAEs, we do not actually know $p_\theta$ and so we model it using a decoder that we train with MLE.

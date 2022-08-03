@@ -1,0 +1,30 @@
+\begin{algorithm}[t]
+\caption{Visual Affordance Learning}
+\label{algo:val}
+\begin{algorithmic}[1]
+\REQUIRE Dataset $\mathcal{D}$, policy $\pi(\at|\zt, \zt_g)$, $Q$-function $Q(\zt, \at, \zt_g)$, RL algorithm $\gA$, replay buffer $\gR$, relabeling strategy
+% \footnote{The relabeling distribution is 50\% future goals, 30\% prior goals and 20\% rollout goals \cite{andrychowicz2017her, nair2018rig}.}
+$p_\text{RS}(\zt)$, environment family $p(\mathcal{E})$.
+%%SL.10.22: what is RS (i.e., what type of object)?
+%%AVN rewritten as a distribution, TODO include footnote in maintext (does not show up from algo box)
+\STATE Learn encoder $\phi(\zt|\st)$ by generative model of $\mathcal{D}$
+\STATE Learn affordances $p(\zt_t|\zt_0)$ by generative model of $\mathcal{D}$
+\STATE Add latent encoding of $\mathcal{D}$ to the replay buffer
+\STATE Initialize $\pi$ and $Q$ by running $\gA$ offline
+\STATE Sample $\mathcal{E}_\text{new} \sim p(\mathcal{E})$, $\mathcal{E}_\text{new} = \left(p_\text{new}(\st_0), \pi_\text{new}(\st_{t+1} | \st, \at)\right)$
+\FOR{$1, \dots, N_\text{episodes}$}
+    \STATE Sample initial state $\st_0 \sim p_\text{new}(\st_0)$.
+    \STATE Sample goal $\zt_g \sim p(\zt_t|\zt_0)$
+    \FOR{$t = 0, \dots, H$}
+        \STATE Sample $\at_t \sim \pi(\cdot|\zt_t, \zt_g)$
+        \STATE Sample $\st_{t+1} \sim p_\text{new}(\cdot | \st_t, \at_t)$
+    \ENDFOR
+    \STATE Store trajectory $(\zt_1, \at_1, \dots, \zt_H)$ in replay buffer $\gR$.
+    \FOR{$1, \dots, N_\text{train\_steps}$}
+        \STATE Sample transition $(\zt_t, \at_t, \zt_{t+1}, \zt_g)$
+        \STATE Relabel with $\zt_g' \sim p_\text{RS}(\zt_g)$ and recompute reward
+        \STATE Update $\pi$ and $Q$ with relabeled transition using $\gA$
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}

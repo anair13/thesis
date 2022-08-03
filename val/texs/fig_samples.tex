@@ -1,0 +1,92 @@
+\begin{figure*}[t]
+    \begin{subfigure}[b]{0.12\textwidth}
+        \center
+        \includegraphics[height=0.99\textwidth]{val/imgs/views/simb_view.jpeg}
+        \vspace{0.02cm}
+        
+        \includegraphics[width=0.99\textwidth]{val/imgs/views/sima_view.jpeg}
+    \end{subfigure}
+    \hspace{1cm}
+    \begin{subfigure}[b]{0.14\textwidth}
+        % \center
+        \begin{flushright}
+        % \textbf{Samples}
+        
+        Initial Image
+        
+        \vspace{0.35cm}
+        
+        CVQVAE (Ours)
+        
+        \vspace{0.35cm}
+        
+        CCVAE
+        
+        \vspace{0.35cm}
+        
+        CBiGAN
+        
+        \vspace{0.35cm}
+        
+        VAE
+        
+        \vspace{1.1cm}
+        
+        % BiGAN
+        \end{flushright}
+        
+        % \textbf{Reconstructions}
+        
+        % Image
+        
+        % CVQVAE (Ours)
+        
+        % CCVAE
+        
+        % CBiGAN
+        
+        % VAE
+        
+        % BiGAN
+        
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \center
+        
+        \scalebox{1.4}{
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/s1.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/s2.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/s3.png} } \hspace{-12px}
+                % \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/s4.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/s5.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/f1.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/f2.png} } \hspace{-12px}
+% \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/f3.png} }
+            }
+    
+        \hspace{0.5cm}\textcolor{green}{\rule{3cm}{2px}} \hspace{0.5cm} \textcolor{red}{\rule{1cm}{2px}}
+        
+        Sim Setting A
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \center
+        
+            \scalebox{1.4}{
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim2/s1.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim2/s3.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim2/s2.png} } \hspace{-12px}
+                % \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/s4.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim2/s5.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim2/f1.png} } \hspace{-12px}
+                \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim2/f2.png} } \hspace{-12px}
+% \adjustbox{trim=0 16 0 0,clip} { \includegraphics[width=0.1\textwidth]{val/imgs/samples/sim1/f3.png} }
+            }
+    
+        \hspace{0.5cm}\textcolor{green}{\rule{3cm}{2px}} \hspace{0.5cm} \textcolor{red}{\rule{1cm}{2px}}
+        
+        Sim Setting B
+    \end{subfigure}
+    \caption{Left: randomly sampled work spaces from our simulated multi-task environment. Right: samples on test environments in simulation. In each column, the top image is the conditioning image $s_0$ and the images below are conditional sampled image. Successful samples for our affordance model are highlighted in green, and show the potential outcome of a behavior. Failure modes are highlighted in red, and lack diversity or alter an object's geometry or color.  }
+    \label{fig:samples}
+    \vspace{-0.5cm}
+\end{figure*}

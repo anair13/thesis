@@ -1,0 +1,162 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
+
+% numbers option provides compact numerical references in the text. 
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%wa
+% User commands.
+\usepackage{mathtools}
+\usepackage{amsfonts}  % for \mathbb
+\usepackage{graphics}
+\usepackage[pdftex]{graphicx}
+\usepackage{wrapfig}
+\usepackage{color}
+% \usepackage[symbol]{footmisc}
+
+% % Algorithm.
+\usepackage{algorithmicx}
+\usepackage[ruled]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+
+% Caption
+% \usepackage{caption}
+% \usepackage{subcaption}
+
+% Figure
+\usepackage{wrapfig}
+
+% ---------------------------------
+% User defined Macros
+% ---------------------------------
+
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+% KL Divergence 
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+\newcommand{\infdiv}{\infdivx}
+\newcommand{\kld}[2]{\ensuremath{D_{KL}\inf
+divx{#1}{#2}}}
+
+% Omit final dot from each def.
+\usepackage{expl3}
+\ExplSyntaxOn
+\newcommand\latinabbrev[1]{
+  \peek_meaning:NTF . {% Same as \@ifnextchar
+    #1\@}%
+  { \peek_catcode:NTF a {% Check whether next char has same catcode as \'a, i.e., is a letter
+      #1.\@ }%
+    {#1.\@}}}
+\ExplSyntaxOff
+\def\eg{\latinabbrev{e.g}}
+\def\etal{\latinabbrev{et al}}
+\def\etc{\latinabbrev{etc}}
+\def\ie{\latinabbrev{i.e}}
+
+% Vector.
+\let\vec\mathbf
+
+% Comments
+\providecommand{\kuan}[1]{{\color{blue} [Kuan: #1]}}
+\providecommand{\kuan}[1]{{\color{red} [Ashvin: #1]}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pdfinfo{
+   /Author (Homer Simpson)
+   /Title  (Robots: Our new overlords)
+   /CreationDate (D:20101201120000)
+   /Subject (Robots)
+   /Keywords (Robots;Overlords)
+}
+
+\begin{document}
+
+% paper title
+\title{
+Autonomous Learning of Robot Skills via Planning 
+}
+%%SL.12.28: I think it's a nice starting point for the title! I guess the idea you want to get across is that the planning component is what enables the learning to be autonomous, which makes a lot of sense. There are a number of unfortunate potential misunderstandings though that we should try to avoid:
+% 1. robotics people will tend to (mis)interpret "planning" as more traditional motion planning, which might make the title come across as kind of simplistic -- planning is a standard way to get autonomous robot behavior (and the autonomous *learning* part might be missed)
+% 2. some people might not quite get what the "autonomous learning" bit means, or that the paper has anything to do with RL at all
+% a few ideas for titles that kind of revolve around a similar theme but try to address some of these potential issues:
+% - Automating Real-World Goal-Conditioned RL via Goal Planning
+% - Planning with Goal-Conditioned Policies for Autonomous RL
+% - Autonomous Robotic Reinforcement Learning via Goal Planning
+
+% You will get a Paper-ID when submitting a pdf file to the conference system
+\author{Author Names Omitted for Anonymous Review. Paper-ID [add your ID here]}
+
+%\author{\authorblockN{Michael Shell}
+%\authorblockA{School of Electrical and\\Computer Engineering\\
+%Georgia Institute of Technology\\
+%Atlanta, Georgia 30332--0250\\
+%Email: mshell@ece.gatech.edu}
+%\and
+%\authorblockN{Homer Simpson}
+%\authorblockA{Twentieth Century Fox\\
+%Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\and
+%\authorblockN{James Kirk\\ and Montgomery Scott}
+%\authorblockA{Starfleet Academy\\
+%San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212\\
+%Fax: (888) 555--1212}}
+
+
+% avoiding spaces at the end of the author lines is not a problem with
+% conference papers because we don't use \thanks or \IEEEmembership
+
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page, use this alternative format:
+% 
+%\author{\authorblockN{Michael Shell\authorrefmark{1},
+%Homer Simpson\authorrefmark{2},
+%James Kirk\authorrefmark{3}, 
+%Montgomery Scott\authorrefmark{3} and
+%Eldon Tyrell\authorrefmark{4}}
+%\authorblockA{\authorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: mshell@ece.gatech.edu}
+%\authorblockA{\authorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\authorblockA{\authorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\authorblockA{\authorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+
+\maketitle
+
+\begin{abstract}
+\color{blue} [We are sorry that the manuscript is not ready for reviewing yet.]
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\input{1-introduction}
+\input{2-related-work}
+% \input{3-problem-statement}
+\input{4-method}
+\input{5-experiments}
+\input{6-conclusion}
+
+%% Use plainnat to work nicely with natbib. 
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+%% \newpage
+% \clearpage
+% \appendix
+% \input{appendix-a-environment-details}
+% \input{appendix-b-implementation-details}
+
+\end{document}

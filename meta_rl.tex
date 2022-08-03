@@ -1,0 +1,70 @@
+\section{Meta-Reinforcement Learning (Meta-RL)}
+\label{sec:meta-learning-rl}
+In this section we specialize the meta-learning setup to the case of reinforcement learning and point out differences from the supervised learning problems we have studied so far.
+In meta-reinforcement learning (meta-RL), each task is a Markov Decision Process (MDP).
+An MDP consists of a set of states $\mathcal{S}$, a set of actions $\mathcal{A}$, an initial state distribution $p(\tstate_1)$, a state transition distribution $p(\tstate_{t+1}|\tstate_t,\act_t)$, a discount factor $\gamma$, and a reward function $r(\tstate_t, \act_t)$.
+We assume the transition and reward functions are unknown, but can be sampled by taking actions in the environment.
+The goal of RL is to learn a policy $\pi_{\theta}(\act_t|\tstate_t)$ that selects actions that maximize the sum of discounted rewards.
+
+While a review of RL algorithms is beyond the scope of this work, one characteristic of RL algorithms that will be important in later chapters is the type of data required for learning.
+RL algorithms can be categorized into those that learn from data collected by the current policy (``on-policy''), and those that can learn from data collected by a different policy (``off-policy'')~\citep{sutton}.
+Off-policy algorithms are substantially more data efficient, as they can re-use previously collected data for training.
+Since deep RL is data-intensive, often requiring millions of billions of environment interactions to learn a good policy, we will be interested in leveraging off-policy learning wherever possible to reduce the burden of interaction.
+
+In the meta-RL setting, we assume a distribution over tasks $p(\task)$. 
+This problem definition encompasses task distributions with varying transition functions (e.g., robots with different dynamics) and varying reward functions (e.g., navigating to different locations).
+We formalize the adaptation procedure $f_\phi$ as a function of experience $( \state_{1:t}, r_{1:t}, \act_{1:t-1} )$ that summarizes task-relevant information into the variable $\mathbf{z}_t$.
+The policy is conditioned on this variable as $\pi_\theta(\act_t|\state_t, \mathbf{z}_t)$ to adapt to the task. 
+By training the adaptation mechanism $f_\phi$ and the policy $\pi_\theta$ end-to-end to maximize returns of the adapted policy, meta-RL algorithms can learn policies that effectively modulate and adapt their behavior with small amounts of experience in new tasks. 
+We formalize this meta-RL objective as:
+\begin{align}\vspace{-0.2in}
+    \theta^*\text{ , } \phi^* = \max_{\theta,\phi} \hspace{4pt} \mathop{\mathbb{E}}_{\task \sim p(\task)} \hspace{4pt}
+    \mathop{\mathbb{E}}_{\substack{
+    \\ \act_t \sim \pi_\theta(\cdot|\state_t,\mathbf{z}_t) 
+    \\ \tstate_{t+1} \sim p_\task(\cdot|\tstate_t,\act_t) 
+    \\ r_t \sim r_\task(\cdot | \tstate_t, \act_t)
+    }} \hspace{4pt}
+    \left[ \sum_{t=1}^T  \gamma^t r_t \right]
+    \hspace{10pt} \text{where} \hspace{10pt} \mathbf{z}_t = f_{\phi}(\state_{1:t}, r_{1:t}, \act_{1:t-1}).
+    \label{eqn:meta-general}
+\end{align}
+
+Similar to the supervised learning setting, prior meta-RL methods differ in how the adaptation procedure $f_\phi$ is represented: as a recurrent update~\citep{duan2016rl, wang2016learning}, or as a gradient step~\citep{finn2017model}).
+Additionally, meta-RL algorithms also differ in how often the adaptation procedure occurs (e.g., at every timestep~\citep{duan2016rl, zintgraf2019varibad} or once per episode (as in the PEARL algorithm proposed in Chapter~\ref{chapter:pearl} as well as~\citet{humplik2019meta}), and in how the optimization is performed (e.g., on-policy~\citep{duan2016rl}, off-policy as in both algorithms proposed in Chapter~\ref{chapter:pearl}). 
+A significant difference between the meta-RL and supervised meta-learning settings is that in meta-RL the agent must collect its own adaptation data. 
+Thus adaptation to a new task presents the same exploration-exploitation problem inherent to RL.
+%In order to learn a new task quickly, the agent must explore efficiently.
+During the meta-training phase, the agent must learn both exploration strategies and how to make use of the collected data to learn the task.
+
+In Chapter~\ref{chapter:pearl}, we tackle combining meta-RL with off-policy learning to produce the sample efficient meta-RL algorithm PEARL.
+To do so, we must contend with the exploration problem, since in the off-policy setting, the data seen during meta-training is systematically different from the data collected when adapting to a new task.
+As we will see, framing meta-RL as probabilistic inference of task variables affords an elegant solution to this exploration problem.
+%In Chapter~\ref{chapter:meld}, we push the capabilities of meta-RL algorithms further to operate on a real robotic system from image observations.
+%In both chapters, we will use the idea of meta-RL as probabilistic inference of hidden task variables to address these challenges.
+
+\section{Partially Observed Meta-RL}
+Robots operating in the real world do not have access to the underlying state $\tstate_t$, and must instead select actions using high-dimensional and often incomplete observations from cameras and other sensors. 
+Such a system can be described as a partially observed Markov decision process (POMDP), where observations $\obs_t$ are a noisy or incomplete function of the unknown underlying state $\tstate_t$, and the policy is conditioned on a history of observations as $\pi(\act_t | \obs_{1:t})$.
+In the meta-RL setting, each $\task$ from a distribution of tasks $p(\task)$ is now a POMDP as described above, with initial state distribution $p_\task(\tstate_1)$, dynamics function $p_\task(\tstate_{t+1}|\tstate_t,\act_t)$, observation function $p_\task(\obs_t | \tstate_t)$, and reward function $r_\task(r_t|\tstate_t,\act_t)$.
+The partially observed meta-RL objective is very similar to Equation~\ref{eqn:meta-general} (additions are marked in blue):
+\begin{align}\vspace{-0.2in}
+    \theta^*\text{ , } \phi^* = \max_{\theta,\phi} \hspace{4pt} \mathop{\mathbb{E}}_{\task \sim p(\task)} \hspace{4pt}
+    \mathop{\mathbb{E}}_{\substack{
+    \textcolor{blue}{\obs_{t} \sim p_\task(\cdot|\tstate_t)} 
+    \\ \act_t \sim \pi_\theta(\cdot|\textcolor{blue}{\obs_{1:t}},\mathbf{z}_t) 
+    \\ \tstate_{t+1} \sim p_\task(\cdot|\tstate_t,\act_t) 
+    \\ r_t \sim r_\task(\cdot | \tstate_t, \act_t)
+    }} \hspace{4pt}
+    \left[ \sum_{t=1}^T  \gamma^t r_t \right]
+    \hspace{10pt} \text{where} \hspace{10pt} \mathbf{z}_t = f_{\phi}(\textcolor{blue}{\obs_{1:t}}, r_{1:t}, \act_{1:t-1}).
+    \label{eqn:meta-general-partial}
+\end{align}
+Black-box recurrent meta-RL algorithms can handle such state partial observability by design (the function $f$ and the policy $\pi$ are both the same recurrent network).
+However these approaches have a number of drawbacks: they provide no explicit representation learning to handle image inputs, they do not represent uncertainty in either task or state estimation, and it has proven difficult to use such models in conjunction with off-policy learning (see Chapter~\ref{chapter:pearl}). 
+
+In Chapter~\ref{chapter:pearl}, we again leverage the probabilistic inference perspective on meta-learning to cast meta-RL into the framework of latent state estimation.
+This insight allows us to leverage latent state models designed to infer state information from history directly for meta-RL with only a few modifications.
+The resulting MELD algorithm uses unsupervised representation learning to aid in interpreting image inputs, represents uncertainty over both the state and task, and is amenable to off-policy optimization. 
+
+
+

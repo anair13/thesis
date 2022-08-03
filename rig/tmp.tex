@@ -1,0 +1,191 @@
+\section{Intro starting with RL motivation}
+
+% By specifying reward functions that are grounded in tasks that we care about, we can potentially train agents to perform useful tasks.
+% The choice of reward function is a critical component to getting reinforcement learning algorithms to work.
+
+% 1: we want useful behaviors
+Reinforcement learning is a promising approach to developing autonomous systems with useful behaviors.
+By specifying reward functions that are grounded in tasks that we care about,
+%%SL.05.08: somewhat strange phrasing -- as opposed to tasks that we don't care about?
+we can train agents to perform complex tasks such as playing video games\cite{mnih2015human, silver2016alphago} and performing robotics tasks ~\cite{something}.
+The choice of reward function is a critical component to getting reinforcement learning algorithms to work and perform useful tasks.
+% 2: reward signals are difficult to get
+However, when moving beyond simulated and controlled environments, simply computing the reward function becomes a non-trivial task.
+%%SL.05.08: I don't think we should motivate the work narrowly as addressing the reward specification problem, because it's neither the place where we do best, nor the most exciting one. I think we really need to leverage everything we have: the ability to easily handle visual observations, efficient learning, and bringing the flexibility of model-based learning to model-free RL, *and* also representation learning and ability to autonomously set self-supervised goals during training in arbitrary environments. We should find a way to tie all of these together.
+For example, in robotics, the reward function is frequently manually designed and based on measurements such as the Euclidean distance between an object and its desired position.
+Getting access to this measurement can be expensive and time consuming, potentially requiring additional sensors and new perception system for every new task.
+Can we develop an autonomous system that is able to learn meaningful behavior when they only have access to observations?
+
+% In contrast, humans are able to acquire new skills while always using the same perception system.
+
+% 3: Humans don't need reward signal. Can we replicate this?
+We draw inspiration for developing such a system from how humans quickly learn new skills.
+%%SL.05.08: when motivating your method with "how humans do it," use this sparingly and carefully. In particular, it's good to be concrete and not gratuitous. There is nothing inherently virtuous about doing things the way humans do it (there is a word for that actually -- cargo cult science -- something too much of the current AI community is guilty of). There is something virtuous about pointing out that there exists a system that can do things that are seemingly very hard for our current machines, and that should be a hint that we can do things better.
+We humans are capable of learning various motor skills, including sparse tasks, directly from raw sensory data (vision, audio, etc.) without requiring direct access to these metrics.
+This ability is in stark contrast to many reinforcement learning methods, which usually require dense reward signals based on a state representation that makes it easy to compute reward signals.
+% 4: Humans don't need reward signal because they perform unsupervised, goal-oriented learning
+One reason that we are capable of learning new skills without dense reward supervision is that humans have learned good representations of the world, allowing us to translate sparse task (e.g. kick the ball into a goal) into dense reward signals (e.g. distance between ball and the goal) [TODO: citation].
+Evidence shows that humans start to learn such representations as early as infancy.
+%%SL.05.08: I think we can cut some of the fluff here and just state more directly what we want to state about representations without worrying about what humans do (saying humans learn representations is kind of a tautology, since the word representation is so ill-defined as to be meaningless in this context).
+By setting goals for themselves and attempting to achieve them, infants learn useful representations of the world in a self-supervised manner [TODO: citation].
+
+% 5: Can we develop an autonomous system that (like humans) are able to learn meaningful behavior when they only have access to observations?
+The goal of this paper is to emulate this learning process.
+Specifically, we would like to develop a self-supervised learning systems whereby a robot autonomously sets and attempts to reach goals in some representation, improves its representation of the world, and repeats this process.
+It is important that this self-supervision is goal-oriented.
+Otherwise, a self-supervision ``in a vaccuum'' may not result in a useful representation.
+By grounding the self-supervision in goals with real-world meaning, such as moving an arm or an object, the resulting representation can be useful for downstream tasks.
+Furthermore, we would like to use ``raw'' image observations, so that new downstream tasks can be conveyed without changing the observation representation.
+In summary, we would like an autonomous learning system that (1) imagines its own goals to allow it to autonomously acquire more useful behaviors, (2) have goals that are grounded in the real-world, (3) work with high-dimensional observations such as images, and (4) provide a representation where learning is easier.
+%%SL.05.08: I think this paragraph is a bit tricky to sell, because it's not entirely obvious why all of this is actually desireable. It's also not clear whether our method actually accomplishes this.
+
+While existing methods provide solutions to some of these solutions independently, no prior work has tackled all of these issues together and in the context of developing a self-supervised learning system. (TODO: provide specific example and add citations.)
+
+
+To solves all of these issues, we propose using a variational auto-encoder (VAE) to embed image observations into a latent space.
+We define goals as variables in this latent space and train an agent to reach goal latent variables using reinforcement learning.
+By training an auto-encoder to reconstruct images from the latent variables, we ground the latent space in a useful representation so that reaching latent variables corresponds to meaningful behavior in the real world.
+Specifically, we can express many ``downstream'' robotic tasks as reaching a goal image
+%%SL.05.08: I think you are in a lot of danger of people arguing with you here and losing track of the message of the paper.
+(e.g. moving objects to a location, set a dinner table, or go to a location, etc.).
+Thus, to have a robot reach a goal image, we simply encode the image into a latent variable and give this latent variable as the goal for a learned RL policy to reach.
+We chose to encode the images using a VAE for a number of reasons.
+VAEs have been shown to work well with high-dimensional observations like images.
+VAEs also provide a natural mechanism for sampling new goals to enable self-supervision: one can simply sample latent variables from the prior distribution.
+(Maybe move to related works:
+Furthermore, by sampling from the VAE during training time, we can generate new goals to retroactively relabel data.
+In effect, we can ``imagine'' goals that were never reached.
+This is contrast to methods like HER~\cite{andrychowicz2017her}, which can only resample previously seen goals.
+)
+Lastly, we show that VAEs lend themselves to a natural dense reward that corresponds to maximizing the probability of reaching a goal, making the goal-reaching task easier for the inner-loop reinforcement learning algorithm.
+
+The overall learning procedure alternates between updating the VAE and performing RL to maximize the probability of reaching a latent goal state.
+(
+Possibly:
+We show that this alternating optimization procedure can be interpreted as performing EM to optimize the evidence lower bound on the probability of reaching a goal image.
+% This interpretation also highlights the distinction between traditional EM for unsupervised learning and self-supervised reinforcement learning: when performing the M-step, one needs to update a policy rather
+)
+% In this paper, we study how to allow agents to learn in these settings by simultaneously learning latent goal representations of images with a VAE and a policy from images to reach these goals.
+We call our method TBD.
+We compare TBD with existing reinforcement-learning algorithms on numerous simulated robotics tasks.
+In particular, we show that the self-supervised learning results in a policy that is able to learn to solve new tasks faster than directly trying to learn a task (even when accounting for the amount of unsupervised data used).
+Lastly, we also test our method on real-world robotics tasks, showing that TBD can be translated to real tasks.
+
+\section{Old Related Works}
+Reinforcement learning has been applied successfully to play games with superhuman skill and performing robotics tasks beyond the capability of classical methods.
+However, these methods require significant human involvement in designing reward functions, state representations, and task-specific models.
+For example, learning to play Go with RL \cite{silver2016alphago} defines task-specific representations and contains Monte-Carlo Tree Search inside the method.
+Algorithms to play Atari games \cite{mnih2015human} processes image observations but assumes a reward function defined on true states which must be human-defined.
+Successful applications of RL in robotics ~\cite{levine2017grasping,gu2016naf}
+%%SL.05.13: neither of these papers require a trajectory optimizer...
+requires extra instrumentation of the environment and extra information such as a trajectory optimizer.
+Instead we focus on comparing our method to other self-supervised methods which make minimal assumptions about any such human involvement.
+%%SL.05.13: I would suggest substantially shortening this paragraph, it doesn't really seem to be saying much except the last couple of paragraphs
+
+Self-supervised methods have also been applied successfully to robotics tasks, but existing methods are similarly limited by the need for task-specific engineering.
+Learning to grasp novel objects \cite{pinto2015supersizing, levine2017grasping} outperforms classical methods but requires action parameterization specific to grasping, and reward information is obtained by checking whether the robot gripper can close, another task-specific module.
+Inverse model methods that have learned to push objects, tie knots, and do visual navigation \cite{agrawal2016poking, pathak2018zeroshot} successfully learn behavior from large amounts of data collected autonomously, but implicitly make the assumption that every trajectory is optimal at reaching the resulting states.
+Other work on self-supervised pushing  \cite{finn2016visualforesight, ebert2017videoprediction} implicitly obtains reward information from a human by the goal specification mechanism.
+
+Another form of self-supervision in reinforcement learning is work on intrinsic rewards to encourage exploration~\cite{pathak2017curiosity,bellemare2016unifying}[TODO: add more].
+%%SL.05.13: I don't think this is even remotely relevant... it's a completely orthogonal problem
+These methods look at how to automatically generate exploration strategies, usually with a goal of increasing the number of states visited.
+Our work also provides a natural exploration strategy by sampling goal states.
+Unlike these methods that focus only on exploration, the representation that we learn also results in a reward function can be used directly to achieve a goal image specified by a user.
+
+Auxiliary rewards are another form of extra supervision~\cite{jaderberg2016auxiliary, shelhamer2016loss}.
+These rewards are usually hand-designed and intended to improve stability in training, and could be used to further improve our method.
+%% AVN I think these are not as relevant and we could leave these out.
+
+A number of works have rewards based on learned latent spaces~\cite{watter2015embed, ha2018world, machado2018eigenoption, thomas2017independentlycontrollable}.
+The work of \cite{machado2018eigenoption} uses the resulting latent to discover eigenoptions, which can be used to initialize exploration.
+In contrast, show that the resulting policy can be used directly to solve goal-reaching tasks.
+These work constrain the latent space to have locally linear~\cite{watter2015embed} or learnable~\cite{ha2018world} dynamics.
+In our work, we do not force the latent space to replace states in a MDP, allowing the latent variables to ignore unnecessary state information.
+Such a representation can be easier to learn when the dynamics of the environment are difficult to learn.
+\cite{thomas2017independentlycontrollable} distributes goals across different latent dimensions, which is largely orthogonal to and could be used in conjunction with our method.
+
+
+% Most closely related to our work is Embed to Control \cite{watter2015embed}.
+% In order to reach goals in latent space, the method learns a latent embedding and a linearly-constrained dynamics model of the system in the embedding space in order to reach goals.
+% Because of these constraints, all parameters in the model can be estimated with variational inference and planning can be done efficiently via LQR.
+% However, the constraint of locally linear dynamics also severely limits the method's applicability to complex domains.
+% In our work, we make no simplifying assumptions about the underlying structure of the problem as planning is done with RL.
+% Also, compared to model-based methods, our method of feature selection allows us to selectively ignore unimportant state information.
+% In our experiments, we show that this allows our method to significantly outperform E2C on visually and dynamically complex environments.
+
+(Depending on how important relabelling/dense rewards becomes...)
+While model-based RL methods are natural for goal reaching since they learn the entire dynamics of a system and can reuse data for optimizing varying reward functions, our work extends on prior work that shows model-free methods can also reuse data in a similar manner.
+For instance, Horde \cite{sutton2011horde} reuses environment interaction data to learn value functions for multiple tasks simultaneously.
+% Not sure if this is a fair summary of Horde, its actually about "unsupervised sensorimotor interaction" and we might want to talk about it more.
+Hindsight Experience Replay \cite{andrychowicz2017her} extends this idea to continuous control with goals \cite{schaul2015uva} to allow learning on difficult control tasks with sparse rewards by relabeling rollouts with goals as reached states, thereby allowing the agent to experience positive reinforcement.
+Temporal Difference Models \cite{pong2018tdm} further exploits data reuse in the finite horizon case by relabeling both goals and horizons.
+In this work, we provide a new framework for goal re-sampling using a VAE, and empirically demonstrate that our way of generating and relabeling goals enables faster and more stable learning.
+% TODO: prev sentence depends on results.
+% TODO: maybe incorporate inverse models here, but it should probably be discusses elsewhere. Poking \cite{agrawal2016poking}.
+
+To (maybe) add:
+\begin{itemize}
+    \item automatic curriculum
+    \item goal GAN
+\end{itemize}
+
+
+
+
+%%SL.05.13: perhaps you can begin with a top-down description of the method: a few sentences of motivation, a summary of how it works, and then dive into individual sections that describe each part
+
+\subsection{Efficient Learning with Image Observations}
+As discussed in Section \ref{section:goal-conditioned-rl}, retroactively relabelling goals can greatly improve the sample efficiency of RL algorithms.
+%%SL.05.13: this seems like a weird way to start this section
+However, methods that use sparse rewards ~\cite{andrychowicz2017her} must resample goals from states seen later in the trajectory since any other randomly selected state is unlikely to generate non-zero rewards.
+By using dense rewards, it is possible to generate reward signal when generating goals not seen from the same trajectory~\cite{pong2018tdm}.
+Sampling goals can be easy when working with ground truth state spaces.
+For example, if the Cartesian coordinates of various objects is part of the state space, then one can easily sample goal object positions to be within some predefined box of coordinates.
+However, when working with sensory observations such as images, it becomes non-trivial to generate goal images.
+To overcome these issues, we train a variational auto-encoder (VAE) to generate goal images.
+Rather than giving a goal image $o^g$ to a policy, we propose to use the corresponding latent $z^g$ as the goal.
+So, to sample goals, we sample $z^g$ from the prior used to train the VAE and give $z^g$ to the goal-reaching reinforcement learning algorithm.
+%%SL.05.13: this seems like it should come at the end of the technical sections, after you've described how things work
+
+%%SL.05.13: unless you're actually doing this, don't write it; I do not think that you are currently doing this, but if you do end up doing this (which is fine), you'll need a pretty different introduction
+With what data-set should we train the VAE?
+We propose to train the VAE on a mixture of two data-set: one is a pre-defined set of goals $N_h$ images $\{o^h_i\}_{i=1}^{N_h}$ that a human cares about, while the other is $N_r$ images generated by the policy $\{o^r_i\}_{i=1}^{N_r}$.
+Generating the predefined set of goal images can be much easier than writing an entire goal-image sampling process since only a few images need to be provided.
+This mixed data-set encourages the VAE to capture both images that humans care about but also the set of images that policy can reach.
+We hope that by capturing both of these modes, the resulting latent space can smoothly interpolate between the two, which can potentially resulting in a better, more useful representation for a policy to use.
+Overall, we train VAE parameters $\psi$ according to
+\begin{equation}
+    \max_\psi \sum_{i=1}^{N_h} \log p_\psi(o^h_i) + \frac{1}{N_r} \sum_{i=1}^{N_r} \log p_\psi(o^r_i).
+\end{equation}
+
+\subsection{State Space for Reinforcement Learning from Images}
+VAEs learn meaningful latent representations for images.
+So, rather than giving pixels directly to our RL algorithm, we first embed images into the VAE latent space and use this latent space as the state space for our RL algorithm.
+
+\subsection{Reward for Reinforcement Learning from Images}
+While VAEs provide a mechanism for generating images, training a goal-image reaching policy requires a reward function.
+Metrics such as mean pixel-wise error do not capture the underlying semantics conveyed by goals.
+As we show in the experiments, it is also difficult to train policies using pixel-wise error as the reward function.
+VAEs provide a natural reward function to use.
+Distances in the latent spaces are explicitly trained so that the Mahalanobis distance $|| \cdot ||_A$ corresponds to log probabilities, where $A$ is the precision matrix of a Gaussian.
+We thus use log-probability of a goal latent as the reward:
+\begin{equation}
+    r(o_t) = \log p_\psi(z^g \mid o_t)
+\end{equation}
+which is the log probability of a goal-latent conditioned on an image $o_t$.
+This reward function encourages the policy to go to observations that make the goal latent more likely.
+
+We can glean more intuition as to why this reward function is an appropriate reward function to use.
+We show in the Appendix that maximizing $\log p_\psi(z^g \mid o_t)$ correspond to performing the following optimization
+\begin{equation}
+    \min_\theta \E_{z^g} \left[KL\left(p_\theta(o \mid z^g) || p_\psi(o \mid z^g)\right)
+    - KL\left(p_\theta(o \mid z^g) || p_\psi(o)\right)\right].
+\end{equation}
+The first term encourages the policy $\pi_\theta$ to match the true goal-conditioned distribution $p_\psi(o \mid z^g)$.
+The second term encourages the policy to maximize the divergence with the marginalized distribution over the observations.
+Intuitively, the second term further encourages the policy pay attention to $z^g$, rather than simply making $p_\theta(o \mid z^g) = p_\psi(o)$.
+
+(Note: maybe this is one way we can back-prop the RL gradients into the VAE: say that the VAE tries to make it so that $p_\psi(o)$ is different from $p_\psi(o \mid z^g)$ so that RL has an easier time?)
+
+\subsection{Summary}

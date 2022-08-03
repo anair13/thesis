@@ -1,0 +1,40 @@
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+       \node[state] (s0) at (0,0) {$s_0$};
+       \node[state] (z0) at (0,1.5) {$z_0$};
+       \node[state, fill=gray!25] (o0) at (0,3) {$o_0$};
+       \node[state, fill=gray!25] (w0) at (0,4.5) {$\Omega_0$};
+       \node[state] (u0) at (1.5,1.5) {$u_0$};
+
+       \node[state] (s1) at (3,0) {$s_1$};
+       \node[state] (z1) at (3,1.5) {$z_1$};
+       \node[state, fill=gray!25] (o1) at (3,3) {$o_1$};
+       \node[state, fill=gray!25] (w1) at (3,4.5) {$\Omega_1$};
+       \node[state] (u1) at (4.5,1.5) {$u_1$};
+
+       \node[state] (sg) at (11.5,4.5) {$s_g$};
+       \node[state] (zg) at (10,4.5) {$z_g$};
+       \node[state, fill=gray!25] (og) at (10,3) {$o_g$};
+
+       \draw[every loop]
+            (s0) edge node {} (z0)
+            (z0) edge node {} (o0)
+            (o0) edge node {} (u0)
+            (z0) edge[bend left] node {} (w0)
+            (u0) edge node {} (s1)
+            (s1) edge node {} (z1)
+            (z1) edge node {} (o1)
+            (o1) edge node {} (u1)
+            (z1) edge[bend left] node {} (w1)
+
+            (sg) edge node {} (zg)
+            (zg) edge node {} (og)
+
+            % (u1) edge node {} (s1)
+            (zg) edge[bend right] node {} (w0)
+            (zg) edge[bend right] node {} (w1);
+    \end{tikzpicture}
+    \caption{A graphical model for self-supervised learning}
+    \label{fig:pgm}
+\end{figure}
