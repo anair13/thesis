@@ -551,3 +551,73 @@
 \def\ourname{IQL\xspace}
 \def\ournamepref{implicit\xspace}
 \def\Ournamepref{Implicit\xspace}
+
+
+
+
+%%%%%%% SkewFit
+\newcommand{\bx}{\mathbf{x}}
+\mathchardef\mhyphen="2D
+
+\newcommand{\MI}{I(\G, \SF)}
+\newcommand{\HG}{\gH(\G)}
+\newcommand{\HGS}{\gH(\G \mid \SF)}
+
+
+\newcommand{\Loss}{\mathcal{L}}
+\newcommand{\SFLoss}{\mathcal{L}^\text{SF}}
+\newcommand{\Lossq}{\mathcal{L}_\text{SKEW}}
+\newcommand{\Lossp}{\mathcal{L}_\text{FIT}}
+\newcommand{\pstate}{{p^S_{\pgparam}}}
+\newcommand{\pstatet}{{p^S_{\pgparam_t}}}
+\newcommand{\pstatett}{{p^S_{\pgparam_{t+1}}}}
+
+\newcommand{\U}{{U_\Imgs}}
+\newcommand{\UA}{{U_\gA}}
+\newcommand{\dynamics}{{p_\mathrm{dyn}}}
+% Generative model
+\newcommand{\pgparam}{{\phi}}
+\newcommand{\pgparamt}{{\pgparam_t}}
+\newcommand{\pgparamtt}{{\pgparam_{t+1}}}
+\newcommand{\pg}{{q^G_{\pgparam}}}
+\newcommand{\pgt}{{q^G_{\pgparam_t}}}
+\newcommand{\pgtt}{{q^G_{\pgparam_{t+1}}}}
+% Empirical distribution
+\newcommand{\pes}[1]{{p_{\text{emp}_{#1}}}}
+\newcommand{\pe}{\pstate}
+\newcommand{\pet}{\pstatet}
+\newcommand{\pett}{\pstatett}
+% Weighted empirical distribution
+\newcommand{\pwe}{\textcolor{red}{\bar {q}}}
+% Skewed distribution
+\newcommand{\pskewed}{{p_{\text{skewed}}}}
+\newcommand{\pskewedt}{{p_{\text{skewed}_t}}}
+\newcommand{\pskeweds}[1]{{p_{\text{skewed}_{#1}}}}
+\newcommand{\pskewedtt}{{p_{\text{skewed}_{t+1}}}}
+\newcommand{\pskewedn}{{p_{\text{skewed}_n}}}
+\newcommand{\pskewednn}{{p_{\text{skewed}_{n+1}}}}
+% For proof
+\newcommand{\pt}{{p_\theta}}
+\newcommand{\ptt}{{p_\theta^t}}
+\newcommand{\htt}{{\gH_\theta^t}}
+\newcommand{\replay}{\mathcal{R}}
+
+%% Notation switches
+\newcommand{\qe}{{\hat {q}}}
+% Weighted empirical distribution
+\newcommand{\qwe}{{\bar {q}}}
+
+\newcommand{\inX}{{\G}}
+\newcommand{\outX}{{\SF}}
+\newcommand{\x}{x}
+
+\newcommand{\NOTE}[1]{\textcolor{red}{(#1)}}
+\newcommand{\TODO}[1]{\textcolor{red}{(TODO: #1)}}
+\newcommand{\METHOD}{Skew-Fit\xspace}
+\newcommand{\METHODmath}{\text{Skew-Fit}}
+\newcommand{\METHODRIG}{Skew-Fit with RIG\xspace}
+\newcommand{\CONTRACTIVE}{contractive\xspace}
+\newcommand{\ESTABLE}{$\epsilon$-stable}
+\newcommand{\dynop}{{\mathcal{F}_\mathrm{dyn}}}
+\newcommand{\UB}{\mathcal{L}}
+\newcommand{\error}{e}
