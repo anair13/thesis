@@ -71,19 +71,21 @@ Similarly, in the real world experiments, on every reset we randomly rotated eac
 Due to a host of issues, such as defective hardware or poorly tuned controller parameters, feedback controllers might have induced noise. Conventional feedback control policies are determined a priori and do not adapt their behavior from data.
 However, RL methods are known for their ability to cope with shifting noise distributions and are capable of recovering from such issues.
 
-\begin{figure*}[t]
+\begin{figure}[ht!]
     \vspace{6pt}
     \centering
     \begin{subfigure}[b]{0.38\linewidth}
+    \renewcommand{\arraystretch}{1.5}
+    \footnotesize
         \begin{tabular}{ | c || c | c |}
             \hline
             Misaligned? & No & Yes  \\ \hline
             Residual RL & 20/20 & 15/20  \\ \hline
             Hand-engineered  & 20/20 & 2/20  \\ \hline
         \end{tabular}
-        \vspace{1.2cm} \\
+        \vspace{.8cm} \\
         \centering
-        (a)
+        \normalsize{(a)}
     \end{subfigure}
     \begin{subfigure}[b]{0.3\linewidth}
         \includegraphics[width=0.99\linewidth]{residualrl/figs/real_world_envvar_success.pdf} \\
@@ -95,10 +97,10 @@ However, RL methods are known for their ability to cope with shifting noise dist
         \centering
         (c)
     \end{subfigure}
-    \vspace{0.2cm}
+    \vspace{0cm}
     \caption{Outcome of our residual RL method in different experiments during the block assembly task in the real-world. Success rate is recorded manually by human judgment of whether the blocks stayed upright and ended in the correct position. Plot (a) compares the insertion success of residual RL and hand-designed controller depending on the block orientation during run time. Plot (b) shows the success rate of the insertion process during training, where on every reset the blocks are randomly rotated: straight, tilted clockwise, or tilted counterclockwise ($\pm$  $20^{\circ}$) and plot (c) shows the increasing success rate of our method for biased controllers as well even as control bias increases.}%
     \label{fig:environment_variation}
-\end{figure*}
+\end{figure}
 
 In this experiment, we introduce a control noise, including biased control noise, and demonstrate that residual RL can still successfully solve the task, while a hand-engineered controller cannot. The control noise follows a normal distribution and is added to the control output of the system at every step:
 \begin{align}

@@ -3,19 +3,20 @@
 In this work, we empirically evaluate learning methods on a set of electric connector assembly tasks, pictured in Fig.~\ref{fig:usb_photo_demo2}.
 Connector plug insertions are difficult for two reasons. 
 First, the robot must be very precise in lining up the plug with its socket. 
-As we show in our experiments, errors as small as~$\pm 1$\,mm can lead to consistent failure. 
-Second, there is significant friction when the connector plug touches the socket, and the robot must learn to apply sufficient force in order to insert the plug. Image sequences of successful insertions are shown in Fig.~\ref{fig:usb_photo_demo2}, where it is also possible to see details of the gripper setup that we used to ensure a failure free, fully automated training process.
-In our experiments, we use a 7 degrees of freedom Sawyer robot with end-effector control, meaning that the action signal $u_t$ can be interpreted as the relative end-effector movement in Cartesian coordinates. The robot's underlying internal control pipeline is illustrated in Figure~\ref{fig:control_pipeline}.
-
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{wrapfigure}[14]{r}{0.5\textwidth}
   \begin{center}
     %\vspace{12pt}
         \includegraphics[width=0.88\linewidth]{insertion/newfigs/control_pipeline.pdf}
         %\vspace{6pt}
+        \captionsetup{justification=justified, format=plain}
     \caption{Illustration of the robot's cascade control scheme. The actions  $u_t$ are computed at a frequency of up to $10\,\mathrm{Hz}$,  desired joint angles are obtained by inverse kinematics, and a joint-space impedance controller with anti-windup PID control commands actuator torques at $1000\,\mathrm{Hz}$.}
    \label{fig:control_pipeline}
   \end{center}
 \end{wrapfigure}
+As we show in our experiments, errors as small as~$\pm 1$\,mm can lead to consistent failure. 
+
+Second, there is significant friction when the connector plug touches the socket, and the robot must learn to apply sufficient force in order to insert the plug. Image sequences of successful insertions are shown in Fig.~\ref{fig:usb_photo_demo2}, where it is also possible to see details of the gripper setup that we used to ensure a failure free, fully automated training process.
+In our experiments, we use a 7 degrees of freedom Sawyer robot with end-effector control, meaning that the action signal $u_t$ can be interpreted as the relative end-effector movement in Cartesian coordinates. The robot's underlying internal control pipeline is illustrated in Figure~\ref{fig:control_pipeline}.
 
 To comprehensively evaluate connector assembly tasks, we experiment on a variety of connectors. Each connector offers a different challenge in terms of required precision and force to overcome friction. 
 We chose to benchmark the controllers performance on the insertion of a USB connector, a U-Sub connector, and a waterproof Model-E connector manufactured by MISUMI.
@@ -33,6 +34,10 @@ In the following we describe the used adapters, USB, D-Sub, and Model-E. The obs
 \subsection{Experimental Settings}
 We consider three settings in our experiments in order to evaluate how plausible it is to solve these tasks with more convenient state representations and reward functions and to evaluate the performance of different algorithms changes as the setting is modified.
 
+% \subsubsection{Visual}
+\textbf{3.2.1 Visual. } In this experiment, we evaluate whether the RL algorithms can learn to perform the connector assembly tasks from vision without having access to state information. The state provided to the learned policy is a $32 \times 32$ grayscale image, such as shown in Fig.~\ref{fig:vision_insertion_sequence}.
+
+\vspace{1cm}
 \begin{wrapfigure}{r}{0.5\textwidth}
 % \begin{figure}[t]
 \centering
@@ -74,6 +79,7 @@ We consider three settings in our experiments in order to evaluate how plausible
         \centering
     \end{subfigure}   
      }
+     \captionsetup{justification=justified, format=plain}
     \caption{Successful insertion on the Model-E connector. The image-based RL algorithms receives only receives the $32\times32$ grayscale image as the observation.
     % is the only observation that the image-based RL algorithm receives.
     }
@@ -81,12 +87,11 @@ We consider three settings in our experiments in order to evaluate how plausible
     \label{fig:vision_insertion_sequence}
 % \end{figure}
 \end{wrapfigure}
-
-% \subsubsection{Visual}
-\textbf{3.2.1 Visual. } In this experiment, we evaluate whether the RL algorithms can learn to perform the connector assembly tasks from vision without having access to state information. The state provided to the learned policy is a $32 \times 32$ grayscale image, such as shown in Fig.~\ref{fig:vision_insertion_sequence}.
 For goal specification, we use a goal image, avoiding the need for state information to compute rewards. The reward is the pixelwise L1 distance to the given goal image. Being able to learn from such a setup is compelling as it does not require any extra state estimation and many tasks can be specified easily by a goal image.
 
 \textbf{3.2.2. Sparse. } In this experiment, the reward is obtained by directly measuring whether the connection is alive and transmitting:
+
+\vspace*{0cm}
 \begin{align}
  r  = 
   \begin{cases}

@@ -1,4 +1,6 @@
-\begin{figure}[btp]
+\begin{figure}
+\resizebox{\textwidth}{!}{
+\begin{minipage}[t]{.5\textwidth}
 \small
     \centering
         \begin{tabular}{|l|l|l|l|}
@@ -14,9 +16,11 @@
           & Images, TD3 & 52\% &  52\% \\ \hline
         \multirow{1}{*}{Human} & P-Controller & \textbf{100\%} & 44\% \\   \hline
         \end{tabular}
-        \hfill
-        %\hspace{0.5cm}
-        \begin{tabular}{|l|l|l|l|}
+\end{minipage}
+\begin{minipage}[t]{.5\textwidth}
+\renewcommand{\arraystretch}{1}
+\small
+\begin{tabular}{|l|l|l|l|}
         \hline
         \multicolumn{2}{|l|}{\multirow{2}{*}{Model-E Connector}} & \multicolumn{2}{c|}{Goal}                                 \\ \cline{3-4} 
         \multicolumn{2}{|l|}{}                     & \multicolumn{1}{c|}{Perfect} & \multicolumn{1}{c|}{Noisy} \\ \hline \hline
@@ -29,11 +33,15 @@
            & Images, TD3 & 0\% & 0\% \\ \hline
         \multirow{1}{*}{Human} & P-Controller & 52\% & 24\% \\   \hline
         \end{tabular}
-        % \vspace{10pt}
-    \caption{We report average success out of 25 policy executions after training is finished for each method. For noisy goals, noise is added in form of $\pm 1\,\mathrm{mm}$ perturbations of the goal location. Residual RL, particularly with SAC, tends to be the best performing method across all three connectors. For the \text{Model-E}~connector, only residual RL solves the task in the given amount of training time.}
+\end{minipage}}
+\captionof{table}{We report average success out of 25 policy executions after training is finished for each method. For noisy goals, noise is added in form of $\pm 1\,\mathrm{mm}$ perturbations of the goal location. Residual RL, particularly with SAC, tends to be the best performing method across all three connectors. For the \text{Model-E}~connector, only residual RL solves the task in the given amount of training time.}
     \label{fig:tables}
-    % \vspace{-0.5cm}
+    
 \end{figure}
+
+
+        
+       
 
 \section{Results}\label{sec:results}
 
@@ -43,18 +51,20 @@ We analyze the performance of policies learned with residual RL, as well as othe
 The results of the vision-based experiment are shown in Fig.~\ref{vision_based_distance_all}.
 Our experiments show that a successful and consistent vision-based insertion policy can be learned from relatively few samples using residual RL. 
 
-\begin{wrapfigure}{r}{0.5\linewidth}
-    % \begin{figure}[t]
-    \label{tab:goal_pertubation_USB}
-    \renewcommand{\arraystretch}{1.0}
-    \begin{center}
-    \small
+This result suggests that goal-specification through images is a practical way to solve these types of industrial tasks. Although image-based rewards are often very sparse and hard to learn from, in this case the distance between images corresponds to a relatively dense reward signal which is sufficient to distinguish the different stages of the insertion process.
+
+Interestingly, during training with standard RL, the policy would sometimes learn to ``hack'' the reward signal by moving down in the image in front of or behind the socket. In contrast, the stabilizing human-engineered controller in residual RL provides sufficient horizontal control to prevent this. The initial controller also scaffolds the learning process, by providing a very strong initialization that requires the reinforcement learning algorithm to only learn the final phase of the insertion. This produces substantially better performance in conjunction with vision-based rewards.
+
+\vspace{.3cm}
+\begin{table}[ht!]
+    \centering
+\begin{minipage}[t]{.47\textwidth}
+    \renewcommand{\arraystretch}{1}
+    \footnotesize
     \begin{tabular}{|l|l|l|l|}
     \hline
-    
     \multicolumn{2}{|l|}{\multirow{2}{*}{USB Connector}} & \multicolumn{2}{c|}{Goal}                                 \\ \cline{3-4} 
     \multicolumn{2}{|l|}{}                     & \multicolumn{1}{c|}{Perfect} & \multicolumn{1}{c|}{Noisy} \\ \hline \hline
-    
     \multirow{5}{*}{Pure RL}   
      & Dense & 28\% & 20\% \\ 
      & Sparse, \;SAC & 16\% & 8\% \\ 
@@ -71,27 +81,21 @@ Our experiments show that a successful and consistent vision-based insertion pol
       \hline
     \multirow{1}{*}{Human} & P-Controller & \textbf{100\%} & 60\% \\   \hline
     \end{tabular}
-    \end{center}
-    \vspace{5pt}
-    \caption{Average success rate on the USB insertion task. Residual RL and RL + LfD solve the task consistently. Moreover, residual RL stays robust under $\pm1$\text{mm} noise. }
+    %\captionsetup{justification=justified,format=plain}
+    %\captionof{table}{Average success rate on the USB insertion task. Residual RL and RL + LfD solve the task consistently. Moreover, residual RL stays robust under $\pm1$\text{mm} noise. }
+    \label{tab:goal_pertubation_USB}
     \label{fig:TableUSB}
-    % \end{figure}
-    % \vspace{-0.7cm}
-\end{wrapfigure}
-
-This result suggests that goal-specification through images is a practical way to solve these types of industrial tasks. Although image-based rewards are often very sparse and hard to learn from, in this case the distance between images corresponds to a relatively dense reward signal which is sufficient to distinguish the different stages of the insertion process.
-
-Interestingly, during training with standard RL, the policy would sometimes learn to ``hack'' the reward signal by moving down in the image in front of or behind the socket. In contrast, the stabilizing human-engineered controller in residual RL provides sufficient horizontal control to prevent this. The initial controller also scaffolds the learning process, by providing a very strong initialization that requires the reinforcement learning algorithm to only learn the final phase of the insertion. This produces substantially better performance in conjunction with vision-based rewards.
-
-\begin{wrapfigure}{r}{0.5\linewidth}
-% \begin{figure}[tbp]
-    \centering
-        \includegraphics[width=0.99\linewidth]{insertion/newfigs/Sparse_success_all.pdf}
-    \caption{Learning curves for solving the USB insertion task with a sparse reward. Final distance to goal is shown; lower is better. Residual RL and RL with learning from demonstrations both solve the task relatively quickly, while RL alone takes about twice as long to solve the task at the same performance. }
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.49\textwidth}
+\centering
+    \includegraphics[width=1\linewidth]{insertion/newfigs/Sparse_success_all.pdf}
+    \captionsetup{justification=justified,format=plain}
+    \captionof{figure}{Learning curves for solving the USB insertion task with a sparse reward. Final distance to goal is shown; lower is better. Residual RL and RL with learning from demonstrations both solve the task relatively quickly, while RL alone takes about twice as long to solve the task at the same performance. }
     \label{fig:SparseRewardsAll}
-    \vspace{-1.0cm}
-% \end{figure}
-\end{wrapfigure}
+\end{minipage}
+\caption{Learning curves for solving the USB insertion task with a sparse reward. Final distance to goal is shown; lower is better. Residual RL and RL with learning from demonstrations both solve the task relatively quickly, while RL alone takes about twice as long to solve the task at the same performance. }
+\end{table}
 
 \subsection{Learning From Sparse Rewards}
 

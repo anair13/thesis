@@ -276,8 +276,8 @@ In \Cref{sec:analysis}, we will show that this procedure recovers the optimal Q-
 
 \subsection{Policy Extraction and Algorithm Summary}
 
-\begin{wrapfigure}{R}{0.35\textwidth}
-    \begin{minipage}{0.35\textwidth}
+\begin{wrapfigure}{R}{0.4\textwidth}
+    \begin{minipage}{0.4\textwidth}
         \begin{algorithm}[H]
             \caption{\Ournamepref Q-learning}
             %%SL.9.28: Rules about capitalization: if using title case, then capitalize all words (including the word after "-" -- i.e., In-Sample Q-Learning); if using sentence case, then capitalize only the first word, i.e., In-sample Q-learning.
@@ -497,6 +497,7 @@ Since \ourname (d) performs iterative dynamic programming, it correctly propagat
 %\usepackage{changepage,threeparttable} % for wide tables
 %If the table is too wide, replace \begin{table}[!htp]...\end{table} with
 %\begin{adjustwidth}{-2.5 cm}{-2.5 cm}\centering\begin{threeparttable}[!htb]...\end{threeparttable}\end{adjustwidth}
+\resizebox{\textwidth}{!}{
 \tiny
 \begin{tabular}{l||rrrrrrrrr|r}
 Dataset &BC &10\%BC & BCQ &DT & ABM &AWAC &Onestep RL &TD3+BC &CQL & \ourname (Ours) \\\hline
@@ -527,7 +528,7 @@ adroit-v0 total & 104.5 & - & - & - & - & - & - & - & 93.6 & \textbf{118.1$\pm$3
 total+kitchen+adroit &825.9 & - & - & - & - & - & - & - & 1240.3 &\textbf{1348.3$\pm$155.3} \\
 \hline
 runtime & 10m & 10m &  & 960m & & 20m & 20m$^*$ & 20m & 80m & 20m
-\end{tabular}
+\end{tabular}}
 \begin{tablenotes}
 \item $^*$: Note that it is challenging to compare one-step and multi-step methods directly. Also, \cite{brandfonbrener2021offline} reports results for a set of hyperparameters, such as batch and network size, that is significantly different from other methods. We report results for the original hyperparameters and runtime for a comparable set of hyperparameters.
 % Note that it corresponds to marginally worse performance.
@@ -545,6 +546,7 @@ runtime & 10m & 10m &  & 960m & & 20m & 20m$^*$ & 20m & 80m & 20m
     %%SL.10.3: This figure is analyzed later than Table 1, can we mess with latex figure placement and somehow get this to appear at the bottom and the table at the top?
     \includegraphics[width=0.24\textwidth]{iql/images/antmaze_rebuttal.pdf}
     \includegraphics[width=0.24\textwidth]{iql/images/antmaze_values_cdq.pdf}
+    \captionsetup{justification=justified,format=plain}
     \caption{\textbf{Left}: Estimating a larger expectile $\tau$ is crucial for antmaze tasks that require dynamical programming ('stitching'). 
  \textbf{Right:} Clipped double Q-Learning (CDQ) is crucial for learning values for $\tau=0.9$.
     %IQL with $\tau=0.5$
@@ -594,9 +596,11 @@ With larger values of $\tau$, our method approximates $Q$-learning better, leadi
 
 \label{sec:finetune}
 
-\begin{wraptable}[19]{r}{0.65\textwidth}
-% \begin{table}[!htp]\centering
+\begin{wraptable}[22]{r}{0.65\textwidth}
+%\begin{minipage}{0.65\textwidth}
+ %\begin{table}[!htp]\centering
 \scriptsize
+\renewcommand{\arraystretch}{.7}
 \begin{tabular}{ l ||p{1.5cm} |p{1.5cm} | p{1.5cm}  }
     \centering
     Dataset & AWAC & CQL & \ourname (Ours) \\
@@ -616,9 +620,12 @@ With larger values of $\tau$, our method approximates $Q$-learning better, leadi
     total & 154.4 $\rightarrow$ 211.4 & 182.8 $\rightarrow$ 241.0 & \textbf{412.9} $\rightarrow$ \textbf{561.5}
     %%SL.10.3: why is CQL offline ant maze much worse here than it is in Table 1? is that a bug?
 \end{tabular}
+\captionsetup{justification=justified,format=plain}
 \caption{Online finetuning results showing the initial performance after offline RL, and performance after 1M steps of online RL. In all tasks, \ourname is able to finetune to a significantly higher performance than the offline initialization, with final performance that is comparable to or better than the best of either AWAC or CQL on all tasks except pen-binary-v0.}
 \label{tab:finetuning}
-% \end{table}
+ %\end{table}
+ %\FloatBarrier
+ %\end{minipage}
 \end{wraptable}
 
 The policies obtained by offline RL can often be improved with a small amount of online interaction.

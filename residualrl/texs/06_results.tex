@@ -62,15 +62,16 @@ Reinforcement learning for robotics holds the promise of greater autonomy and re
 RL methods have been difficult to apply in robotics because of sample efficiency, safety, and stability issues. Still, RL has been used to allow robots to learn tasks such as playing table tennis \cite{peters2010reps}, swinging up a cartpole and balancing a unicycle \cite{deisenroth2011pilco}, grasping~\cite{pinto2017robust, levine2017grasping}, opening a door \cite{Gu2016b}, and general manipulation tasks \cite{levine2016gps, haarnoja2018sac}. RL, particularly deep RL, tends to be data-hungry; even learning simple tasks can require many hours of interaction. To bring these methods into factories and warehouses, they must be able to consistently solve complex tasks, multi-step tasks. One way to enable these methods to solve these complex tasks is to introduce prior human knowledge into the learning system, as our method does.
 
 Prior work in RL has incorporated human prior knowledge for solving tasks in various ways. One such way is reward shaping \cite{ng1999rewardshaping}, where additional rewards auxiliary to the real objective are included in order to guide the agent towards the desired behavior. Reward shaping can effectively encode a policy. For example, to train an agent to perform block stacking, each step can be encoded into the reward \cite{popov17stacking}.
-\begin{figure}[H]
+\begin{wrapfigure}{r}{0.5\textwidth}
     \centering
     % \vspace{-0.1in}
-    \includegraphics[width=0.8\linewidth]{residualrl/figs/sim_to_real_bitmap.jpg} \\
+    \includegraphics[width=0.99\linewidth]{residualrl/figs/sim_to_real_bitmap.jpg} \\
     \centering
+    \captionsetup{justification=justified,format=plain}
     \caption{Real-world block insertion results using residual RL for sim-to-real transfer. ``Sim'' indicates that the real-world policy was initialized by reinforcement learning in simulation. Residual RL with simulation initialization successfully solves the task with little environment experience required. } %
     \label{fig:sim_to_real}
-\end{figure}
-\newpage
+\end{wrapfigure}
+%\newpage
 Often, intensive reward shaping is key for RL to succeed at a task and prior work has even considered reward shaping as part of the learning system \cite{daniel2014activereward}. Reward shaping in order to tune agent behavior is a very manual process and recovering a good policy with reward shaping can be as difficult as specifying the policy itself. Hence, in our method we allow for human specification of both rewards and policies---whichever might be more practical for a particular task.
 
 Further work has incorporated more specialized human knowledge into RL systems. One approach is to use trajectory planners in RL in order to solve robotics tasks \cite{thomas2018cad}. However, since the method optimizes trajectory following instead of the task reward, generalization can be difficult when aspects of the environment change. Other work has focused on human feedback \cite{loftin2014discretehumanfeedback, saunders2018trialwithouterror, torrey2013teachingbudget, frank2008rareevents, christiano2017humanpreferences} to inform the agent about rewards or to encourage safety. However, in many robotics tasks, providing enough information about the task through incremental human feedback is difficult.

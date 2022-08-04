@@ -196,16 +196,17 @@ We maintain a latent plan buffer for each level to further facilitate the planni
 
 We build our planner upon the model predictive path integral (MPPI)~\cite{Gandhi2021RobustMP}, which iteratively optimizes the plan through importance sampling. In each interaction, we perturb the chosen plan in the latent space with a small Gaussian noise as new candidates. 
 
-\begin{figure}[t!]
+\begin{figure}[ht!]
     \centering
-    \includegraphics[width=.48\textwidth]{ptp/figures/target_tasks.pdf}
+    \includegraphics[width=.8\textwidth]{ptp/figures/target_tasks.pdf}
     \vspace{-3mm}
     \caption{\textbf{Target tasks.} Three multi-stage tasks are designed for our experiments in the simulation and the real world respectively. In each target task, the robot needs to strategically interacts with the environment (\eg first takes out an object in the drawer then closes the drawer). The initial state and the desired goal state are shown for each task. }
     \vspace{-5mm}
     \label{fig:target_tasks}
 \end{figure}
 
-\begin{figure*}[t!]
+\vspace*{.3cm}
+\begin{figure*}[ht!]
     \centering
     \includegraphics[width=0.95\textwidth]{ptp/figures/sim_quantitative.pdf}
     \vspace{-3mm}
