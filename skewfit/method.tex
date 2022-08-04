@@ -10,8 +10,8 @@ However, there is no guarantee that this would increase the entropy of $\pgtt$.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=\linewidth]{skewfit/figures/skewfitfigure_vertical_q_phi_g.pdf}
-    \fcaption{Our method, \METHOD, samples goals for goal-conditioned RL.
+    \includegraphics[width=.8\linewidth]{skewfit/figures/skewfitfigure_vertical_q_phi_g.pdf}
+    \caption{Our method, \METHOD, samples goals for goal-conditioned RL.
     We sample states from our replay buffer, and give more weight to rare states.
     We then train a generative model $\pg_{t+1}$ with the weighted samples.
     By sampling new states with goals proposed from this new generative model, we obtain a higher entropy state distribution in the next iteration.}
@@ -72,7 +72,7 @@ Overall, \METHOD collects states from the environment and resamples each state i
 \METHOD is shown in \Figref{fig:main-fig} and summarized in Algorithm \ref{alg:method}.
 We now discuss conditions under which \METHOD converges to the uniform distribution.
 
-\vspace{0.1in}
+\vspace*{.5cm}
 \begin{algorithm}
    	\fcaption{\METHOD}
    	\label{alg:method}

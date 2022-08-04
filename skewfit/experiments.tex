@@ -7,7 +7,7 @@ Our experiments study the following questions:
 \begin{figure}[t]
     \includegraphics[width=.49\linewidth ]{skewfit/figures/entropy_figure-01.png}
     \includegraphics[width=.49\linewidth ]{skewfit/figures/plots/four_rooms_entropy}
-    \fcaption{
+    \caption{
     Illustrative example of \METHOD on a 2D navigation task. (Left) Visited state plot for \METHOD with $\alpha = -1$ and uniform sampling, which corresponds to $\alpha = 0$. (Right) The entropy of the goal distribution per iteration, mean and standard deviation for 9 seeds. Entropy is calculated via discretization onto an 11x11 grid. \METHOD steadily increases the state entropy, reaching full coverage over the state space.
     }
     \label{fig:2d-sl}
@@ -29,7 +29,7 @@ In contrast, \METHOD results in quickly learning a high entropy, near-uniform di
     \centering
     \includegraphics[width=0.32\linewidth]{skewfit/figures/ant_env_updated.png}
     \includegraphics[width=0.65\linewidth]{skewfit/figures/plots/ant.pdf}
-    \fcaption{
+    \caption{
     (Left) Ant navigation environment.
     (Right) Evaluation on reaching target XY position.
     We show the mean and standard deviation of 6 seeds.
@@ -64,10 +64,10 @@ These results demonstrate that \METHOD accelerates exploration by setting divers
 
 
 \paragraph{Vision-Based Continuous Control Tasks}
-\begin{figure}[t]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.8\linewidth]{skewfit/figures/env_display.pdf}
-    \fcaption{We evaluate on these continuous control tasks, from left to right:
+    \caption{We evaluate on these continuous control tasks, from left to right:
     \textit{Visual Door}, a door opening task;
     \textit{Visual Pickup}, a picking task;
     \textit{Visual Pusher}, a pushing task;
@@ -92,7 +92,7 @@ We additionally compare to \citet{hazan2019provably}, an exploration method that
 Next, we compare to \textbf{RIG} without \METHOD.
 Lastly, we compare to \textbf{DISCERN}~\citep{wardefarley2018discern}, a vision-based method which uses a non-parametric clustering approach to sample goals and an image discriminator to compute rewards.
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
      \begin{subfigure}[t]{.49\linewidth}
     \centering

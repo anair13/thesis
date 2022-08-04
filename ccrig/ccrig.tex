@@ -184,11 +184,12 @@ In our experiments, we aim to answer the following questions:
 \begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
-        \center
+        %\center
         \includegraphics[height=4.2cm]{ccrig/img/final_pusher3-crop.pdf}
     \end{subfigure}
-    \hspace{0.3cm}
+    \hspace*{0.3cm}
     \begin{subfigure}[b]{0.48\textwidth}
+    \hspace{5mm}
         \includegraphics[height=4.2cm]{ccrig/img/final_pointmass1-crop.pdf}
     \end{subfigure}
     \caption{Self-supervised learning results in visually varied simulated environments. CC-RIG significantly outperforms RIG and is competitive with the oracle method that has direct access to ground truth states. The simulated pusher environment (left) is shown in Figure~\ref{fig:cvae_samples} and the navigation environment is shown in Figure~\ref{fig:pointmass}.}
@@ -263,6 +264,7 @@ CC-RIG requires more samples to learn, but eventually approaches the oracle perf
         VAE samples \vspace{0.3cm}
     \end{subfigure}
     \begin{subfigure}[b]{0.4\textwidth}
+    \hspace*{5.2mm}
         \adjustbox{trim=2.2 33.5 100 31.8,clip} {
         \center
             \rotatebox[origin=c]{180}{
@@ -272,12 +274,11 @@ CC-RIG requires more samples to learn, but eventually approaches the oracle perf
     \end{subfigure}
     \hspace{0.1cm}
     \begin{subfigure}[b]{0.4\textwidth}
-        \hspace{-5px}
+        \hspace{1.4mm}
         \adjustbox{trim=0 {.26\height} {0.39\height} {.62\height},clip} {
         \includegraphics[height=252.5px]{ccrig/img/vae_samples_real_pusher3.png}
         }
     \end{subfigure}
-
     \caption{Comparing samples from our CC-VAE model to a standard VAE. The initial image $s_0$ is shown on the top row, and samples conditioned on $s_0$ are shown below. Our model coherently maintains object color and geometry in its samples, suggesting that the context conditioned model can successfully factor out the scene-specific object identity from the variable object position. This enables the use of the CC-VAE for goal proposals in visually diverse scenes.}
     \vspace{-0.2in}
     \label{fig:cvae_samples}
@@ -310,13 +311,14 @@ Because it is difficult to automatically detect the positions of objects, we sho
 At training time, the dataset consists of interaction with 20 objects. The result of running CC-RIG on novel objects that were not included in the dataset are shown in the table as ``CC-RIG, novel'' and in the rollouts in Figure~\ref{fig:realworld-robot-pushing-results}. These results show that our method can also generalize its experience to push novel objects it has not seen before.
 
 \begin{figure}
-    \renewcommand{\arraystretch}{1.5}
+    \renewcommand{\arraystretch}{1.1}
     \setlength{\tabcolsep}{5pt}
     \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+    \hspace*{-.5mm}
     \begin{subfigure}[b]{0.99\textwidth}
         \center
         Real-World Pushing Results
-        \begin{tabular}{ | p{2.2cm} | P{2.3cm}| P{2.0cm} | P{2.0cm} | P{3cm} | } \hline
+        \begin{tabular}{ | p{2.9cm} | P{2.8cm}| P{2.8cm} | P{2.8cm} | P{2.8cm} | } \hline
          & CVAE distance & VAE distance & Pixel distance & Object distance (cm) \\ \hline
 RIG & $2.37$ $\pm$ $0.97$ & $2.41$ $\pm$ $0.93$ & $93.9$ $\pm$ $41.7$ & $17.1$ $\pm$ $8.2$ \\ \hline
 CC-RIG & $1.66$ $\pm$ $0.63$ & $2.17$ $\pm$ $0.88$ & $56.8$ $\pm$ $34.5$ & $14.0$ $\pm$ $6.9$ \\ \hline
@@ -328,7 +330,7 @@ CC-RIG, novel & $1.51$ $\pm$ $0.71$ & $1.91$ $\pm$ $0.87$ & $53.1$ $\pm$ $24.9$ 
     \begin{subfigure}[b]{0.49\textwidth}
         \center
         Test rollouts, training objects \\
-        $s_0$ \hspace{3.7cm} $s_H$ \hspace{0.5cm} $s_g$
+         $s_0$ \hspace{4.5cm} $s_H$ \hspace{.8cm} $s_g$
 
         \includegraphics[width=0.14\linewidth]{ccrig/img/real_env_rollout_new/2/0.png}
         \includegraphics[width=0.14\linewidth]{ccrig/img/real_env_rollout_new/2/1.png}
@@ -350,7 +352,7 @@ CC-RIG, novel & $1.51$ $\pm$ $0.71$ & $1.91$ $\pm$ $0.87$ & $53.1$ $\pm$ $24.9$ 
     \begin{subfigure}[b]{0.49\textwidth}
         \center
         Test rollouts, novel objects \\
-        $s_0$ \hspace{3.7cm} $s_H$ \hspace{0.5cm} $s_g$
+        $s_0$ \hspace{4.5cm} $s_H$ \hspace{0.8cm} $s_g$
 
         \includegraphics[width=0.14\linewidth]{ccrig/img/real_env_rollout_novel/1/0.png}
         \includegraphics[width=0.14\linewidth]{ccrig/img/real_env_rollout_novel/1/1.png}
