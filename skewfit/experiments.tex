@@ -4,7 +4,7 @@ Our experiments study the following questions:
 \textbf{(3)} How does \METHOD compare to prior work on choosing goals for vision-based, goal-conditioned RL?
 \textbf{(4)} Can \METHOD be applied to a real-world, vision-based robot task?
 
-\begin{figure}[t]
+\begin{figure}[ht!]
     \includegraphics[width=.49\linewidth ]{skewfit/figures/entropy_figure-01.png}
     \includegraphics[width=.49\linewidth ]{skewfit/figures/plots/four_rooms_entropy}
     \caption{
@@ -25,7 +25,7 @@ The $\beta$-VAE hyperparameters used to train $\pgt$ are given in \autoref{sec:2
 As seen in \Figref{fig:2d-sl}, sampling uniformly from previous experience ($\alpha = 0$) to set goals results in a policy that primarily sets goal near the initial state distribution.
 In contrast, \METHOD results in quickly learning a high entropy, near-uniform distribution over the state space.
 
-\begin{figure}[t]
+\begin{figure}[ht!]
     \centering
     \includegraphics[width=0.32\linewidth]{skewfit/figures/ant_env_updated.png}
     \includegraphics[width=0.65\linewidth]{skewfit/figures/plots/ant.pdf}
