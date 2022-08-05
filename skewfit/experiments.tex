@@ -12,6 +12,7 @@ Our experiments study the following questions:
     }
     \label{fig:2d-sl}
 \end{figure}
+\FloatBarrier
 
 \paragraph{Does \METHOD Maximize Entropy?}
 To see the effects of \METHOD on goal distribution entropy in isolation of learning a goal-reaching policy, we study an idealized example where the policy is a near-perfect goal-reaching policy.
@@ -25,6 +26,7 @@ The $\beta$-VAE hyperparameters used to train $\pgt$ are given in \autoref{sec:2
 As seen in \Figref{fig:2d-sl}, sampling uniformly from previous experience ($\alpha = 0$) to set goals results in a policy that primarily sets goal near the initial state distribution.
 In contrast, \METHOD results in quickly learning a high entropy, near-uniform distribution over the state space.
 
+\vspace{.5cm}
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.32\linewidth]{skewfit/figures/ant_env_updated.png}
@@ -37,7 +39,7 @@ In contrast, \METHOD results in quickly learning a high entropy, near-uniform di
     }
     \label{fig:antmaze}
 \end{figure}
-
+\FloatBarrier
 \paragraph{Exploration with \METHOD}
 We next evaluate \METHOD while concurrently learning a goal-conditioned policy on a task with state inputs, which enables us study exploration performance independently of the challenges with image observations.
 We evaluate on a task that requires training a simulated quadruped ``ant'' robot to navigate to different XY positions in a labyrinth,
@@ -66,7 +68,7 @@ These results demonstrate that \METHOD accelerates exploration by setting divers
 \paragraph{Vision-Based Continuous Control Tasks}
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.9\linewidth]{skewfit/figures/env_display.pdf}
+    \includegraphics[width=0.8\linewidth]{skewfit/figures/env_display.pdf}
     \caption{We evaluate on these continuous control tasks, from left to right:
     \textit{Visual Door}, a door opening task;
     \textit{Visual Pickup}, a picking task;
@@ -74,7 +76,7 @@ These results demonstrate that \METHOD accelerates exploration by setting divers
     and \textit{Real World Visual Door}, a real world door opening task. All tasks are solved from images and without any task-specific reward. See Appendix \ref{sec:environment-details} for details.}
     \label{fig:env-pics}
 \end{figure}
-
+\FloatBarrier
 We now evaluate \METHOD on a variety of image-based continuous control tasks, where the policy must control a robot arm using only image observations, there is no state-based or task-specific reward, and \METHOD must directly set image goals.
 We test our method on three different image-based simulated continuous control tasks released by the authors of RIG~\citep{nair2018rig}: \textit{Visual Door}, \textit{Visual Pusher}, and \textit{Visual Pickup}.
 These environments contain a robot that can open a door, push a puck, and lift up a ball to different configurations, respectively.
@@ -91,9 +93,10 @@ To ensure a fair comparison across methods, we combine these prior methods with 
 We additionally compare to \citet{hazan2019provably}, an exploration method that assigns bonus rewards based on the likelihood of a state (labeled \textbf{Hazan et al.}).
 Next, we compare to \textbf{RIG} without \METHOD.
 Lastly, we compare to \textbf{DISCERN}~\citep{wardefarley2018discern}, a vision-based method which uses a non-parametric clustering approach to sample goals and an image discriminator to compute rewards.
-
+\vspace{.5cm}
 \begin{figure}[ht!]
-    \centering
+\centering
+\resizebox{\textwidth}{!}{
      \begin{subfigure}[t]{.49\linewidth}
     \centering
         % \includegraphics[width=\linewidth]{skewfit/figures/plots/main_sim_fig/door_big.pdf}
@@ -121,8 +124,8 @@ Lastly, we compare to \textbf{DISCERN}~\citep{wardefarley2018discern}, a vision-
         % \includegraphics[width=0.8\linewidth]{skewfit/figures/plots/main_sim_fig/legend.pdf}
           \includegraphics[width=\linewidth]{skewfit/figures/plots/main_sawyer_fig_with_hazan/main_figure_legend_with_hazan.pdf}
     }
-  \end{subfigure}
-    \fcaption{
+  \end{subfigure}}
+    \caption{
         Learning curves for simulated continuous control tasks.
         Lower is better.
         We show the mean and standard deviation of 6 seeds and smooth temporally across 50 epochs within each seed.
@@ -131,8 +134,8 @@ Lastly, we compare to \textbf{DISCERN}~\citep{wardefarley2018discern}, a vision-
     }
     \label{fig:sim-results}
 \end{figure}
-
-
+\FloatBarrier
+\vspace{.5cm}
 We see in \Figref{fig:sim-results} that Skew-Fit significantly outperforms prior methods both in terms of task performance and sample complexity.
 The most common failure mode for prior methods is that the goal distributions collapse, resulting in the agent learning to reach only a fraction of the state space, as shown in \autoref{fig:offline-sk-real}.
 For comparison, additional samples of $\pg$ when trained with and without \METHOD are shown in \autoref{sec:vae-dump}.
@@ -145,7 +148,7 @@ For a quantitative comparison, \Figref{fig:exploration_pickups} shows the cumula
 From the graph, we see that many methods have a near-constant rate of object lifts throughout all of training.
 \METHOD is the only method that significantly increases the rate at which the policy picks up the object during exploration, suggesting that only \METHOD sets goals that encourage the policy to interact with the object.
 
-\begin{figure}[t]
+\begin{figure}[ht!]
 \centering
   \includegraphics[width=\linewidth]{skewfit/figures/plots/exploration_pickups.pdf}
   \caption{
@@ -155,7 +158,7 @@ In contrast, after seeing the object picked up a few times, \METHOD practices pi
 }
   \label{fig:exploration_pickups}
 \end{figure}
-
+\FloatBarrier
 
 \paragraph{Real-World Vision-Based Robotic Manipulation}
 We also demonstrate that \METHOD scales well to the real world with a door opening task, \textit{Real World Visual Door}, as shown in \Figref{fig:env-pics}.
@@ -175,7 +178,7 @@ our website.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.75\linewidth]{skewfit/figures/plots/real_world_door.pdf}
+  \includegraphics[width=0.7\linewidth]{skewfit/figures/plots/real_world_door.pdf}
     \begin{subfigure}[b]{0.49\textwidth}
         \center
         \hspace{-.2cm}

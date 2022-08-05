@@ -342,7 +342,7 @@ For other tasks, we used 10,000 images.
 
 \footnotetext{In all our simulation results, each plot shows a 95\% confidence interval of the mean across 5 seeds.}
 
-We compare our method with the following prior works.
+\sloppy We compare our method with the following prior works.
 \textit{L\&R}: Lange and Riedmiller~\citep{lange2010deep} trains an autoencoder to handle images.
 \textit{DSAE}: Deep spatial autoencoders~\citep{finn2016deep} learns a spatial autoencoder and uses guided policy search~\citep{levine2016gps} to achieve a single goal image.
 \textit{HER}: Hindsight experience replay~\citep{andrychowicz2017her} utilizes a sparse reward signal and relabeling trajectories with achieved goals.
@@ -370,6 +370,7 @@ Overall, these result show that our method is capable of handling raw image obse
     \vspace{-0.2in}
     \includegraphics[width=\linewidth]{rig/img/pusher_reward_type_ablation_main.pdf}
     \vspace{-0.2in}
+    \captionsetup{format=plain, justification=justified}
     \caption{Reward type ablation results. RIG (red), which uses latent Euclidean distance, outperforms the other methods.}
     \vspace{-0.1in}
     \label{fig:reward-ablation}
@@ -393,7 +394,8 @@ We also see that latent distances results in faster learning when compared to pi
     \centering
     \vspace{-0.2in}
     \includegraphics[width=\linewidth]{rig/img/pusher_relabeling_ablation_main.pdf}
-    \vspace{-0.2in}
+    \vspace{-0.15in}
+    \captionsetup{format=plain, justification=justified}
     \caption{Relabeling ablation results. RIG (red), which uses a mixture of VAE and HER, outperforms the other methods.}
     \vspace{-0.2in}
     \label{fig:relabel-ablation}
@@ -413,8 +415,9 @@ In Figure \ref{fig:relabel-ablation}, we see that sampling from the VAE and Futu
     \vspace{-0.2in}
     \includegraphics[width=\linewidth]{rig/img/pusher_vary_multiobject.pdf}
     \vspace{-0.1in}
+    \captionsetup{format=plain, justification=justified}
     \caption{Training curve for learning with varying number of objects.}
-    \vspace{-0.2in}
+    \vspace{-0.15in}
     \label{fig:multiobject}
 \end{wrapfigure}
 
@@ -429,16 +432,16 @@ During training, each episode still always starts with both objects in the scene
 Figure \ref{fig:multiobject} shows that our method can learn to solve this task successfully, without decrease in performance from the base setting where both objects are present (in Figure~\ref{fig:sim_results}).
 Developing and demonstrating algorithms that solve tasks with varied underlying structure is an important step toward creating autonomous agents that can handle the diversity of tasks present ``in the wild.''
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
-    \includegraphics[width=0.285\linewidth]{rig/img/real_reacher.pdf}
-    \includegraphics[width=0.6\linewidth]{rig/img/real_rollouts-crop.pdf}
+    \includegraphics[width=0.31\linewidth]{rig/img/real_reacher.pdf}
+    \includegraphics[width=0.67\linewidth]{rig/img/real_rollouts-crop.pdf}
     \caption{(Left) Our method compared to the HER baseline and oracle on a real-world visual reaching task. (Middle) Our robot setup is pictured. (Right) Test rollouts of our learned policy. }
-    \vspace{-0.2in}
+    %\vspace{-0.2in}
     \label{fig:realworld-robot-results}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.28\textwidth}
         \includegraphics[width=1\linewidth]{rig/img/pusher_learning_curve-crop.pdf}
@@ -447,18 +450,19 @@ Developing and demonstrating algorithms that solve tasks with varied underlying 
         \includegraphics[width=1\linewidth]{rig/img/real_pusher_rollouts.pdf}
     \end{subfigure}
     \begin{subfigure}[b]{0.3\textwidth}
+    %\vspace{-1cm}
         \begin{flushright}
-            Puck Distance to Goal (cm) \\
-            \vspace{0.1cm}           
+            \small{Puck Distance to Goal (cm)} \\
+            \vspace{0cm}           
             {\renewcommand{\arraystretch}{1.2}%
             \begin{tabular}{  c | c }
              \hline
-                RIG & HER  \\ \hline
+               $\quad\,$ RIG $\quad \,$ & $\quad\,$ HER $\quad\,$ \\ \hline
                 $\mathbf{4.5 \pm 2.5}$ & $14.9 \pm 5.4$  \\
             \end{tabular}
             }
         \end{flushright}
-        \vspace{0.35cm}
+        \vspace{0.1cm}
     \end{subfigure}
     \caption{(Left) The learning curve for real-world pushing. (Middle) Our robot pushing setup is pictured, with frames from test rollouts of our learned policy. (Right) Our method compared to the HER baseline on the real-world visual pushing task. We evaluated the performance of each method by manually measuring the distance between the goal position of the puck and final position of the puck for 15 test rollouts, reporting mean and standard deviation.}
     \vspace{-0.2in}
