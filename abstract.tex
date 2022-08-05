@@ -1,1 +1,8 @@
-
+For robots to perform tasks in the unstructured environments of the real world, they must be able to be tasked with a desired objective in a general way, and learn to perform the desired task quickly if the robot does not already know how to accomplish it.
+In this thesis, we explore deep reinforcement learning as a solution to enable this vision for scalable learning-based real-world robotics. We cover two main themes: accelerating reinforcement learning from prior data and self-supervised RL.
+Accelerating RL from prior data or prior knowledge is important for making reinforcement learning algorithms sufficiently sample-efficient to run directly in the real world.
+We discuss utilizing human demonstrations to accelerate reinforcement learning, using human-designed residual controllers in combination with reinforcement learning for industrial insertion tasks, and algorithms for offline reinforcement learning that can also benefit from a small amount of online fine-tuning.
+Concurrently, while sample-efficiency of reinforcement learning algorithms is a well-appreciated problem, additional problems arise around agents that can learn from rich observations such as images: in particular, reward supervision and collecting data autonomously.
+We will discuss our work on self-supervised RL through goal reaching with a generative model, allowing agents to evaluate their own success at reaching goals and autonomously propose and practice skills.
+In the final section, we combine offline policy learning with self-supervised practice, allowing robots to practice and perfect skills in novel environments.
+These directions enable robots to supervise their own data collection, learning complex and general manipulation skills from interaction.
