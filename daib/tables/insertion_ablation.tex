@@ -1,0 +1,23 @@
+
+\renewcommand{\arraystretch}{1.4}
+\setlength{\arrayrulewidth}{0.1mm}
+\setlength{\tabcolsep}{3pt}
+
+\begin{table}[]
+\begin{tabular}{l|ll|rr}
+         & Reward & Policy & \multicolumn{1}{l}{Offline} & \multicolumn{1}{l}{Online} \\ \hline \hline
+DT12-1   & DAIB   & DAIB   & 0/20                           & 18/20                         \\
+         & DAIB   & -      & 0/20                           & 4/20                          \\
+         & -      & -      & 0/20                           & 0/20                          \\  \hline
+Mega 1x1 & DAIB   & DAIB   & 0/20                           & 20/20                         \\
+         & DAIB   & -      & 3/20                           & 20/20                         \\
+         & -      & -      & 3/20                           & 0/20                          \\  \hline
+NEMA 15  & DAIB   & DAIB   & 6/20                           & 17/20                         \\
+         & DAIB   & -      & 0/20                           & 2/20                          \\
+         & -      & -      & 0/20                           & 0/20                          \\  \hline
+Europlug & DAIB   & DAIB   & 2/20                           & 15/20                         \\
+         & DAIB   & -      & 1/20                           & 12/20                         \\
+         & -      & -      & 0/20                           & 15/20                        
+\end{tabular}
+\caption{Ablation}
+\end{table}

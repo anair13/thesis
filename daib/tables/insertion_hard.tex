@@ -1,0 +1,21 @@
+
+\renewcommand{\arraystretch}{1.4}
+\setlength{\arrayrulewidth}{0.1mm}
+\setlength{\tabcolsep}{3pt}
+
+\begin{table}[]
+% \footnotesize
+\begin{tabular}{l|r|r|r|r|r|r}
+Connector     & \multicolumn{1}{l}{Localize} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Straight\\ Down\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Random\\ Search\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Spiral\\ Search\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Ours\\ (offline)\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Ours\\ (online)\end{tabular}} \\ \hline \hline
+DT12-1        & 0/20                         & 0/20                                                                        & 0/20                                                                        & 0/20                                                                        & 0/20                                                                         & 18/20                                                                 \\
+Mega 1x1 & 0/20                         & 1/20                                                                        & 0/20                                                                        & 17/20                                                                       & 0/20                                                                         & 20/20                                                                 \\
+NEMA 15     & 0/20                         & 0/20                                                                        & 0/20                                                                        & 0/20                                                                        & 6/20                                                                         & 17/20                                                                 \\
+Europlug      & 0/20                         & 0/20                                                                        & 0/20                                                                        & 0/20                                                                        & 2/20                                                                         & 15/20                                                                
+\end{tabular}
+\caption{Harder insertion (10-20mm error). Baselines use localization model initially, then follow the baseline strategy. }
+\label{table:hard}
+\end{table}
+
+\renewcommand{\arraystretch}{1.4}
+\setlength{\arrayrulewidth}{0.1mm}
+\setlength{\tabcolsep}{3pt}
