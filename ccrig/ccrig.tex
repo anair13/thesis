@@ -9,7 +9,7 @@ Reinforcement learning autonomously learns policies that maximize a reward funct
 How can a robot explore the world in order to learn and fine-tune useful skills on diverse objects, only from acting and observing how its actions affect its sensory stream?
 
 \input{ccrig/fig1.tex}
-Prior methods have proposed to let an agent learn from its sensor stream by automatically generating plausible goals during an unsupervised training phase, and then learning policies that reach those goals~\cite{nair2018rig, nachum2018hiro, wadefarley2019discern, pong2019skewfit}. Such goals can be defined in a variety of ways, but a simple choice is to use goal observations, such that each proposed task requires reaching a different observation. When the robot observes the world via raw camera images, this corresponds to using images as goals. At test time, a user then provides the robot with a new goal image.
+Prior methods have proposed to let an agent learn from its sensor stream by automatically generating plausible goals during an unsupervised training phase, and then learning policies that reach those goals~\citep{nair2018rig, nachum2018hiro, wadefarley2019discern, pong2019skewfit}. Such goals can be defined in a variety of ways, but a simple choice is to use goal observations, such that each proposed task requires reaching a different observation. When the robot observes the world via raw camera images, this corresponds to using images as goals. At test time, a user then provides the robot with a new goal image.
 
 While such methods have been demonstrated in both simulated and real-world settings, they are typically used to learn behaviors in domains with relatively little visual diversity.
 In the real world, a robot might interact with highly diverse scenes and objects, and the tasks that it can perform from each of the many possible initial states will be different. If the robot is presented with an object, it can learn to pick up or grasp it, and when it is presented with a door, it can learn to open it. However, it must generate and practice goals that are suitable for each scene. In this paper, we propose and evaluate a self-supervised policy learning method that learns to propose goals that are suitable to the current scene via a conditional goal generation model, allowing it to learn in visually varied settings that prove challenging for prior algorithms.
@@ -23,25 +23,25 @@ The main contribution in this paper builds on this context-conditioned generativ
 \section{Related Work}
 
 While many practical robots today perform tasks by executing hand-engineered sequences of motor commands, machine
-learning is opening up a new avenue to train a wide variety of robotic tasks from interaction. This body of work includes grasping~\cite{ekvall2004interactive, kroemer2010grasping, bohg2010learning}, and general tasks ~\cite{PETERS2008682,kober2013reinforcement},
-multi-task learning~\cite{6907421}, baseball~\cite{peters2008baseball}, ping-pong~\cite{peters2010reps}, and various other tasks \cite{deisenroth2011pilco}. More recently, using expressive function approximators such as neural networks has reduced manual feature engineering and has increased task complexity and diversity, finding use in decision-making domains, such as solving Atari games \cite{mnih2013atari} and Go \cite{silver2016alphago}. Deep learning for robotics has proved to be difficult due to a host of challenges including noisy state estimation, specifying reward functions, and handling continuous action spaces, but has been used to investigate
+learning is opening up a new avenue to train a wide variety of robotic tasks from interaction. This body of work includes grasping~\citep{ekvall2004interactive, kroemer2010grasping, bohg2010learning}, and general tasks ~\citep{PETERS2008682,kober2013reinforcement},
+multi-task learning~\citep{6907421}, baseball~\citep{peters2008baseball}, ping-pong~\citep{peters2010reps}, and various other tasks \citep{deisenroth2011pilco}. More recently, using expressive function approximators such as neural networks has reduced manual feature engineering and has increased task complexity and diversity, finding use in decision-making domains, such as solving Atari games \citep{mnih2013atari} and Go \citep{silver2016alphago}. Deep learning for robotics has proved to be difficult due to a host of challenges including noisy state estimation, specifying reward functions, and handling continuous action spaces, but has been used to investigate
 % Done %SL.7.1: "Further autonomous task learning" somehow does not seem very inspiring.
-grasping \cite{pinto2015supersizing}, pushing \cite{agrawal2016poking}, manipulation of 3D object models~\cite{krainin2011autonomous}, active learning~\cite{martinez2014active} and pouring liquids~\cite{schenck2017visual}.
-Deep reinforcement learning, which autonomously maximizes a given reward function, has been used to solve precise manipulation tasks \cite{levine2016gps}, grasping \cite{pinto2017robust, levine2017grasping},
-door opening \cite{gu2016naf}, and
-navigation \cite{kahn2018navigation}.
+grasping \citep{pinto2015supersizing}, pushing \citep{agrawal2016poking}, manipulation of 3D object models~\citep{krainin2011autonomous}, active learning~\citep{martinez2014active} and pouring liquids~\citep{schenck2017visual}.
+Deep reinforcement learning, which autonomously maximizes a given reward function, has been used to solve precise manipulation tasks \citep{levine2016gps}, grasping \citep{pinto2017robust, levine2017grasping},
+door opening \citep{gu2016naf}, and
+navigation \citep{kahn2018navigation}.
 These methods have succeeded on specific tasks, often with hard-coded reward functions.
 However, to scale task generalization robots may need to learn methods that can handle significant environment variation and require relatively little external supervision.
 
 Several works have investigated self-supervised robotic interaction with varied objects in the deep learning setting with the goal of generalizing between objects.
-For example, in the domain of robotic grasping, several works have studied autonomous data collection to learn to grasp from a hand-specified grasping reward~\cite{pinto2015supersizing, levine2017grasping}. However, hand-specifying such rewards in general settings and for arbitrary manipulation skills is very cumbersome.
+For example, in the domain of robotic grasping, several works have studied autonomous data collection to learn to grasp from a hand-specified grasping reward~\citep{pinto2015supersizing, levine2017grasping}. However, hand-specifying such rewards in general settings and for arbitrary manipulation skills is very cumbersome.
 Other work has focused on self-supervised learning with
-visual forward models, either by enforcing a simplified dynamical structure \cite{watter2015embed, zhang2019solar} or with pixel transformer architectures \cite{finn2016visualforesight, ebert2017videoprediction, ebert2018retrying, lee2018videoprediction, ebert2018journal}.
+visual forward models, either by enforcing a simplified dynamical structure \citep{watter2015embed, zhang2019solar} or with pixel transformer architectures \citep{finn2016visualforesight, ebert2017videoprediction, ebert2018retrying, lee2018videoprediction, ebert2018journal}.
 However, these methods rely on accurate visual forward modelling, which is itself a very challenging problem.
 Instead, we build on self-supervised model-free approaches, which allow the agent to efficiently reach visual goals without planning with a visual forward model.
 
-Prior work has also sought to perform self-supervised learning with model-free approaches. Using visual inverse models \cite{agrawal2016poking} is one such approach, but may not work well for complex interaction dynamics or longer horizon planning.
-Most closely related to our approach are prior methods on goal-conditioned reinforcement learning~\cite{kaelbling1993goals, schaul2015uva, andrychowicz2017her}. The methods have been extended to frame self-supervised RL as learning goal reaching with automatically proposed goals, including visually-specified goals~\cite{nair2018rig, pong2019skewfit, wadefarley2019discern, florensa2019self, lin2019rlwithoutstate}. However, they generally focus on learning in narrow environments with little between-trial variability.
+Prior work has also sought to perform self-supervised learning with model-free approaches. Using visual inverse models \citep{agrawal2016poking} is one such approach, but may not work well for complex interaction dynamics or longer horizon planning.
+Most closely related to our approach are prior methods on goal-conditioned reinforcement learning~\citep{kaelbling1993goals, schaul2015uva, andrychowicz2017her}. The methods have been extended to frame self-supervised RL as learning goal reaching with automatically proposed goals, including visually-specified goals~\citep{nair2018rig, pong2019skewfit, wadefarley2019discern, florensa2019self, lin2019rlwithoutstate}. However, they generally focus on learning in narrow environments with little between-trial variability.
 In this setting, any previously visited state represents a valid goal. However, in the general case, this is no longer true: when the robot is presented with a different scene or different objects on each trial, it must only set those goals that can be accomplished in the current scene.
 In contrast, we focus on enabling self-supervised learning from off-policy data in heterogeneous environments with increased factors of variability.
 % , which retains the flexibility to accomplish varied at goals at test time, but can employ efficient model-free algorithms during training.
@@ -49,15 +49,15 @@ In contrast, we focus on enabling self-supervised learning from off-policy data 
 % %%SL.7.5: I think we should just delete this paragraph, it's a bit tangential and probably rather distracting.
 % A parallel line of work has considered instead generalizing in the real world by remaining robust to variation in simulators.
 % %%SL.7.1: If we are out of space, I think you can just skip all this stuff -- it's nice to have, but largely orthogonal to what we are doing.
-% This paradigm of domain randomization has shown to succesfully transfer to the real world in quadcopter navigation \cite{sadeghi2017simtoreal}, pushing \cite{peng2018openai},
-% grasping \cite{pinto2017asymmetric}, and
-% locomotion \cite{tan2018quadruped, hwangbo2019quadruped}, showing particularly robust performance by actively interacting in the real world \cite{chebotar2019simtoreal, zhou2019epi}.
+% This paradigm of domain randomization has shown to succesfully transfer to the real world in quadcopter navigation \citep{sadeghi2017simtoreal}, pushing \citep{peng2018openai},
+% grasping \citep{pinto2017asymmetric}, and
+% locomotion \citep{tan2018quadruped, hwangbo2019quadruped}, showing particularly robust performance by actively interacting in the real world \citep{chebotar2019simtoreal, zhou2019epi}.
 % However, representing diverse real-world physical and visual object properties in simulation is its own significant challenge.
 
 %%SL.7.1: This is good to have if we actually end up having the deformable manipulation experiments (then we can put back in a sentence or two about sim to real, but not as much as the full previous paragraph).
 % \todo{If we get towel working}
 % Learning directly in the real world also enables manipulation with non-rigid objects that would be difficult to model with traditional methods.
-% For example, knot tying and suturing, which poses a challenge for such methods, have been tackled by flexible motion planning [Inoue 1985, Mayer 2008], and learning from demonstrations \cite{schulman2013warping, schulman2013generalization, nair2017icra}.
+% For example, knot tying and suturing, which poses a challenge for such methods, have been tackled by flexible motion planning [Inoue 1985, Mayer 2008], and learning from demonstrations \citep{schulman2013warping, schulman2013generalization, nair2017icra}.
 % In our work, we consider manipulating deformable objects of cloth, such as towels.
 
 \section{Background}
@@ -65,16 +65,16 @@ In contrast, we focus on enabling self-supervised learning from off-policy data 
 In this section, we provide an overview of relevant prior work necessary to understand our method, including goal-conditioned reinforcement learning and representation learning with variational auto-encoders.
 
 \subsection{Goal-Conditioned Reinforcement Learning}
-In an MDP consisting of states $s_t \in \mathcal S$, actions $a_t \in \mathcal A$, dynamics $p(s_{t+1}|s_t, a_t)$, rewards $r_t$, horizon $H$, and discount factor $\gamma$, reinforcement learning addresses optimizing a policy $a_t = \pi_\theta(s_t)$ to maximize expected return $\E[\sum_{t=0}^{H} \gamma^t r_t]$. To learn a variety of skills, it is instead convenient to optimize over a family of reward functions parametrized by goals, as in the framework of goal-conditioned RL \cite{kaelbling1993goals}. A variety of RL algorithms exist, but as we are primarily interested in sample-efficient off-policy learning, we consider goal-conditioned Q-learning algorithms \cite{schaul2015uva}. These algorithms learn a parametrized Q-function $Q_w(s, a, g)$ that estimates the expected return of taking action $a$ from state $s$ with goal $g$. Q-learning methods rely on minimizing the Bellman error:
+In an MDP consisting of states $s_t \in \mathcal S$, actions $a_t \in \mathcal A$, dynamics $p(s_{t+1}|s_t, a_t)$, rewards $r_t$, horizon $H$, and discount factor $\gamma$, reinforcement learning addresses optimizing a policy $a_t = \pi_\theta(s_t)$ to maximize expected return $\E[\sum_{t=0}^{H} \gamma^t r_t]$. To learn a variety of skills, it is instead convenient to optimize over a family of reward functions parametrized by goals, as in the framework of goal-conditioned RL \citep{kaelbling1993goals}. A variety of RL algorithms exist, but as we are primarily interested in sample-efficient off-policy learning, we consider goal-conditioned Q-learning algorithms \citep{schaul2015uva}. These algorithms learn a parametrized Q-function $Q_w(s, a, g)$ that estimates the expected return of taking action $a$ from state $s$ with goal $g$. Q-learning methods rely on minimizing the Bellman error:
 \begin{align} \label{eq:bellman}
     \mathcal{L} = |Q_w(s, a, g) - (r + \max_{a'} Q_w(s', a', g))|
 \end{align}
-This objective can be optimized using standard actor-critic algorithms using a set of transitions $(s, a, s', g, r)$ which can be collected off-policy \cite{lillicrap2015continuous}.
+This objective can be optimized using standard actor-critic algorithms using a set of transitions $(s, a, s', g, r)$ which can be collected off-policy \citep{lillicrap2015continuous}.
 In practice, a target network is often used for the second Q-function.
 
 \subsection{Variational Auto-Encoders}
 Above, the goal description can take many forms. To handle high-dimensional goals, in this work, we learn a latent representation of the state using a variational auto-encoder (VAE).
-A VAE is a probabilistic generative model that has been shown to learn structured representations of high-dimensional data \cite{kingma2014vae} successfully. It is trained by reconstructing states $s$ with a parametrized encoder that converts the state into a normal random distribution $q_\phi(z|s)$ with a parametrized decoder that converts the latent variable $z$ into a predicted state distribution $p_\psi(s|z)$, while keeping the latent $z$ close (in KL divergence) to its prior $p(z)$, a standard normal distribution. To train the encoder and decoder parameters $\phi$ and $\psi$, we jointly optimize both objectives when minimizing the negative evidence lower bound:
+A VAE is a probabilistic generative model that has been shown to learn structured representations of high-dimensional data \citep{kingma2014vae} successfully. It is trained by reconstructing states $s$ with a parametrized encoder that converts the state into a normal random distribution $q_\phi(z|s)$ with a parametrized decoder that converts the latent variable $z$ into a predicted state distribution $p_\psi(s|z)$, while keeping the latent $z$ close (in KL divergence) to its prior $p(z)$, a standard normal distribution. To train the encoder and decoder parameters $\phi$ and $\psi$, we jointly optimize both objectives when minimizing the negative evidence lower bound:
 \begin{align}
     \mathcal L_\text{VAE} = -\E_{q_\phi(z|s)} [\log p(s|z)] + \beta D_{KL}(q_\phi(z|s)||p(z)).
 \end{align}
@@ -83,7 +83,7 @@ A VAE is a probabilistic generative model that has been shown to learn structure
 \label{sec:cvae}
 
 Instead of a generative model that learns to generate the dataset distribution, one might instead desire a more structured generative model that can generate samples based on structured input.
-One example of this is a conditional variational auto-encoder (CVAE) that conditions the output on some input variable $c$ and samples from $p(x|c)$ \cite{sohn2015cvae}.
+One example of this is a conditional variational auto-encoder (CVAE) that conditions the output on some input variable $c$ and samples from $p(x|c)$ \citep{sohn2015cvae}.
 For example, to train a model that generates images of digits given the desired digit, the input variable $c$ might be a one-hot encoded vector of the desired digit.
 
 A CVAE trains $q_\phi(z|s, c)$ and $q_\psi(s|z, c)$, where both the encoder and decoder has access to the input variable $c$. The CVAE then minimizes:
@@ -96,7 +96,7 @@ In our framework $c = s_{0}$.
 \subsection{Reinforcement Learning with Imagined Goals}
 \label{sec:rig}
 
-To learn skills from raw observations in a self-supervised manner, reinforcement learning with imagined goals (RIG) proposed to use representation learning combined with goal-conditioned RL \cite{nair2018rig}.
+To learn skills from raw observations in a self-supervised manner, reinforcement learning with imagined goals (RIG) proposed to use representation learning combined with goal-conditioned RL \citep{nair2018rig}.
 The aim of RIG is to choose actions in order to make the state $s_t$ reach a goal image $s_g$ at test time.
 RIG first collects an interaction dataset $\{s_t\}$ and learns a latent representation by training a VAE on this data.
 Then, a goal-conditioned policy is trained to act in the environment in order to reach a given goal $z_g$.
@@ -165,7 +165,7 @@ and let $\mu(s, s_0)$ denote the mean of $q_\phi(z|s, s_0)$. We then use RIG in 
 
 To collect data, we sample a latent goal for each rollout from the prior $z_g \sim N(0, I)$, as in RIG. For every observation $s_t$, we compute the mean encoding $\mu_t(s_t, s_0)$. We then obtain a rollout of the policy by executing $\pi(\bar{z}, \bar{z_g})$. The reward at each timestep is the latent distance $||\bar{\mu}_t - \bar{z}_g||$.
 
-The policy and Q-function can be trained with any off-policy reinforcement learning algorithm. We use TD3 in our implementation \cite{fujimoto2018td3}. Our policy and Q-function are goal-conditioned, and we take advantage of being able to relabel the goals for each transition to improve sample efficiency \cite{andrychowicz2017her, nair2018rig, pong2019skewfit}. However, when relabeling a goal $\bar{z}_g$ with a random goal from the environment, the context-conditioning is still preserved. That is, if $z_g' \sim N(0, 1)$ is the new sampled goal, we use $\bar{z}_g' = (z_g', z_c)$. This ensures that the relabeled goal is compatible with the scene for the corresponding transition.
+The policy and Q-function can be trained with any off-policy reinforcement learning algorithm. We use TD3 in our implementation \citep{fujimoto2018td3}. Our policy and Q-function are goal-conditioned, and we take advantage of being able to relabel the goals for each transition to improve sample efficiency \citep{andrychowicz2017her, nair2018rig, pong2019skewfit}. However, when relabeling a goal $\bar{z}_g$ with a random goal from the environment, the context-conditioning is still preserved. That is, if $z_g' \sim N(0, 1)$ is the new sampled goal, we use $\bar{z}_g' = (z_g', z_c)$. This ensures that the relabeled goal is compatible with the scene for the corresponding transition.
 
 After training, we can use the learned policy $\pi$ to reach a visually indicated goal.
 Given a goal image $s_g$, we encode it into a latent goal $z_g = \mu(s_g, s_0)$.
@@ -199,13 +199,13 @@ In our experiments, we aim to answer the following questions:
 
 \subsection{Self-Supervised Learning in Simulation}
 
-In simulation, we can conduct controlled experiments and evaluate against known underlying state values to measure the performance of our approach and prior methods. As a simulation test-bed, we use a multi-color pusher environment simulated in MuJoCo~\cite{todorov12mujoco}. In this environment (Figure~\ref{fig:cvae_samples}(left)),
+In simulation, we can conduct controlled experiments and evaluate against known underlying state values to measure the performance of our approach and prior methods. As a simulation test-bed, we use a multi-color pusher environment simulated in MuJoCo~\citep{todorov12mujoco}. In this environment (Figure~\ref{fig:cvae_samples}(left)),
 %%SL.10.7: Reference a figure that shows the environment. %% Addressed -GB
 a simulated Sawyer arm is tasked with pushing a circular puck to a target position, specified by a goal image at test time. On each rollout, the puck color is set to a random RGB value. Therefore, the goal proposals for each method must adequately account for the color of the puck -- a goal that requires moving a red puck to a given location is impossible if only a blue puck is present in the scene.
 
 We compare the following algorithms:
 \textbf{CC-RIG.} Our method using a CC-VAE for representation learning, as described in Section~\ref{sec:ccrig}.
-\textbf{RIG.} Reinforcement learning with imagined goals \cite{nair2018rig} using a standard VAE, as described in Section \ref{sec:rig}.
+\textbf{RIG.} Reinforcement learning with imagined goals \citep{nair2018rig} using a standard VAE, as described in Section \ref{sec:rig}.
 \textbf{Oracle.} The oracle agent runs goal-conditioned RL with direct access to state information. Achieving performance similar to the oracle indicates that an algorithm loses little from using raw image observations over ground truth state.
 
 Learning curves comparing these methods are presented in the plot on the left in~Figure~\ref{fig:sim-learning-curves}. CC-RIG outperforms RIG significantly, and standard RIG is not able to improve beyond the initial random policy. The performance of CC-RIG approaches that of the oracle policy, which has access to the true state. This suggests that, in visually varied environments, self-supervised learning is possible so long as the visual complexity is factored out with representation learning, and the proposed goals are consistent with the appearance of the current scene.
@@ -280,7 +280,7 @@ CC-RIG requires more samples to learn, but eventually approaches the oracle perf
         }
     \end{subfigure}
     \caption{Comparing samples from our CC-VAE model to a standard VAE. The initial image $s_0$ is shown on the top row, and samples conditioned on $s_0$ are shown below. Our model coherently maintains object color and geometry in its samples, suggesting that the context conditioned model can successfully factor out the scene-specific object identity from the variable object position. This enables the use of the CC-VAE for goal proposals in visually diverse scenes.}
-    \vspace{-0.2in}
+    %\vspace{-0.2in}
     \label{fig:cvae_samples}
 \end{figure}
 
@@ -303,7 +303,7 @@ We first collect a large dataset with random actions and train a CC-VAE on the d
 The CC-VAE learns to generate goals with the correct object. To handle varying brightness at different times of the day, we added data augmentation by applying a color jitter filter to $(s_0, s_t)$ pairs.
 As seen in the figure, the model is robust to this factor of variation. Each sample contains the same type of object, brightness level, and background as the initial state that it is conditioned on. However, crucially, these factors of variation are not present in $z_t$, as evidenced by the fact they do not vary within each column of Figure~\ref{fig:realworld-robot-pushing-results}, but the object position does.
 
-Next, we run CC-RIG with the trained CC-VAE to learn to reach visually indicated goals in a self-supervised manner. We first conduct fully off-policy training using the same dataset as was used to train the CC-VAE, consisting of 50,000 samples (about 3 hours) of total interaction with 20 objects. Then, we collect a small amount of additional on-policy data to finetune the policy, analogous to recent work on large-scale vision-based robotic reinforcement learning~\cite{pmlr-v87-kalashnikov18a}.
+Next, we run CC-RIG with the trained CC-VAE to learn to reach visually indicated goals in a self-supervised manner. We first conduct fully off-policy training using the same dataset as was used to train the CC-VAE, consisting of 50,000 samples (about 3 hours) of total interaction with 20 objects. Then, we collect a small amount of additional on-policy data to finetune the policy, analogous to recent work on large-scale vision-based robotic reinforcement learning~\citep{pmlr-v87-kalashnikov18a}.
 The robot learns to push objects to target locations, indicated by a goal image.
 The real-world results are presented in Figure~\ref{fig:realworld-robot-pushing-results}.
 Because it is difficult to automatically detect the positions of objects, we show some representative rollout examples, and we compute several distance metrics between the final state of a rollout and the goal: \textbf{CVAE distance.} CC-VAE latent space distance between final image and goal. \textbf{VAE distance.} VAE latent space distance between final image and goal. \textbf{Pixel distance.} We manually label the center of mass of the object in the final image and goal image, and compute the distance between them. \textbf{Object distance.} We measure the distance between the physical goal position of the object and the final position. In each metric, CC-RIG outperforms RIG.

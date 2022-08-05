@@ -276,7 +276,7 @@ In \Cref{sec:analysis}, we will show that this procedure recovers the optimal Q-
 
 \subsection{Policy Extraction and Algorithm Summary}
 
-\begin{wrapfigure}{R}{0.4\textwidth}
+\begin{wrapfigure}[12]{R}{0.4\textwidth}
     \begin{minipage}{0.4\textwidth}
         \begin{algorithm}[H]
             \caption{\Ournamepref Q-learning}
@@ -596,37 +596,36 @@ With larger values of $\tau$, our method approximates $Q$-learning better, leadi
 
 \label{sec:finetune}
 
-\begin{wraptable}[22]{r}{0.65\textwidth}
+%\begin{wraptable}[22]{r}{0.65\textwidth}
 %\begin{minipage}{0.65\textwidth}
- %\begin{table}[!htp]\centering
-\scriptsize
-\renewcommand{\arraystretch}{.7}
-\begin{tabular}{ l ||p{1.5cm} |p{1.5cm} | p{1.5cm}  }
+ \begin{table}[!htp]\centering
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{ l ||p{2.7cm} |p{2.7cm} | p{2.7cm}  }
     \centering
     Dataset & AWAC & CQL & \ourname (Ours) \\
-    % Dataset & AWAC \; Offline$\rightarrow$Online & CQL Offline $\rightarrow$ Online & Ours Offline $\rightarrow$ Online \\
+    % Dataset & AWAC  Offline$\rightarrow$Online & CQL Offline $\rightarrow$ Online & Ours Offline $\rightarrow$ Online \\
     \hline
-    antmaze-umaze-v0 & 56.7 \; $\rightarrow$ 59.0 & 70.1 \; $\rightarrow$ \textbf{99.4} & \textbf{88.0} \; $\rightarrow$ \textbf{96.3} \\
-    antmaze-umaze-diverse-v0 & 49.3 \; $\rightarrow$ 49.0 & 31.1 \; $\rightarrow$ \textbf{99.4} & \textbf{67.0} \; $\rightarrow$ 49.0\\
-    antmaze-medium-play-v0 & 0.0 \; \; $\rightarrow$ 0.0 & 23.0 \; $\rightarrow$ 0.0 & \textbf{69.0} \; $\rightarrow$ \textbf{89.2} \\
-    antmaze-medium-diverse-v0 & 0.7 \; \; $\rightarrow$ 0.3 & 23.0 \; $\rightarrow$ 32.3 & \textbf{71.8} \; $\rightarrow$ \textbf{91.4} \\
-    antmaze-large-play-v0 & 0.0 \; \; $\rightarrow$ 0.0 & 1.0 \; \; $\rightarrow$ 0.0 & \textbf{36.8} \; $\rightarrow$ \textbf{51.8} \\
-    antmaze-large-diverse-v0 & 1.0 \; \; $\rightarrow$ 0.0 & 1.0 \; \; $\rightarrow$ 0.0 & \textbf{42.2} \; $\rightarrow$ \textbf{59.8} \\ \hline
+    antmaze-umaze-v0 & 56.7  $\rightarrow$ 59.0 & 70.1  $\rightarrow$ \textbf{99.4} & \textbf{88.0}  $\rightarrow$ \textbf{96.3} \\
+    antmaze-umaze-diverse-v0 & 49.3  $\rightarrow$ 49.0 & 31.1  $\rightarrow$ \textbf{99.4} & \textbf{67.0}  $\rightarrow$ 49.0\\
+    antmaze-medium-play-v0 & 0.0   $\rightarrow$ 0.0 & 23.0  $\rightarrow$ 0.0 & \textbf{69.0}  $\rightarrow$ \textbf{89.2} \\
+    antmaze-medium-diverse-v0 & 0.7   $\rightarrow$ 0.3 & 23.0  $\rightarrow$ 32.3 & \textbf{71.8}  $\rightarrow$ \textbf{91.4} \\
+    antmaze-large-play-v0 & 0.0   $\rightarrow$ 0.0 & 1.0   $\rightarrow$ 0.0 & \textbf{36.8}  $\rightarrow$ \textbf{51.8} \\
+    antmaze-large-diverse-v0 & 1.0   $\rightarrow$ 0.0 & 1.0   $\rightarrow$ 0.0 & \textbf{42.2}  $\rightarrow$ \textbf{59.8} \\ \hline
     antmaze-v0 total & 107.7 $\rightarrow$ 108.3 & 151.5 $\rightarrow$ 231.1 & \textbf{374.8} $\rightarrow$ \textbf{437.5} \\ \hline
-    pen-binary-v0 & \textbf{44.6} \; $\rightarrow$ \textbf{70.3} & 31.2 \; $\rightarrow$ 9.9 & 37.4 \; $\rightarrow$ 60.7 \\
-    door-binary-v0 & \textbf{1.3} \; \; $\rightarrow$ \textbf{30.1} & 0.2 \; \; $\rightarrow$ 0.0 & 0.7 \; \; $\rightarrow$ \textbf{32.3} \\
-    relocate-binary-v0 & \textbf{0.8} \; \; $\rightarrow$ 2.7 & 0.1 \; \; $\rightarrow$ 0.0 & 0.0 \; \; $\rightarrow$ \textbf{31.0} \\ \hline
-    hand-v0 total & \textbf{46.7} \; $\rightarrow$ 103.1 & 31.5 \; $\rightarrow$ 9.9 & 38.1 \; $\rightarrow$ \textbf{124.0} \\ \hline \hline
+    pen-binary-v0 & \textbf{44.6}  $\rightarrow$ \textbf{70.3} & 31.2  $\rightarrow$ 9.9 & 37.4  $\rightarrow$ 60.7 \\
+    door-binary-v0 & \textbf{1.3}   $\rightarrow$ \textbf{30.1} & 0.2   $\rightarrow$ 0.0 & 0.7   $\rightarrow$ \textbf{32.3} \\
+    relocate-binary-v0 & \textbf{0.8}   $\rightarrow$ 2.7 & 0.1   $\rightarrow$ 0.0 & 0.0   $\rightarrow$ \textbf{31.0} \\ \hline
+    hand-v0 total & \textbf{46.7}  $\rightarrow$ 103.1 & 31.5  $\rightarrow$ 9.9 & 38.1  $\rightarrow$ \textbf{124.0} \\ \hline \hline
     total & 154.4 $\rightarrow$ 211.4 & 182.8 $\rightarrow$ 241.0 & \textbf{412.9} $\rightarrow$ \textbf{561.5}
     %%SL.10.3: why is CQL offline ant maze much worse here than it is in Table 1? is that a bug?
 \end{tabular}
 \captionsetup{justification=justified,format=plain}
 \caption{Online finetuning results showing the initial performance after offline RL, and performance after 1M steps of online RL. In all tasks, \ourname is able to finetune to a significantly higher performance than the offline initialization, with final performance that is comparable to or better than the best of either AWAC or CQL on all tasks except pen-binary-v0.}
 \label{tab:finetuning}
- %\end{table}
+ \end{table}
  %\FloatBarrier
  %\end{minipage}
-\end{wraptable}
+%\end{wraptable}
 
 The policies obtained by offline RL can often be improved with a small amount of online interaction.
 %For instance, the antmaze domain is one where no offline method achieves a near-maximum score, suggesting the need for active interaction and online improvement.

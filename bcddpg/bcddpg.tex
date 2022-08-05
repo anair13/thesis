@@ -77,11 +77,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-RL has found significant success in decision making for solving games, so what makes it more challenging to apply in robotics? A key difference is the difficulty of exploration, which comes from  the choice of reward function and complicated environment dynamics. In games, the reward function is usually given and can be directly optimized. In robotics, we often desire behavior to achieve some binary objective (e.g., move an object to a desired location or achieve a certain state of the system) which naturally induces a sparse reward. Sparse reward functions are easier to specify and recent work suggests that learning with a sparse reward results in learned policies that perform the desired objective instead of getting stuck in local optima \cite{andrychowicz2017her, vecerik17ddpgfd}. However, exploration in an environment with sparse reward is difficult since with random exploration, the agent rarely sees a reward signal.
+RL has found significant success in decision making for solving games, so what makes it more challenging to apply in robotics? A key difference is the difficulty of exploration, which comes from  the choice of reward function and complicated environment dynamics. In games, the reward function is usually given and can be directly optimized. In robotics, we often desire behavior to achieve some binary objective (e.g., move an object to a desired location or achieve a certain state of the system) which naturally induces a sparse reward. Sparse reward functions are easier to specify and recent work suggests that learning with a sparse reward results in learned policies that perform the desired objective instead of getting stuck in local optima \citep{andrychowicz2017her, vecerik17ddpgfd}. However, exploration in an environment with sparse reward is difficult since with random exploration, the agent rarely sees a reward signal.
 
 The difficulty posed by a sparse reward is exacerbated by the complicated environment dynamics in robotics. For example, system dynamics around contacts are difficult to model and induce a sensitivity in the system to small errors. Many robotics tasks also require executing multiple steps successfully over a long horizon, involve high dimensional control, and require generalization to varying task instances. These conditions further result in a situation where the agent so rarely sees a reward initially that it is not able to learn at all.
 
-All of the above means that random exploration is not a tenable solution. Instead, in this work we show that we can use demonstrations as a guide for our exploration. To test our method, we solve the problem of stacking several blocks at a given location from a random initial state. Stacking blocks has been studied before in the literature \cite{deisenroth2011blocks, duan2017oneshotimitation} and exhibits many of the difficulties mentioned: long horizons, contacts, and requires generalizing to each instance of the task. We limit ourselves to 100 human demonstrations collected via teleoperation in virtual reality. Using these demonstrations, we are able to solve a complex robotics task in simulation that is beyond the capability of both reinforcement learning and imitation learning.
+All of the above means that random exploration is not a tenable solution. Instead, in this work we show that we can use demonstrations as a guide for our exploration. To test our method, we solve the problem of stacking several blocks at a given location from a random initial state. Stacking blocks has been studied before in the literature \citep{deisenroth2011blocks, duan2017oneshotimitation} and exhibits many of the difficulties mentioned: long horizons, contacts, and requires generalizing to each instance of the task. We limit ourselves to 100 human demonstrations collected via teleoperation in virtual reality. Using these demonstrations, we are able to solve a complex robotics task in simulation that is beyond the capability of both reinforcement learning and imitation learning.
 
 The primary contribution of this paper is to show that demonstrations can be used with reinforcement learning to solve complex tasks where exploration is difficult. We introduce a simple auxiliary objective on demonstrations, a method of annealing away the effect of the demonstrations when the learned policy is better than the demonstrations, and a method of resetting from demonstration states that significantly improves and speeds up training policies.
 By effectively incorporating demonstrations into RL, we short-circuit the random exploration phase of RL and reach nonzero rewards and a reasonable policy early on in training. Finally, we extensively evaluate our method against other commonly used methods, such as initialization with learning from demonstrations and fine-tuning with RL, and show that our method significantly outperforms them.
@@ -119,7 +119,7 @@ A variety of reinforcement learning algorithms have been developed to solve this
 
 \subsection{DDPG}
 
-Our method combines demonstrations with one such method: Deep Deterministic Policy Gradients (DDPG) \cite{lillicrap2015continuous}. 
+Our method combines demonstrations with one such method: Deep Deterministic Policy Gradients (DDPG) \citep{lillicrap2015continuous}. 
 DDPG is an off-policy model-free reinforcement learning algorithm for continuous control which can utilize large function approximators such as neural networks. DDPG is an actor-critic method, which bridges the gap between policy gradient methods and value approximation methods for RL. At a high level, DDPG learns an action-value function (critic) by minimizing the Bellman error, while simultaneously learning a policy (actor) by directly maximizing the estimated action-value function with respect to the parameters of the policy.
 
 Concretely, DDPG maintains an actor function $\pi(s)$ with parameters $\theta_\pi$, a critic function $Q(s, a)$ with parameters $\theta_Q$, and a replay buffer $R$ as a set of tuples $(s_t, a_t, r_t, s_{t+1})$ for each transition experienced. DDPG alternates between running the policy to collect experience and updating the parameters. Training rollouts are collected with extra noise for exploration: $a_t = \pi(s) + \mathcal{N}$, where $\mathcal{N}$ is a noise process.
@@ -144,13 +144,13 @@ Note that DDPG is a natural fit for using demonstrations. Since DDPG can be trai
 
 \subsection{Multi-Goal RL}
 
-Instead of the standard RL setting, we train agents with parametrized goals, which lead to more general policies \cite{schaul2015uva}
-and have recently been shown to make learning with sparse rewards easier \cite{andrychowicz2017her}.
+Instead of the standard RL setting, we train agents with parametrized goals, which lead to more general policies \citep{schaul2015uva}
+and have recently been shown to make learning with sparse rewards easier \citep{andrychowicz2017her}.
 Goals describe the task we expect the agent to perform in the given episode, in our case they specify the desired positions of all objects. We sample the goal $g$ at he beginning of every episode. The function approximators, here $\pi$ and $Q$, take the current goal as an additional input.
 
 \subsection{Hindsight Experience Replay (HER)}
 
-To handle varying task instances and parametrized goals, we use Hindsight Experience Replay (HER) \cite{andrychowicz2017her}. The key insight of HER is that even in failed rollouts where no reward was obtained, the agent can transform them into successful ones by assuming that a state it saw in the rollout was the actual goal. HER can be used with any off-policy RL algorithm assuming that for every state we can find a goal corresponding to this state (i.e. a goal which leads to a positive reward in this state).
+To handle varying task instances and parametrized goals, we use Hindsight Experience Replay (HER) \citep{andrychowicz2017her}. The key insight of HER is that even in failed rollouts where no reward was obtained, the agent can transform them into successful ones by assuming that a state it saw in the rollout was the actual goal. HER can be used with any off-policy RL algorithm assuming that for every state we can find a goal corresponding to this state (i.e. a goal which leads to a positive reward in this state).
 
 For every episode the agent experiences, we store it in the replay buffer twice: once with the original goal pursued in the episode and once with the goal corresponding to the final state achieved in the episode, as if the agent intended on reaching this state from the very beginning.
 
@@ -160,7 +160,7 @@ Our method combines DDPG and demonstrations in several ways to maximally use dem
 
 \subsection{Demonstration Buffer} 
 
-First, we maintain a second replay buffer $R_D$ where we store our demonstration data in the same format as $R$. In each minibatch, we draw an extra $N_D$ examples from $R_D$ to use as off-policy replay data for the update step. These examples are included in both the actor and critic update. This idea has been introduced in \cite{vecerik17ddpgfd}.
+First, we maintain a second replay buffer $R_D$ where we store our demonstration data in the same format as $R$. In each minibatch, we draw an extra $N_D$ examples from $R_D$ to use as off-policy replay data for the update step. These examples are included in both the actor and critic update. This idea has been introduced in \citep{vecerik17ddpgfd}.
 
 \subsection{Behavior Cloning Loss}
 
@@ -215,14 +215,14 @@ We label our method with the behavior cloning loss, Q-filter, and resets from de
         \includegraphics[width=1.0\linewidth]{bcddpg/figs/pickplace}
     \end{subfigure}
     
-    \caption{Baseline comparisons on tasks from \cite{andrychowicz2017her}. Frames from the learned policy are shown above each task. Our method significantly outperforms the baselines.
+    \caption{Baseline comparisons on tasks from \citep{andrychowicz2017her}. Frames from the learned policy are shown above each task. Our method significantly outperforms the baselines.
     On the right plot, the HER baseline always fails.}%
     \label{fig:baseline1}%
 \end{figure*}
 
 \subsection{Environments}
 
-We evaluate our method on several simulated MuJoCo \cite{todorov12mujoco} environments. In all experiments, we use a simulated 7-DOF Fetch Robotics arm with parallel grippers to manipulate one or more objects placed on a table in front of the robot.
+We evaluate our method on several simulated MuJoCo \citep{todorov12mujoco} environments. In all experiments, we use a simulated 7-DOF Fetch Robotics arm with parallel grippers to manipulate one or more objects placed on a table in front of the robot.
 
 The agent receives the positions of the relevant objects on the table as its observations. The control for the agent is continuous and 4-dimensional: 3 dimensions that specify the desired end-effector position\footnote{In the 10cm x 10cm x 10cm cube around the current gripper position} and 1 dimension that specifies the desired distance between the robot fingers.
 The agent is controlled at 50Hz frequency.
@@ -231,7 +231,7 @@ We collect demonstrations in a virtual reality environment. The demonstrator see
 
 \subsection{Training Details}
 
-To train our models, we use Adam \cite{kingma2014adam} as the optimizer with learning rate $10^{-3}$. We use $N = 1024, N_D = 128, \lambda_1 = 10^{-3}, \lambda_2 = 1.0/N_D$. The discount factor $\gamma$ is 0.98. We use 100 demonstrations to initialize $R_D$. The function approximators $\pi$ and $Q$ are deep neural networks with ReLU activations and L2 regularization with the coefficient $5 \times 10^{-3}$. The final activation function for $\pi$ is tanh, and the output value is scaled to the range of each action dimension. To explore during training, we sample random actions uniformly within the action space with probability 0.1 at every step, and the noise process $\mathcal{N}$ is uniform over $\pm 10\%$ of the maximum value of each action dimension. Task-specific information, including network architectures, are provided in the next section.
+To train our models, we use Adam \citep{kingma2014adam} as the optimizer with learning rate $10^{-3}$. We use $N = 1024, N_D = 128, \lambda_1 = 10^{-3}, \lambda_2 = 1.0/N_D$. The discount factor $\gamma$ is 0.98. We use 100 demonstrations to initialize $R_D$. The function approximators $\pi$ and $Q$ are deep neural networks with ReLU activations and L2 regularization with the coefficient $5 \times 10^{-3}$. The final activation function for $\pi$ is tanh, and the output value is scaled to the range of each action dimension. To explore during training, we sample random actions uniformly within the action space with probability 0.1 at every step, and the noise process $\mathcal{N}$ is uniform over $\pm 10\%$ of the maximum value of each action dimension. Task-specific information, including network architectures, are provided in the next section.
 
 \subsection{Overview of Experiments}
 
@@ -241,7 +241,7 @@ We perform three sets of experiments. In Sec. \ref{sec:comparison}, we provide a
 
 \subsection{Tasks}
 
-We first show the results of our method on the simulated tasks presented in the Hindsight Experience Replay paper \cite{andrychowicz2017her}. We apply our method to three tasks:
+We first show the results of our method on the simulated tasks presented in the Hindsight Experience Replay paper \citep{andrychowicz2017her}. We apply our method to three tasks:
 \begin{enumerate}
     \item \textit{Pushing}. A block placed randomly on the table must be moved to a target location on the table by the robot (fingers are blocked to avoid grasping).
     \item \textit{Sliding}. A puck placed randomly on the table must be moved to a given target location. The target is outside the robot's reach so it must apply enough force that the puck reaches the target and stops due to friction.
@@ -299,7 +299,7 @@ Regardless of the reward type, an episode is considered successful for computing
 
 \subsection{Network architectures}
 
-We use a 4 layer networks with 256 hidden units per layer for $\pi$ and $Q$ for the HER tasks and stacking 3 or fewer blocks. For stacking 4 blocks or more, we use an attention mechanism \cite{bahdanau14attention} for the actor and a larger network. The attention mechanism uses a 3 layer network with 128 hidden units per layer to query the states and goals with one shared head. Once a state and goal is extracted, we use a 5 layer network with 256 hidden units per layer after the attention mechanism. Attention speeds up training slightly but does not change training outcomes.
+We use a 4 layer networks with 256 hidden units per layer for $\pi$ and $Q$ for the HER tasks and stacking 3 or fewer blocks. For stacking 4 blocks or more, we use an attention mechanism \citep{bahdanau14attention} for the actor and a larger network. The attention mechanism uses a 3 layer network with 128 hidden units per layer to query the states and goals with one shared head. Once a state and goal is extracted, we use a 5 layer network with 256 hidden units per layer after the attention mechanism. Attention speeds up training slightly but does not change training outcomes.
 
 \begin{figure}[t]
     \vspace{6pt}
@@ -332,7 +332,7 @@ we performed a large hyperparameter
 sweep over various networks sizes, attention hyperparameters, and learning rates
 and report the success rate achieved by the best policy found.
 
-\noindent \textbf{HER:} This method is exactly the one described in Hindsight Experience Replay \cite{andrychowicz2017her}, using HER and DDPG.
+\noindent \textbf{HER:} This method is exactly the one described in Hindsight Experience Replay \citep{andrychowicz2017her}, using HER and DDPG.
 
 \noindent \textbf{BC+HER:} This method first initializes a policy (actor) with BC, then finetunes the policy with RL as described above.
 
@@ -407,6 +407,6 @@ We present a system to utilize demonstrations along with reinforcement learning 
 
 An exciting future direction is to train policies directly on a physical robot. Fig. \ref{fig:baseline1} shows that learning the pick-and-place task takes about 1 million timesteps, which is about 6 hours of real world interaction time. This can realistically be trained on a physical robot, short-cutting the simulation-reality gap entirely. Many automation tasks found in factories and warehouses are similar to pick-and-place but without the variation in initial and goal states, so the samples required could be much lower. With our method, no expert needs to be in the loop to train these systems: demonstrations can be collected by users without knowledge about machine learning or robotics and rewards could be directly obtained from human feedback.
 
-A major limitation of this work is sample efficiency on solving harder tasks. While we could not solve these tasks with other learning methods, our method requires a large amount of experience which is impractical outside of simulation. To run these tasks on physical robots, the sample efficiency will have to improved considerably. We also require demonstrations which are not easy to collect for all tasks. If demonstrations are not available but the environment can be reset to arbitrary states, one way to learn goal-reaching but avoid using demonstrations is to reuse successful rollouts as in  \cite{florensa2017resets}.
+A major limitation of this work is sample efficiency on solving harder tasks. While we could not solve these tasks with other learning methods, our method requires a large amount of experience which is impractical outside of simulation. To run these tasks on physical robots, the sample efficiency will have to improved considerably. We also require demonstrations which are not easy to collect for all tasks. If demonstrations are not available but the environment can be reset to arbitrary states, one way to learn goal-reaching but avoid using demonstrations is to reuse successful rollouts as in  \citep{florensa2017resets}.
 
 Finally, our method of resets from demonstration states requires the ability to reset to arbitrary states. Although we can solve many long-horizon tasks without this ability, it is very effective for the hardest tasks. Resetting from demonstration rollouts resembles curriculum learning: we solve a hard task by first solving easier tasks. If the environment does not afford setting arbitrary states, then other curriculum methods will have to be used.

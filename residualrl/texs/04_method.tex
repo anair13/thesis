@@ -29,6 +29,7 @@ The residual controller $\pi_\theta(s_\text{m}, s_\text{o})$ can now be used to 
 Since the control sequence \eqref{eq:ctrl_seq} enters \eqref{eq:eom} through the dynamics of $s_\text{m}$ and $s_\text{m}$ is in fact the control input to the dynamics of $s_\text{o}$, we cannot simply use the a-priori hand-engineered feedback controller to achieve zero error of $s_\text{m}$ and independently achieve the control objective on $s_\text{o}$.
 Through the coupling of states we need to perform an overall optimization of \eqref{eq:ctrl_seq}, whereby the hand-engineered feedback controller provides internal structures and eases the optimization related to the reward term $f(s_\text{m})$.
 
+\vspace*{.5cm}
 \setlength{\textfloatsep}{0.09cm}
 \begin{algorithm}
    	\caption{Residual reinforcement learning}

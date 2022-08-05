@@ -39,7 +39,7 @@
     learn relatively slowly, even with access to prior data. We present our method, AWAC, as an example of how off-policy RL methods can learn much faster. (2) Variants of soft actor-critic (SAC) with offline training (performed before timestep 0) and fine-tuning. We see a ``dip'' in the initial performance, even if the policy is pretrained with behavioral cloning.
     (3) Offline RL method BEAR~\citep{kumar19bear} on offline training and fine-tuning, including a ``loose'' variant of BEAR with a weakened constraint. Standard offline RL methods fine-tune slowly, while the ``loose'' BEAR variant experiences a similar dip as SAC. (4) We show that the fit of the behavior models $\hat{\pi}_\beta$ used by these offline methods
     degrades as new data is added to the buffer during fine-tuning, potentially explaining their poor fine-tuning performance.
-    \vspace{-0.2in}
+    %\vspace{-0.2in}
     % }
     % AWR \cite{peng2019awr} DAPG \cite{rajeswaran2018dextrous} MARWIL \cite{wang2018marwil} SACfD \cite{vecerik17ddpgfd} SAC \cite{haarnoja2018sac} BEAR \cite{kumar19bear}
     }

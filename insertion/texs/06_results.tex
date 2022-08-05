@@ -101,7 +101,7 @@ Interestingly, during training with standard RL, the policy would sometimes lear
 
 In this experiment, we compare these methods on the USB insertion task with sparse rewards. The results are reported in Fig.~\ref{fig:SparseRewardsAll}. All methods are able to achieve very high success rates in the sparse setting. 
 This result shows that we can learn precise industrial insertion tasks in sparse-reward settings, which can often be obtained much more easily than a dense, shaped reward. 
-In fact, prior work has found that the final policy for sparse rewards can outperform the final policy for dense rewards as it does not suffer from a misspecified objective \cite{andrychowicz2017her}.
+In fact, prior work has found that the final policy for sparse rewards can outperform the final policy for dense rewards as it does not suffer from a misspecified objective \citep{andrychowicz2017her}.
 
 \subsection{Perfect State Information}
 The results of the experiment with perfect state information and dense rewards is shown in Fig.~\ref{fig:state_based_distance_all}. In this case, residual RL still outperforms standard RL, though the better-shaped reward enables standard RL to make more initial progress than with the other reward signals.
