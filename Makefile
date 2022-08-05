@@ -12,3 +12,9 @@ once:
 
 clean:
 	rm *.out *.brf *.aux *.log *.blg *.bbl
+
+quiet:
+	pdflatex -interaction=nonstopmode ${PAPER}
+	biber ${BIB}
+	pdflatex -interaction=nonstopmode ${PAPER}
+	pdflatex -interaction=nonstopmode ${PAPER}

@@ -6,22 +6,24 @@ In effect, robots rely on human ingenuity and engineering in order to do their j
 But such systems are brittle, and the hardware and software must often be redesigned for slight variations of a task.
 If a manufacturing task actually requires adaptability or robustness to varying environment conditions, designing a working system becomes much more difficult.
 And beyond manufacturing, we will expect the robots of tomorrow to do a lot more: cook meals, assist the elderly in homes and other human-centric environments, navigate unmapped terrain, operate machinery and appliances, manipulate objects, and interact safely in presence of humans. 
-This kind of open-world capability requires adaptability, generalization, and is beyond the reach of existing methods.
+This kind of open-world capability requires adaptability, generalization, and is beyond the reach of most robots today.
 
-In contrast, humans perform highly skillful dexterous manipulation very naturally.
-Most humans within the first five years of their life have developed complex, delicate fine motor skills.
+In contrast, humans perform highly skillful dexterous manipulation so easily that it is sometimes hard to conceive the difficulty of replicating this capability in a robot.
+Most humans within the first five years of their life have developed complex fine motor skills, successfully performing bimanual dexterous manipulation of all kinds of unfamiliar and dynamic objects, and using tools with a tight sensorimotor loop that entails perception, functional grasping, and control~\citep{adolph2017motor}.
 It remains a challenge to develop equivalently robust feedback controllers for robots that can adapt to a wide variety of situations to accomplish goals.
-If robots were equally skillful, it would be incredibly economically valuable and they could be used to automate many of the tasks that humans have to do today. How can we develop methods to allow robots to become similarly skillful?
+If robots were equally skillful, it would be incredibly economically valuable - they could be used to automate many of the tasks that humans have to do today.
+How can we develop methods to allow robots to become similarly skillful?
 
 % Existing work in robotics and the shortcomings
 % Existing work in robotics focuses on accomplishing well-specified tasks in carefully controlled environments.
 
 % Deep learning
 The past decade of deep learning suggests that learning from large datasets is the key to such open-world generalization for robots.
-Models that are pre-trained on broad datasets and can be fine-tuned to specific problems have driven recent progress in vision and NLP.
-For instance, bidirection encoders from transformers (BERT)~\cite{devlin2019bert} pretrained on large language datasets (100Ms of sentences) is now the standard starting point for fine-tuning to language models on custom language tasks and on custom data of much smaller size (10,000s of sentences).
-This type of pretraining capability enables machine learning to be used to solve more bespoke problems, greatly widening the applicability of ML methods to real-world applications.
-Similarly, robotics applications are often narrow, so the ability to utilize broad prior data but fine-tune on a specific task would be extremely valuable.
+Expressive models that are trained on broad datasets have driven recent progress in artificial intelligence research.
+These models are trained on a broad enough dataset to capture corner cases within its training distribution.
+Beginning with the breakthrough of AlexNet in image classification, the recipe of large datasets combined with large models has resulted in human-level performance in vision~\citep{krizhevsky2012imagenet}.
+Similarly, in NLP, pretraining on large datasets dominates~\citep{devlin2019bert}.
+These models have contributed to significant progress in protein folding, 
 % However, in robotics, such data sharing and model sharing have proven to be relatively difficult.
 If we could achieve such generality for control - the problem of selecting actions over time in order to maximize a reward function - it could enable truly general robots in the wild.
 
@@ -30,13 +32,16 @@ But control introduces two new challenges not found in the supervised learning s
 The first challenge is credit assignment: actions taken in the past affect the future.
 The second is exploration: actions taken change the distribution of data visited.
 To address these challenges, a promising line of work is deep reinforcement learning.
-Deep reinforcement learning has been applied successfully for super-human performance on games such as Atari, Go, Dota, and Starcraft.
-By now, it has been used for robotics, balloons, and even control of a nuclear fusion reactor.
-Yet, while algorithms for RL have been steadily advancing, becoming more sample efficient and stable, there are still significant challenges towards truly solving robotics with RL.
-What challenges remain to endow robots with human-level skills?
+Deep reinforcement learning has been applied successfully for super-human performance on games such as Atari~\citep{mnih2015human}, Go~\citep{silver2016alphago}, Dota, and Starcraft.
+It has been used for robotics, stratospheric balloons, and even control of plasma in a nuclear fusion reactor.
+Yet, while algorithms for RL have been steadily advancing, becoming more sample efficient and stable, there are still significant obstacles towards truly solving robotics with RL.
+What challenges remain toward endowing robots with human-level skills?
+
+\vspace{5mm}
 
 % What challenges remain: the chicken and the egg problem between data and policy
-\textbf{Challenges in robot learning.} The main issue is that the world is so varied that a robotic agent needs to collect its own data - but there’s a chicken and the egg problem between the policy and data. You need a policy that generalizes to collect useful data in varied environments, but you need good varied data to obtain such a policy. 
+\textbf{Challenges in robot learning.} The central issue is that the world is so varied that a robotic agent acquiring skills via learning based methods needs to experience both the diversity of perceptual inputs, combined with the complexity of control including exploration and credit assignment.
+collect its own data - but there’s a chicken and the egg problem between the policy and data. You need a policy that generalizes to collect useful data in varied environments, but you need good varied data to obtain such a policy. 
 To do so, we face several challenges. When a robot is dropped in a new environment, it must be able to use its prior knowledge to think of potentially useful behaviors that the environment affords. Then, the robot has to be able to actually practice these behaviors informatively. To now improve itself in the new environment, the robot must then be able to evaluate its own success somehow without an externally provided reward.
 
 % Challenge: utilizing prior data
@@ -46,7 +51,9 @@ First, speeding up policy optimization from prior knowledge: usually prior data 
 Second, where does the reward/supervision come from? which leads to the framework of self-supervised RL. So here, we deal with being able to evaluate a reward function for many goals g that the agent may be tasked with, how to infer the distribution of potential goals to train on so you can generalize to test tasks, and how this interacts with policy learning.
 
 % Vision for robotics if these are solved
-If we can overcome these challenges reliably, we open the door for a powerful cycle in which our agents use prior experience to collect high quality interaction data
+If we can overcome these challenges reliably, we can bootstrap a cycle in which our agents use prior experience to learn a policy to collect high quality interaction data, improve the policy from that data, and so.
+
+\vspace{5mm}
 
 % Outline of thesis
 \textbf{Outline.} This thesis is organized as follows. In Part I (Chapter 2-4), we explore utilizing goal-conditioned reinforcement learning for self-supervised exploration from raw observations. In chapter 2, we describe the framework of reinforcement learning with imagined goals (RIG), which enables self-supervised practice. In chapter 3, we discuss an extension of RIG to improve exploration in self-supervised goal-conditioned RL. In chapter 4, we discuss extending RIG to learn in novel situations, using a context-conditioned variation autoencoder (CCVAE). In Part 2 (Chapter 5-8), we discuss utilizing prior data and prior knowledge in order to initialize and accelerate reinforcement learning. In chapter 5, we discuss utilizing demonstrations to solve long-horizon tasks with reinforcement learning. In chapter 6, we discuss how to incorporate prior knowledge such as an expert controller using residual reinforcement learning. In chapter 7, we discuss an algorithm, advantage weighted actor critic (AWAC) to utilize arbitrary offline data, and finetune policies and Q functions online. In chapter 8, we discuss a significant improvement to AWAC, implicit Q-learning (IQL) that is state of the art in both offline RL and online finetuning. Finally, in Part 3 (Chapter 9-10), we show how these two directions come together to enable robots in the real world to explore novel situations. In chapter 9, we cover visuomotor affordance learning (VAL), a method to allow self-supervised learning from prior data. In chapter 10, we extend VAL with planning to enable finetuning of more complex skills. In chapter 11, we discuss some future directions.
