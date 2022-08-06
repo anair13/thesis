@@ -1,3 +1,209 @@
+% Thesis
+@article{lee2020locomotion,
+   abstract = {Permanent link: https://doi.},
+   author = {Joonho ; Lee and Jemin ; Hwangbo and Lorenz ; Wellhausen and Vladlen ; Koltun and Marco Hutter},
+   doi = {10.3929/ethz-b-000448343},
+   journal = {Science Robotics},
+   title = {Learning quadrupedal locomotion over challenging terrain},
+   url = {https://doi.org/10.3929/ethz-b-000448343},
+   year = {2020},
+}
+
+@article{degrave2022fusion,
+   abstract = {Nuclear fusion using magnetic confinement, in particular in the tokamak configuration, is a promising path towards sustainable energy. A core challenge is to shape and maintain a high-temperature plasma within the tokamak vessel. This requires high-dimensional, high-frequency, closed-loop control using magnetic actuator coils, further complicated by the diverse requirements across a wide range of plasma configurations. In this work, we introduce a previously undescribed architecture for tokamak magnetic controller design that autonomously learns to command the full set of control coils. This architecture meets control objectives specified at a high level, at the same time satisfying physical and operational constraints. This approach has unprecedented flexibility and generality in problem specification and yields a notable reduction in design effort to produce new plasma configurations. We successfully produce and control a diverse set of plasma configurations on the Tokamak  Configuration Variable1,2, including elongated, conventional shapes, as well as advanced configurations, such as negative triangularity and snowflake configurations. Our approach achieves accurate tracking of the location, current and shape for these configurations. We also demonstrate sustained droplets on TCV, in which two separate plasmas are maintained simultaneously within the vessel. This represents a notable advance for tokamak feedback control, showing the potential of reinforcement learning to accelerate research in the fusion domain, and is one of the most challenging real-world systems to which reinforcement learning has been applied. A newly designed control architecture uses deep reinforcement learning to learn to command the coils of a tokamak, and successfully stabilizes a wide variety of fusion plasma configurations.},
+   author = {Jonas Degrave and Federico Felici and Jonas Buchli and Michael Neunert and Brendan Tracey and Francesco Carpanese and Timo Ewalds and Roland Hafner and Abbas Abdolmaleki and Diego de las Casas and Craig Donner and Leslie Fritz and Cristian Galperti and Andrea Huber and James Keeling and Maria Tsimpoukelli and Jackie Kay and Antoine Merle and Jean Marc Moret and Seb Noury and Federico Pesamosca and David Pfau and Olivier Sauter and Cristian Sommariva and Stefano Coda and Basil Duval and Ambrogio Fasoli and Pushmeet Kohli and Koray Kavukcuoglu and Demis Hassabis and Martin Riedmiller},
+   doi = {10.1038/s41586-021-04301-9},
+   issn = {1476-4687},
+   issue = {7897},
+   journal = {Nature 2022 602:7897},
+   keywords = {Computer science,Magnetically confined plasmas,Nuclear fusion and fission},
+   month = {2},
+   pages = {414-419},
+   pmid = {35173339},
+   publisher = {Nature Publishing Group},
+   title = {Magnetic control of tokamak plasmas through deep reinforcement learning},
+   volume = {602},
+   url = {https://www.nature.com/articles/s41586-021-04301-9},
+   year = {2022},
+}
+
+
+@article{bellemare2020loon,
+   abstract = {Efficiently navigating a superpressure balloon in the stratosphere1 requires the integration of a multitude of cues, such as wind speed and solar elevation, and the process is complicated by forecast errors and sparse wind measurements. Coupled with the need to make decisions in real time, these factors rule out the use of conventional control techniques2,3. Here we describe the use of reinforcement learning4,5 to create a high-performing flight controller. Our algorithm uses data augmentation6,7 and a self-correcting design to overcome the key technical challenge of reinforcement learning from imperfect data, which has proved to be a major obstacle to its application to physical systems8. We deployed our controller to station Loon superpressure balloons at multiple locations across the globe, including a 39-day controlled experiment over the Pacific Ocean. Analyses show that the controller outperforms Loons previous algorithm and is robust to the natural diversity in stratospheric winds. These results demonstrate that reinforcement learning is an effective solution to real-world autonomous control problems in which neither conventional methods nor human intervention suffice, offering clues about what may be needed to create artificially intelligent agents that continuously interact with real, dynamic environments. Data augmentation and a self-correcting design are used to develop a reinforcement-learning algorithm for the autonomous navigation of Loon superpressure balloons in challenging stratospheric weather conditions.},
+   author = {Marc G. Bellemare and Salvatore Candido and Pablo Samuel Castro and Jun Gong and Marlos C. Machado and Subhodeep Moitra and Sameera S. Ponda and Ziyu Wang},
+   doi = {10.1038/s41586-020-2939-8},
+   issn = {1476-4687},
+   issue = {7836},
+   journal = {Nature 2020 588:7836},
+   keywords = {Aerospace engineering,Computer science},
+   month = {12},
+   pages = {77-82},
+   pmid = {33268863},
+   publisher = {Nature Publishing Group},
+   title = {Autonomous navigation of stratospheric balloons using reinforcement learning},
+   volume = {588},
+   url = {https://www.nature.com/articles/s41586-020-2939-8},
+   year = {2020},
+}
+
+@article{vinyals2019starcraft,
+   abstract = {Many real-world applications require artificial agents to compete and coordinate with other agents in complex environments. As a stepping stone to this goal, the domain of StarCraft has emerged as an important challenge for artificial intelligence research, owing to its iconic and enduring status among the most difficult professional esports and its relevance to the real world in terms of its raw complexity and multi-agent challenges. Over the course of a decade and numerous competitions13, the strongest agents have simplified important aspects of the game, utilized superhuman capabilities, or employed hand-crafted sub-systems4. Despite these advantages, no previous agent has come close to matching the overall skill of top StarCraft players. We chose to address the challenge of StarCraft using general-purpose learning methods that are in principle applicable to other complex domains: a multi-agent reinforcement learning algorithm that uses data from both human and agent games within a diverse league of continually adapting strategies and counter-strategies, each represented by deep neural networks5,6. We evaluated our agent, AlphaStar, in the full game of StarCraft II, through a series of online games against human players. AlphaStar was rated at Grandmaster level for all three StarCraft races and above 99.8% of officially ranked human players. AlphaStar uses a multi-agent reinforcement learning algorithm and has reached Grandmaster level, ranking among the top 0.2% of human players for the real-time strategy game StarCraft II.},
+   author = {Oriol Vinyals and Igor Babuschkin and Wojciech M. Czarnecki and Michal Mathieu and Andrew Dudzik and Junyoung Chung and David H. Choi and Richard Powell and Timo Ewalds and Petko Georgiev and Junhyuk Oh and Dan Horgan and Manuel Kroiss and Ivo Danihelka and Aja Huang and Laurent Sifre and Trevor Cai and John P. Agapiou and Max Jaderberg and Alexander S. Vezhnevets and Rmi Leblond and Tobias Pohlen and Valentin Dalibard and David Budden and Yury Sulsky and James Molloy and Tom L. Paine and Caglar Gulcehre and Ziyu Wang and Tobias Pfaff and Yuhuai Wu and Roman Ring and Dani Yogatama and Dario Wnsch and Katrina McKinney and Oliver Smith and Tom Schaul and Timothy Lillicrap and Koray Kavukcuoglu and Demis Hassabis and Chris Apps and David Silver},
+   doi = {10.1038/s41586-019-1724-z},
+   issn = {1476-4687},
+   issue = {7782},
+   journal = {Nature 2019 575:7782},
+   keywords = {Computer science,Statistics},
+   month = {10},
+   pages = {350-354},
+   pmid = {31666705},
+   publisher = {Nature Publishing Group},
+   title = {Grandmaster level in StarCraft II using multi-agent reinforcement learning},
+   volume = {575},
+   url = {https://www.nature.com/articles/s41586-019-1724-z},
+   year = {2019},
+}
+
+@article{openai2019dota,
+   abstract = {On April 13th, 2019, OpenAI Five became the first AI system to defeat the
+world champions at an esports game. The game of Dota 2 presents novel
+challenges for AI systems such as long time horizons, imperfect information,
+and complex, continuous state-action spaces, all challenges which will become
+increasingly central to more capable AI systems. OpenAI Five leveraged existing
+reinforcement learning techniques, scaled to learn from batches of
+approximately 2 million frames every 2 seconds. We developed a distributed
+training system and tools for continual training which allowed us to train
+OpenAI Five for 10 months. By defeating the Dota 2 world champion (Team OG),
+OpenAI Five demonstrates that self-play reinforcement learning can achieve
+superhuman performance on a difficult task.},
+   author = {OpenAI and : and Christopher Berner and Greg Brockman and Brooke Chan and Vicki Cheung and Przemysaw Dbiak and Christy Dennison and David Farhi and Quirin Fischer and Shariq Hashme and Chris Hesse and Rafal Jzefowicz and Scott Gray and Catherine Olsson and Jakub Pachocki and Michael Petrov and Henrique P. d. O. Pinto and Jonathan Raiman and Tim Salimans and Jeremy Schlatter and Jonas Schneider and Szymon Sidor and Ilya Sutskever and Jie Tang and Filip Wolski and Susan Zhang},
+   doi = {10.48550/arxiv.1912.06680},
+   month = {12},
+   title = {Dota 2 with Large Scale Deep Reinforcement Learning},
+   url = {https://arxiv.org/abs/1912.06680v1},
+   year = {2019},
+}
+
+
+@article{ang2005pid,
+  author={Kiam Heong Ang and Chong, G. and Yun Li},
+  journal={IEEE Transactions on Control Systems Technology}, 
+  title={PID control system analysis, design, and technology}, 
+  year={2005},
+  volume={13},
+  number={4},
+  pages={559-576},
+  doi={10.1109/TCST.2005.847331}
+}
+  
+@article{hogan1985impedance,
+    author = {Hogan, Neville},
+    title = "{Impedance Control: An Approach to Manipulation: Part IIImplementation}",
+    journal = {Journal of Dynamic Systems, Measurement, and Control},
+    volume = {107},
+    number = {1},
+    pages = {8-16},
+    year = {1985},
+    month = {03},
+    abstract = "{This three-part paper presents an approach to the control of dynamic interaction between a manipulator and its environment. Part I presented the theoretical reasoning behind impedance control. In Part II the implementation of impedance control is considered. A feedback control algorithm for imposing a desired cartesian impedance on the end-point of a nonlinear manipulator is presented. This algorithm completely eliminates the need to solve the inverse kinematics problem in robot motion control. The modulation of end-point impedance without using feedback control is also considered, and it is shown that apparently redundant actuators and degrees of freedom such as exist in the primate musculoskeletal system may be used to modulate end-point impedance and may play an essential functional role in the control of dynamic interaction.}",
+    issn = {0022-0434},
+    doi = {10.1115/1.3140713},
+    url = {https://doi.org/10.1115/1.3140713},
+    eprint = {https://asmedigitalcollection.asme.org/dynamicsystems/article-pdf/107/1/8/5492420/8\_1.pdf},
+}
+
+@article{wang2020soft,
+title = {A dual-mode soft gripper for food packaging},
+journal = {Robotics and Autonomous Systems},
+volume = {125},
+pages = {103427},
+year = {2020},
+issn = {0921-8890},
+doi = {https://doi.org/10.1016/j.robot.2020.103427},
+url = {https://www.sciencedirect.com/science/article/pii/S0921889019300879},
+author = {Zhongkui Wang and Keung Or and Shinichi Hirai},
+keywords = {Soft gripper, Grasping, Suction, Food packaging, Automation},
+abstract = {Robotics and automation in the food industry is not as widely applied as in other industries, such as automotive and electrical industries, due to the large variations in the shape and properties of food materials and the frequent alterations of food products. Robotic end effectors that can adapt to these variations and handle multiple types of food materials are in high demand. Therefore, we propose a dual-mode soft gripper made of rubber material that can grasp and suck different types of objects. The gripper consists of four soft fingers, fabricated with rubber material using casting process, each of which is designed as a combination of a PenuNet bending actuator and a suction pad located at the fingertip. We introduce a new design for the air paths, which play an important role in the proper function of the soft finger. Finite element (FE) simulations were performed to confirm the finger design. Experimental tests were conducted to evaluate single finger bending, gripper lifting force, and grasping and sucking actions for various types of food materials. Results show that the soft gripper can lift a 273.97-g hot dog in the grasping mode, as well as a 512.62-g bagged Kernel corn and a 1072.65-g Macbook Air in the suction mode. It can adapt to approximately circular and square targets, such as a piece of fried chicken and an orange, when the soft fingers are in a perpendicular configuration. While in a parallel configuration, the gripper can successfully handle elongated targets, such as a hot dog. An experiment is also presented to demonstrate the automatic packaging of a Japanese boxed lunch, which requires both grasping and suction modes to be employed.}
+}
+
+@article{jumper2021alphafold,
+	abstract = {Proteins are essential to life, and understanding their structure can facilitate a mechanistic understanding of their function. Through an enormous experimental effort1--4, the structures of around 100,000 unique proteins have been determined5, but this represents a small fraction of the billions of known protein sequences6,7. Structural coverage is bottlenecked by the months to years of painstaking effort required to determine a single protein structure. Accurate computational approaches are needed to address this gap and to enable large-scale structural bioinformatics. Predicting the three-dimensional structure that a protein will adopt based solely on its amino acid sequence---the structure prediction component of the `protein folding problem'8---has been an important open research problem for more than 50 years9. Despite recent progress10--14, existing methods fall far short of atomic accuracy, especially when no homologous structure is available. Here we provide the first computational method that can regularly predict protein structures with atomic accuracy even in cases in which no similar structure is known. We validated an entirely redesigned version of our neural network-based model, AlphaFold, in the challenging 14th Critical Assessment of protein Structure Prediction (CASP14)15, demonstrating accuracy competitive with experimental structures in a majority of cases and greatly outperforming other methods. Underpinning the latest version of AlphaFold is a novel machine learning approach that incorporates physical and biological knowledge about protein structure, leveraging multi-sequence alignments, into the design of the deep learning algorithm.},
+	author = {Jumper, John and Evans, Richard and Pritzel, Alexander and Green, Tim and Figurnov, Michael and Ronneberger, Olaf and Tunyasuvunakool, Kathryn and Bates, Russ and {\v Z}{\'\i}dek, Augustin and Potapenko, Anna and Bridgland, Alex and Meyer, Clemens and Kohl, Simon A. A. and Ballard, Andrew J. and Cowie, Andrew and Romera-Paredes, Bernardino and Nikolov, Stanislav and Jain, Rishub and Adler, Jonas and Back, Trevor and Petersen, Stig and Reiman, David and Clancy, Ellen and Zielinski, Michal and Steinegger, Martin and Pacholska, Michalina and Berghammer, Tamas and Bodenstein, Sebastian and Silver, David and Vinyals, Oriol and Senior, Andrew W. and Kavukcuoglu, Koray and Kohli, Pushmeet and Hassabis, Demis},
+	da = {2021/08/01},
+	date-added = {2022-08-05 14:36:46 -0700},
+	date-modified = {2022-08-05 14:36:46 -0700},
+	doi = {10.1038/s41586-021-03819-2},
+	id = {Jumper2021},
+	isbn = {1476-4687},
+	journal = {Nature},
+	number = {7873},
+	pages = {583--589},
+	title = {Highly accurate protein structure prediction with AlphaFold},
+	ty = {JOUR},
+	url = {https://doi.org/10.1038/s41586-021-03819-2},
+	volume = {596},
+	year = {2021},
+	Bdsk-Url-1 = {https://doi.org/10.1038/s41586-021-03819-2}}
+
+@article{ren2015fasterrcnn,
+   abstract = {State-of-the-art object detection networks depend on region proposal
+algorithms to hypothesize object locations. Advances like SPPnet and Fast R-CNN
+have reduced the running time of these detection networks, exposing region
+proposal computation as a bottleneck. In this work, we introduce a Region
+Proposal Network (RPN) that shares full-image convolutional features with the
+detection network, thus enabling nearly cost-free region proposals. An RPN is a
+fully convolutional network that simultaneously predicts object bounds and
+objectness scores at each position. The RPN is trained end-to-end to generate
+high-quality region proposals, which are used by Fast R-CNN for detection. We
+further merge RPN and Fast R-CNN into a single network by sharing their
+convolutional features---using the recently popular terminology of neural
+networks with 'attention' mechanisms, the RPN component tells the unified
+network where to look. For the very deep VGG-16 model, our detection system has
+a frame rate of 5fps (including all steps) on a GPU, while achieving
+state-of-the-art object detection accuracy on PASCAL VOC 2007, 2012, and MS
+COCO datasets with only 300 proposals per image. In ILSVRC and COCO 2015
+competitions, Faster R-CNN and RPN are the foundations of the 1st-place winning
+entries in several tracks. Code has been made publicly available.},
+   author = {Shaoqing Ren and Kaiming He and Ross Girshick and Jian Sun},
+   doi = {10.48550/arxiv.1506.01497},
+   issn = {01628828},
+   issue = {6},
+   journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+   keywords = {Object detection,convolutional neural network,region proposal},
+   month = {6},
+   pages = {1137-1149},
+   pmid = {27295650},
+   publisher = {IEEE Computer Society},
+   title = {Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks},
+   volume = {39},
+   url = {https://arxiv.org/abs/1506.01497v3},
+   year = {2015},
+}
+
+@ARTICLE{mason1981compliance,
+  author={Mason, Matthew T.},
+  journal={IEEE Transactions on Systems, Man, and Cybernetics}, 
+  title={Compliance and Force Control for Computer Controlled Manipulators}, 
+  year={1981},
+  volume={11},
+  number={6},
+  pages={418-432},
+  doi={10.1109/TSMC.1981.4308708}}
+
+@article{sacerdoti1974planning,
+title = {Planning in a hierarchy of abstraction spaces},
+journal = {Artificial Intelligence},
+volume = {5},
+number = {2},
+pages = {115-135},
+year = {1974},
+issn = {0004-3702},
+doi = {https://doi.org/10.1016/0004-3702(74)90026-5},
+url = {https://www.sciencedirect.com/science/article/pii/0004370274900265},
+author = {Earl D. Sacerdoti},
+abstract = {A problem domain can be represented as a hierarchy of abstraction spaces in which successively finer levels of detail are introduced. The problem solver ABSTRIPS, a modification of STRIPS, can define an abstraction space hierarchy from the STRIPS representation of a problem domain, and it can utilize the hierarchy in solving problems. Examples of the system's performance are presented that demonstrate the significant increases in problem-solving power that this approach provides. Then some further implications of the hierarchical planning approach are explored.}
+}
+
 % VAL -----------------------
 
 @inproceedings{schulman2015computation,
