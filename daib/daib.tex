@@ -162,7 +162,7 @@ Generalizable policies require broad and diverse datasets, but for realistic app
 
 However, instantiating this concept in a practical robotics setting requires overcoming a number of obstacles. The robot must be able to combine large amounts of diverse offline data with small amounts of targeted online experience, and do so in a way that doesn't require revisiting previously learned tasks or domains, which means that we need an offline RL algorithm that supports online finetuning. Perhaps more importantly, the entire finetuning process must be supported by the robot's own sensors, without privileged information or environment instrumentation, so as to retain the benefits of autonomous learning. In particular, this means that when adapting to a new task, the robot must be able to evaluate on its own whether it is making progress on the task, using a learned reward function.
 
-\begin{figure}[t!]
+\begin{figure}[th!]
     \centering
     \begin{subfigure}[b]{0.8\linewidth}
         \center
@@ -175,6 +175,8 @@ However, instantiating this concept in a practical robotics setting requires ove
     % \vspace{-0.5cm}
 % \end{wrapfigure}
 \end{figure}
+
+\FloatBarrier
 
 We study this problem in the setting of learning a policy from vision for performing industrial insertion tasks.
 This family of assembly tasks, including plugging in connectors into sockets, screwdrivers into screw intrusions, setting screws, and so on, are found in many stages of manufacturing.
@@ -676,7 +678,7 @@ When finetuning, we use $25\%$ of online data and the remaining offline data per
 
 \section{Robot Setup}
 
-\begin{figure}[t]
+\begin{figure}[th!]
     \centering
     \begin{subfigure}[b]{0.99\linewidth}
         \center
@@ -688,6 +690,8 @@ When finetuning, we use $25\%$ of online data and the remaining offline data per
     \vspace{-0.5cm}
 % \end{wrapfigure}
 \end{figure}
+
+\FloatBarrier
 
 Our robot setup for connector insertion is pictured in Fig~\ref{fig:connectortable}. We use two 7 DoF Sawyer robots from Rethink Robotics for collecting data and running experiments. The robot is commanded with an end-effector controller, where the action $a$ corresponds to relative end-effector movement in Cartesian coordinates. The resulting desired joint angles are computed via inverse kinematics, and then executed with a joint-space velocity controller with force limits for safety and to prevent dislodging connectors from a grasped position.
 

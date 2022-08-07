@@ -8,7 +8,9 @@
   }
   \label{fig:offline-sk-real}
 \end{figure}
-Reinforcement learning (RL) provides an appealing formalism for automated learning of behavioral skills, but separately learning every potentially useful skill becomes prohibitively time consuming, both in terms of the experience required for the agent and the effort required for the user to design reward functions for each behavior.
+While reinforcement learning (RL) provides an appealing formalism for automated learning of behavioral skills, separately learning every potentially useful skill becomes prohibitively time consuming, both in terms of the experience required for the agent and the effort required for the user to design reward functions for each behavior.
+In the previous chapter, we covered self-supervised goal-conditioned reinforcement learning with a generative model as an approach to scalable multi-task learning with little human supervision.
+This approach however, crucially relies on the distribution of data that the generative model is trained on.
 What if we could instead design an unsupervised RL algorithm that automatically explores the environment and iteratively distills this experience into general-purpose policies that can accomplish new user-specified tasks at test time?
 
 In the absence of any prior knowledge, an effective exploration scheme is one that visits as many states as possible, allowing a policy to autonomously prepare for user-specified tasks that it might see at test time.
@@ -47,7 +49,7 @@ While learning to reach goals is the typical objective studied in goal-condition
 Acquiring such a maximum-entropy goal distribution is challenging in environments with complex, high-dimensional state spaces, where even knowing which states are valid presents a major challenge.
 For example, in image-based domains, a uniform goal distribution requires sampling uniformly from the set of realistic images, which in general is unknown a priori.
 
-Our paper makes the following contributions.
+In this chapter, we present the following contributions.
 First, we propose a principled objective for unsupervised RL, based on \autoref{eq:hg-hgs}.
 While a number of prior works ignore the $\gH(\G)$ term, we argue that jointly optimizing the entire quantity is needed to develop effective exploration.
 Second, we present a general algorithm called \METHOD and prove that under regularity conditions \METHOD learns a sequence of generative models that converges to a uniform distribution over the goal space, even when the set of valid states is unknown (e.g., as in the case of images).

@@ -83,7 +83,7 @@ Suppose that you need to learn to open a new kind of drawer in a kitchen. While 
 In fact, infants learn about affordances such as movability, suckability, graspability, and digestibility through interaction and sensory feedback~\citep{berger2014development}.
 Learning and utilizing affordances through interaction allows an agent to acquire diverse, meaningful experiences even in unfamiliar situations.
 However, this way of learning new skills differs markedly from the approach taken by most robotic learning algorithms: the most widely used exploration methods are generally \emph{undirected}, and focus more on seeking out novelty and surprise~\citep{houthooft2016vime, tang2017hashtag, pathak2017curiosity}, rather than familiar and previously seen outcomes.
-In this paper, we study how robots operating entirely from pixel input can learn about affordances and, when faced with a new and unfamiliar environment, can utilize a previously trained model of possible outcomes to propose potential \emph{goals} that they can practice in this new environment, so as to explore and update their policy efficiently.
+In this chapter, we study how robots operating entirely from pixel input can learn about affordances and, when faced with a new and unfamiliar environment, can utilize a previously trained model of possible outcomes to propose potential \emph{goals} that they can practice in this new environment, so as to explore and update their policy efficiently.
 
 \input{val/texs/fig_page1}
 
@@ -142,7 +142,7 @@ In this way, goal-conditioned RL with generative models enables self-supervised 
 
 \section{Problem Setting}
 
-In this paper, we now consider acting in a distribution of environments $p(\mathcal{E})$ with shared structure.\footnote{Meta-learning approaches have also studied learning a new task quickly, given experience on a set of related MDPs ~\citep{duan2016rl2, finn2017maml, rakelly2019pearl}. The aims of our method are related to meta-learning, in that we also aim to learn in new environments more quickly, but we do not assume being given user-specified tasks or rewards to solve in the new environment.}
+We now consider acting in a distribution of environments $p(\mathcal{E})$ with shared structure.\footnote{Meta-learning approaches have also studied learning a new task quickly, given experience on a set of related MDPs ~\citep{duan2016rl2, finn2017maml, rakelly2019pearl}. The aims of our method are related to meta-learning, in that we also aim to learn in new environments more quickly, but we do not assume being given user-specified tasks or rewards to solve in the new environment.}
 Each environment $\mathcal{E}_i$ has its own task distribution $p_i(\gt)$. 
 As before, tasks are defined by goal states, so $p_i(\gt)$ represents the potential outcomes of interest in that environment.
 We assume that the outcomes of interest depends only on the appearance of the environment.

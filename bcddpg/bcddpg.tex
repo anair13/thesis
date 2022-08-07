@@ -83,7 +83,7 @@ The difficulty posed by a sparse reward is exacerbated by the complicated enviro
 
 All of the above means that random exploration is not a tenable solution. Instead, in this work we show that we can use demonstrations as a guide for our exploration. To test our method, we solve the problem of stacking several blocks at a given location from a random initial state. Stacking blocks has been studied before in the literature \citep{deisenroth2011blocks, duan2017oneshotimitation} and exhibits many of the difficulties mentioned: long horizons, contacts, and requires generalizing to each instance of the task. We limit ourselves to 100 human demonstrations collected via teleoperation in virtual reality. Using these demonstrations, we are able to solve a complex robotics task in simulation that is beyond the capability of both reinforcement learning and imitation learning.
 
-The primary contribution of this paper is to show that demonstrations can be used with reinforcement learning to solve complex tasks where exploration is difficult. We introduce a simple auxiliary objective on demonstrations, a method of annealing away the effect of the demonstrations when the learned policy is better than the demonstrations, and a method of resetting from demonstration states that significantly improves and speeds up training policies.
+In this chapter, we show how demonstrations can be used within a reinforcement learning algorithm to solve complex tasks where exploration is difficult. We introduce a simple auxiliary objective on demonstrations, a method of annealing away the effect of the demonstrations when the learned policy is better than the demonstrations, and a method of resetting from demonstration states that significantly improves and speeds up training policies.
 By effectively incorporating demonstrations into RL, we short-circuit the random exploration phase of RL and reach nonzero rewards and a reasonable policy early on in training. Finally, we extensively evaluate our method against other commonly used methods, such as initialization with learning from demonstrations and fine-tuning with RL, and show that our method significantly outperforms them.
 
 \begin{figure*}[t]
@@ -286,7 +286,7 @@ Two different reward functions are used. To test the performance of our method u
     r_t = \min_i \, \mathds{1}_{||x_i - g_i|| < \delta}
 \end{equation}
 
-\noindent The threshold $\delta$ is the size of a block, 5cm. Throughout the paper we call this the ``sparse'' reward.
+\noindent The threshold $\delta$ is the size of a block, 5cm. We call this the ``sparse'' reward.
 
 To enable solving the longer horizon tasks of stacking 4 or more blocks, we use the ``step'' reward :
 \begin{equation}

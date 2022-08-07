@@ -145,15 +145,17 @@
 %\addbibresource{meld/meld.bib}
 %\addbibresource{mi/mi.bib}
 % \addbibresource{main.bib} % union set of all the bibs
-\addbibresource{bibs/main1_val.bib}
-\addbibresource{bibs/main2_rig.bib}
-\addbibresource{bibs/main3_bcddpg.bib}
-\addbibresource{bibs/main4_awac.bib}
-\addbibresource{bibs/main5_skewfit.bib}
-\addbibresource{bibs/main6_residualrl.bib}
-\addbibresource{bibs/main7_insertion.bib}
-\addbibresource{bibs/main8_ptp.bib}
-\addbibresource{bibs/main9_daib.bib}
+% \addbibresource{bibs/main1_val.bib}
+% \addbibresource{bibs/main2_rig.bib}
+% \addbibresource{bibs/main3_bcddpg.bib}
+% \addbibresource{bibs/main4_awac.bib}
+% \addbibresource{bibs/main5_skewfit.bib}
+% \addbibresource{bibs/main6_residualrl.bib}
+% \addbibresource{bibs/main7_insertion.bib}
+% \addbibresource{bibs/main8_ptp.bib}
+% \addbibresource{bibs/main9_daib.bib}
+% \addbibresource{bibs/main9_daib_old.bib}
+\addbibresource{bibs/main1_val_bibertool.bib}
 \DeclareUnicodeCharacter{0301}{*************************************}
 
 %%%%% FIGURES
@@ -210,42 +212,42 @@
  \part{Reinforcement Learning with Imagined Goals}
 
  \chapter{Visual Reinforcement Learning with Imagined Goals}\label{chapter:rig}
-% \input{rig/rig}
+\input{rig/rig}
 
 \chapter{SkewFit: State-Covering Self-Supervised Reinforcement Learning}\label{chapter:skewfit}
-%  \input{skewfit/skewfit}   %%%%%% CH %%%%%% 
+ \input{skewfit/skewfit}   %%%%%% CH %%%%%% 
 
 \chapter{Contextual Imagined Goals for Self-Supervised Robotic Learning}\label{chapter:ccrig}
-% \input{ccrig/ccrig}   %%%%%% CH %%%%%% 
+\input{ccrig/ccrig}   %%%%%% CH %%%%%% 
 
 \part{Accelerating Reinforcement Learning with Prior Knowledge}
 
  \chapter{Overcoming Exploration in Reinforcement Learning with Demonstrations}\label{chapter:bcddpg}
-%  \input{bcddpg/bcddpg} %%%%%% CH %%%%%% 
-
- \chapter{Residual Reinforcement Learning for Robot Control}\label{chapter:residualrl}
-%  \input{residualrl/residualrl}  %%%%%% CH %%%%%% 
-
- \chapter{Deep Reinforcement Learning for Industrial Insertion Tasks with Visual Inputs and Natural Rewards}\label{chapter:insertion}
-% \input{insertion/insertion} %%%%%% CH %%%%%% 
+ \input{bcddpg/bcddpg} %%%%%% CH %%%%%% 
 
 \chapter{AWAC: Accelerating Online Reinforcement Learning with Offline Datasets}\label{chapter:awac}
-%  \input{awac/awac}  %%%%%% CH %%%%%% 
+ \input{awac/awac}  %%%%%% CH %%%%%% 
 
 \chapter{Offline Reinforcement Learning with Implicit Q-Learning}\label{chapter:iql}
-% \input{iql/iql}   %%%%%% CH %%%%%% 
+\input{iql/iql}   %%%%%% CH %%%%%% 
+
+\chapter{Residual Reinforcement Learning for Robot Control}\label{chapter:residualrl}
+\input{residualrl/residualrl}  %%%%%% CH %%%%%% 
+
+\chapter{Deep Reinforcement Learning for Industrial Insertion Tasks with Visual Inputs and Natural Rewards}\label{chapter:insertion}
+\input{insertion/insertion} %%%%%% CH %%%%%% 
 
 \chapter{Learning on the Job: Industrial Insertion of Novel Connectors from Vision}\label{chapter:daib}
-% \input{daib/daib}   %%%%%% CH %%%%%% 
+\input{daib/daib}   %%%%%% CH %%%%%% 
 
 \part{Affordance Learning in Unseen Environments}
 
 % %% DONE
  \chapter{Learning New Skills by Imagining Visual Affordances}\label{chapter:val}
-%  \input{val/val}  %%%%%% CH %%%%%% 
+ \input{val/val}  %%%%%% CH %%%%%% 
 
  \chapter{Planning to Practice: Efficient Online Fine-Tuning by Composing Goals in Latent Space}\label{chapter:ptp}
-%  \input{ptp/ptp}   %%%%%% CH %%%%%% 
+ \input{ptp/ptp}   %%%%%% CH %%%%%% 
 
 %%%%%%%%%%%%% END OF PAPER CONTENT
 

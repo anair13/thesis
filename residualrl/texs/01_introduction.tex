@@ -1,5 +1,6 @@
 \section{Introduction}\label{sec:introduction}
 %
+While prior knowledge arriving in the form of prior data is very general, in realistic applications we may have access to more structured types of prior knowledge. In the following chapters, we investigate industrial robotics as an application area.
 Robots in today's manufacturing environments typically perform repetitive tasks, and often lack the ability to handle variability and uncertainty. 
 Commonly used control algorithms, such as PID regulators and the computed torque method, usually follow predefined trajectories with little adaptive behavior.
 Many manufacturing tasks require some degree of adaptability or feedback to the environment, but significant engineering effort and expertise is required to design feedback control algorithms for these industrial robots.
@@ -14,7 +15,7 @@ Thus, all possible system behaviors must be considered a priori at design time.
 
 Reinforcement learning (RL) methods hold the promise of solving these challenges because they allow agents to learn behaviors through interaction with their surrounding environments and ideally generalize to new scenarios that differ from the specifications at the control design stage.
 Moreover, RL can handle control problems that are difficult to approach with conventional controllers because the control goal can be specified indirectly as a term in a reward function and not explicitly as the result of a control action.  
-All of these aspects are considered enablers for truly autonomous manufacturing systems and important for fully flexible lot-size one manufacturing \citep{lotsizeone}.
+All of these aspects are considered enablers for truly autonomous manufacturing systems and important for fully flexible lot-size one manufacturing~\citep{lotsizeone}.
 However, standard RL methods require the robot learn through interaction, which can be unsafe initially, and collecting the amount of interaction that is needed to learn a complex skill from scratch can be time consuming.
 
 \begin{figure*}[t]
@@ -31,7 +32,7 @@ However, standard RL methods require the robot learn through interaction, which 
     \label{fig:fig1}
 \end{figure*}
 
-In this paper, we study control problems that are difficult to approach with conventional feedback control methods. 
+In this chapter, we study control problems that are difficult to approach with conventional feedback control methods. 
 However, the problems possess structure that can be partially handled with conventional feedback control, e.g. with impedance control.
 The residual part of the control task, which is the part that must consider contacts and external object dynamics, is solved with RL. The outputs of the conventional controller and RL are superposed to form the commanded control.
 The main contribution of this paper is a methodology that combines conventional feedback control with deep RL methods and is illustrated in Fig. \ref{fig:fig1}.

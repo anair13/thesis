@@ -123,9 +123,7 @@ Our method is easy to implement by making a small change to the loss function in
 %%SL.9.28: I wonder if it might help to go into more detail about the specific improvement in performance? Otherwise this sounds a little generic.
 %% Ilya: Done.
 
-\vspace{-0.1cm}
 \section{Related work}
-\vspace{-0.1cm}
 
 A significant portion of recently proposed offline RL methods are based on either constrained or regularized approximate dynamic programming (e.g., Q-learning or actor-critic methods), with the constraint or regularizer serving to limit deviation from the behavior policy. We will refer to these methods as ``multi-step dynamic programming'' algorithms, since they perform true dynamic programming for multiple iterations, and therefore can in principle recover the optimal policy if provided with high-coverage data.
 The constraints can be implemented via an explicit density model~\citep{wu2019behavior, fujimoto2019off, kumar2019stabilizing, ghasemipour2021emaq}, implicit divergence constraints~\citep{nair2020awac, wang2020critic, peters2007reinforcement, peng2019advantage, siegel2020keep}, or by adding a supervised learning term to the policy improvement objective~\citep{fujimoto2021minimalist}. Several works have also proposed to directly regularize the Q-function to produce low values for out-of-distribution actions~\citep{kostrikov2021offline, kumar2020conservative,fakoor2021continuous}. Our method is also a multi-step dynamic programming algorithm. However, in contrast to prior works, our method completely avoids directly querying the learned Q-function with unseen actions during training, removing the need for any constraint during this stage, though the subsequent policy extraction, which is based on advantage-weighted regression~\citep{peng2019advantage,nair2020awac}, does apply an implicit constraint. However, this policy does not actually influence value function training.
@@ -167,8 +165,6 @@ L_{TD}(\theta) = \E_{(s, a, s')\sim\D}[(r(s,a) + \gamma \max_{a'}Q_{\hat{\theta}
 \end{equation}
 where $\D$ is the dataset,
 $Q_\theta(s,a)$ is a parameterized Q-function, $Q_{\hat{\theta}}(s,a)$ is a target network (e.g., with soft parameters updates defined via Polyak averaging), and the policy is defined as $\pi(s) = \argmax_a Q_\theta(s,a)$. Most recent offline RL methods modify either the value function loss (above) to regularize the value function in a way that keeps the resulting policy close to the data, or constrain the $\argmax$ policy directly. This is important because out-of-distribution actions $a'$ can produce erroneous values for $Q_{\hat{\theta}}(s',a')$ in the above objective, often leading to \emph{overestimation} as the policy is defined to maximize the (estimated) Q-value.
-
-\vspace{-0.3cm}
 
 \section{\Ournamepref Q-Learning}
 
@@ -592,6 +588,7 @@ With larger values of $\tau$, our method approximates $Q$-learning better, leadi
 
 \vspace{-0.2cm}
 \subsection{Online Fine-tuning after Offline RL}
+\label{sec:iqlfinetuning}
 \vspace{-0.2cm}
 
 \label{sec:finetune}
@@ -646,9 +643,7 @@ On the Ant Maze domains, \ourname significantly outperforms both prior methods a
 %In total, \ourname exhibits the ability to both pretrain from offline data and fine-tune effectively for improvement better than prior methods.
 %%SL.9.28: will need to revise this after we add the AWAC environments.
 
-\vspace{-0.2cm}
 \section{Conclusion}
-\vspace{-0.2cm}
 
 We presented implicit Q-Learning (\ourname), a general algorithm for offline RL that completely avoids any queries to values of out-of-sample actions during training while still enabling multi-step dynamic programming. To our knowledge, this is the first method that combines both of these features. This has a number of important benefits. First, our algorithm is computationally efficient: we can perform 1M updates on one GTX1080 GPU in less than 20 minutes. Second, it is simple to implement, requiring only minor modifications over a standard SARSA-like TD algorithm, and performing policy extraction with a simple weighted behavioral cloning procedure resembling supervised learning. 
 % Third, the method is general, and makes no environment-specific assumptions.
@@ -660,3 +655,7 @@ We presented implicit Q-Learning (\ourname), a general algorithm for offline RL 
 Finally, despite the simplicity and efficiency of this method, we show that it attains excellent performance across all of the tasks in the D4RL benchmark, matching the best prior methods on the MuJoCo locomotion tasks, and exceeding the state-of-the-art performance on the challenging ant maze environments, where multi-step dynamic programming is essential for good performance.
 %%SL.10.3: Commenting out the bit below (it doesn't really make sense anymore, because actually CQL is the best prior method in both domains).
 %This illustrates that our method successfully combines the best properties of both classes of approaches and successfully performs multiple steps of dynamic programming despite never querying out-of-sample actions.
+
+\section{Contribution Statement}
+
+The work in this chapter was performed in collaboration with Ilya Kostrikov and Sergey Levine~\citep{kostrikov2021iql}. Ilya proposed to use expectile regression for offline RL, implemented the offline RL algorithm, conducted the offline RL experiments, and wrote the majority of the paper. Ashvin assisted in developing the method, conducted the online finetuning experiments in~\ref{sec:iqlfinetuning}, and released a re-implementation of the algorithm in PyTorch (the original implementation released by Ilya used Jax). Sergey Levine advised the project and assisted with writing.
