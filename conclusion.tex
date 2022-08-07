@@ -1,1 +1,36 @@
-TODO
+In sum, we have covered two major directions forward for enabling scalable robot learning.
+In Part I, we covered self-supervised goal-conditioned learning for learning multitask policies from raw observations with minimal human supervision.
+In effect, this enables a robot to be dropped in an environment and set goals autonomously.
+In Part II, we covered using prior knowledge to accelerate reinforcement learning.
+In Part III, we explored combining these directions to enable affordance-driven robotic agents.
+In this final chapter, we discuss further implications of this work as well as future directions.
+
+\vspace{5mm}
+
+\textbf{Offline reinforcement learning.}
+The paradigm of offline reinforcement learning followed by online finetuning follows the broader trend in machine learning, where large expressive models trained on large datasets can be successfully fine-tuned for specific problems with relatively less data and compute available.
+The development of offline reinforcement learning algorithms, including the ones in this thesis (see chapter~\ref{chapter:awac}, \ref{chapter:iql}), enables the analogous capability for control~\citep{levine2020offlinetutorial}.
+Policies and value functions can be pretrained offline, and then fine-tuned online.
+This capability is especially important in the reinforcement learning setting because, unlike the supervised learning setting, reinforcement learning agents can often collect data, and this data will often be the most task-relevant data in the presence of distribution shift.
+For instance, a robot may be placed in a new home; the ability to fine-tune on newly collected data which may be out of the training distribution is vital for the robot to accomplish tasks in the new home, and reduces the necessity of perfect zero-shot performance.
+Such a capability can also be the basis for continual lifelong learning, by enabling the collection of high quality data in diverse environments.
+
+In this thesis, we have discussed robotics as the main domain.
+Offline reinforcement learning is a clear fit for robotics as it is a difficult control problem and requires generalization from raw pixel and other sensory observations, an area of clear strength for deep learning methods.
+But beyond robotics, many other control and sequential decision making problems are on the cusp of being realistically automated - in finance, logistics, job scheduling, natural language understanding, chip design, science, healthcare, human-computer interaction, and more.
+Each domain has unique challenges, depending on the cost of collecting offline data, cost of building accurate simulators, cost of online data, and safety considerations of running policies online.
+But in many of these domains, the underlying control problem is often today treated as a prediction problem.
+The availability of stable, usable offline RL algorithms to capture the control nature of these problems can enable significant progress.
+
+\vspace{5mm}
+
+\textbf{Self-supervision and goal-conditioned reinforcement learning.} 
+The other major theme covered in this thesis is multi-task learning via a continuous latent variable.
+We saw how a latent variable model can be used for autonomously setting goals, evaluating rewards, and learning a policy that can generalize across tasks.
+In this work, we mainly focused on reconstructive latent variable models, such as variational auto-encoders~\cite{kingma2014vae}.
+But more generally, the recipe of goal-conditioned reinforcement learning combined with latent variable models and goal relabeling can be applied to arbitrary latent variable models.
+This could enable more convenient task specification modalities such as language commands, demonstrations, or human feedback of policy executions, with significant sharing of the underlying RL algorithm when accommodating new modalities.
+
+Even more generally, the recurring theme of machine learning -- the ``bitter lesson'' according to~\citet{sutton2019bitter} -- is that general methods that leverage computation and data excel in the long run as opposed to methods that limit themselves by embedding domain-specific assumptions.
+Realizing this vision in robotics is difficult due to all the unscalable components of real-world robotics systems: hardware costs, bespoke robot controllers, physical resets, instrumentation for reward and state estimation, and safety.
+Self-supervised goal-conditioned RL combined with the ability to use offline datasets has the potential to address many of these questions in a scalable way.
