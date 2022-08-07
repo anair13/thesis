@@ -214,7 +214,7 @@ In \autoref{fig:rl-sweep}, we see that \METHOD performs consistently well with b
 \begin{figure}
     \begin{subfigure}{\linewidth}
       \centering
-      \includegraphics[width=\linewidth]{figures/plots/td3vskewfit.pdf}
+      \includegraphics[width=\linewidth]{skewfit/figures/plots/td3vskewfit.pdf}
       \label{fig:door-rl-sweep}
     \end{subfigure}
     \\
@@ -234,7 +234,7 @@ The results are included in \Figref{fig:alpha-sweep} and shows that our method i
 Also, the method consistently outperform $\alpha=0$, which is equivalent to sampling uniformly from the replay buffer.
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=1\linewidth]{figures/plots/power_ablation_square_with_inset.pdf}
+  \includegraphics[width=1\linewidth]{skewfit/figures/plots/power_ablation_square_with_inset.pdf}
   \vspace{-.05in}
   \label{fig:door-alpha-sweep}
   \vspace{-.1in}
@@ -253,7 +253,7 @@ Also, the method consistently outperform $\alpha=0$, which is equivalent to samp
  \begin{figure}[H]
      \vspace{0.1in}
          \centering
-         \includegraphics[width=0.8\linewidth]{figures/plots/variance.png}
+         \includegraphics[width=0.8\linewidth]{skewfit/figures/plots/variance.png}
          \fcaption{Gradient variance averaged across parameters in last epoch of training VAEs. Values of $\alpha$ less than $-1$ are numerically unstable for importance sampling (IS), but not for Skew-Fit.}
          \label{fig:grad-var}
      \label{fig:ul-variance-results}
@@ -283,7 +283,7 @@ As shown in \autoref{fig:vae_dump} and \autoref{fig:vae_dump_real}, the generati
 We we see in \autoref{fig:example_rollouts}, this results in a policy that more consistently reaches the goal image.
 \begin{figure*}
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/vae_samples_v3-01.png}
+    \includegraphics[width=0.9\textwidth]{skewfit/figures/vae_samples_v3-01.png}
     \fcaption{
 Proposed goals from the VAE for RIG and with \METHOD on the \textit{Visual Pickup}, \textit{Visual Pusher}, and \textit{Visual Door} environments. Standard RIG produces goals where the door is closed and the object and puck is in the same position, while RIG + \METHOD proposes goals with varied puck positions, occasional object goals in the air, and both open and closed door angles.
     }
@@ -292,9 +292,9 @@ Proposed goals from the VAE for RIG and with \METHOD on the \textit{Visual Picku
 
 \begin{figure*}
     \centering
-    \includegraphics[width=0.25\textheight]{figures/vae_dumps/rig-real-world-v2-exp-samples.png}
+    \includegraphics[width=0.25\textheight]{skewfit/figures/vae_dumps/rig-real-world-v2-exp-samples.png}
     \hspace{.3 in}
-    \includegraphics[width=0.25\textheight]{figures/vae_dumps/skew-fit-real-world-v2-exp-samples.png}
+    \includegraphics[width=0.25\textheight]{skewfit/figures/vae_dumps/skew-fit-real-world-v2-exp-samples.png}
     \fcaption{
 Proposed goals from the VAE for RIG (left) and with RIG + \METHOD (right) on the \textit{Real World Visual Door} environment. Standard RIG produces goals where the door is closed  while RIG + \METHOD proposes goals with both open and closed door angles.
     }
@@ -302,7 +302,7 @@ Proposed goals from the VAE for RIG (left) and with RIG + \METHOD (right) on the
 \end{figure*}
 \begin{figure*}
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/example-rollouts.jpg}
+    \includegraphics[width=0.9\textwidth]{skewfit/figures/example-rollouts.jpg}
     \fcaption{
 Example reached goals by \METHOD and RIG. The first column of each environment section specifies the target goal while the second and third columns show reached goals by \METHOD and RIG. Both methods learn how to reach goals close to the initial position, but only \METHOD learns to reach the more difficult goals.
     }
