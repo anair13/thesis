@@ -27,10 +27,11 @@ The availability of stable, usable offline RL algorithms to capture the control 
 \textbf{Self-supervision and goal-conditioned reinforcement learning.} 
 The other major theme covered in this thesis is multi-task learning via a continuous latent variable.
 We saw how a latent variable model can be used for autonomously setting goals, evaluating rewards, and learning a policy that can generalize across tasks.
-In this work, we mainly focused on reconstructive latent variable models, such as variational auto-encoders~\cite{kingma2014vae}.
+In this work, we mainly focused on reconstructive latent variable models, such as variational auto-encoders~\citep{kingma2014vae}.
 But more generally, the recipe of goal-conditioned reinforcement learning combined with latent variable models and goal relabeling can be applied to arbitrary latent variable models.
 This could enable more convenient task specification modalities such as language commands, demonstrations, or human feedback of policy executions, with significant sharing of the underlying RL algorithm when accommodating new modalities.
 
 Even more generally, the recurring theme of machine learning -- the ``bitter lesson'' according to~\citet{sutton2019bitter} -- is that general methods that leverage computation and data excel in the long run as opposed to methods that limit themselves by embedding domain-specific assumptions.
 Realizing this vision in robotics is difficult due to all the unscalable components of real-world robotics systems: hardware costs, bespoke robot controllers, physical resets, instrumentation for reward and state estimation, and safety.
+Operating in the usual reinforcement learning formalism - maximizing a reward function - hides this complexity.
 Self-supervised goal-conditioned RL combined with the ability to use offline datasets has the potential to address many of these questions in a scalable way.

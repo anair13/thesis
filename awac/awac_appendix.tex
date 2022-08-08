@@ -1,4 +1,4 @@
-\subsection{Algorithm Derivation Details} \label{sec:derivation}
+\section{Algorithm Derivation Details} \label{sec:derivation}
 
 The full optimization problem we solve, given the previous off-policy advantage estimate $A^{\pi_k}$ and buffer distribution $\pi_\beta$, is given below:
 \begin{align}
@@ -33,7 +33,7 @@ Furthermore, assume discrete policies with a minimum probably density of $\pi_\t
 \end{align}
 holds by the Pinsker's inequality, where $\DTV$ denotes the total variation distance between distributions. Thus minimizing the reverse KL also bounds the forward KL. Note that we can control the minimum $\alpha$ if desired by applying Laplace smoothing to the policy.
 
-\subsection{Implementation Details} \label{sec:implementation}
+\section{Implementation Details} \label{sec:implementation}
 
 We implement the algorithm building on top of twin soft actor-critic~\citep{haarnoja2018sac}, which incorporates the twin Q-function architecture from twin delayed deep deterministic policy gradient (TD3) from~\citet{fujimoto2018td3}. All off-policy algorithm comparisons (SAC, BRAC, MPO, ABM, BEAR) are implemented from the same skeleton. The base hyperparameters are given in Table~\ref{table:rl-hyperparams}. The policy update is replaced with:
 \begin{align}
@@ -107,11 +107,11 @@ As rewards for the dextrous manipulation environments are non-positive, we clamp
 \label{table:rl-hyperparams}
 \end{table}
 
-\subsection{Environment-Specific Details} \label{sec:environment_impl}
+\section{Environment-Specific Details} \label{sec:environment_impl}
 
 We evaluate our method on three domains: dexterous manipulation environments, Sawyer manipulation environments, and MuJoCo benchmark environments. In the following sections we describe specific details.
 
-\subsubsection{Dexterous Manipulation Environments}
+\subsection{Dexterous Manipulation Environments}
 
 These environments are modified from those proposed by~\citet{rajeswaran2018dextrous}.
 % , and available in \href{https://github.com/anair13/mj_envs}{this repository}.
@@ -123,11 +123,11 @@ In~\citet{rajeswaran2018dextrous}, the episode was terminated when the pen fell 
 
 \paragraph{relocate-binary-v0.} The task is to relocate an object to a goal location. The action dimension is 30 and the observation dimension is 39. Let $x_p$ denote the object position and $d_p$ denote the desired position. The reward is $r = \mathds{1}_{|x_p - d_p| \leq 0.1}$ - 1.
 
-\subsubsection{Sawyer Manipulation Environment}
+\subsection{Sawyer Manipulation Environment}
 
 \paragraph{SawyerPush-v0.} This environment is included in the \href{https://github.com/vitchyr/multiworld}{Multiworld} library. The task is to push a puck to a goal position in a 40cm x 20cm, and the reward function is the negative distance between the puck and goal position. When using this environment, we use hindsight experience replay for goal-conditioned reinforcement learning. The random dataset for prior data was collected by rolling out an Ornstein-Uhlenbeck process with $\theta = 0.15$ and $\sigma = 0.3$.
 
-\subsubsection{Off-Policy Data Performance}
+\subsection{Off-Policy Data Performance}
 
 The performances of the expert data, behavior cloning (BC) on the expert data (1), and BC on the combined expert+BC data (2) are included in Table~\ref{fig:bc}. For Gym benchmarks we report average return, and expert data is collected by a trained SAC policy. For dextrous manipulation tasks we report the success rate, and the expert data consists of human demonstrations provided by~\citet{rajeswaran2018dextrous}.
 
@@ -179,7 +179,7 @@ relocate    & 1      & 0.02          & 0.01       \\
     \label{fig:algo_table}
 \end{figure}
 
-\subsection{Baseline Implementation Details} \label{sec:baseline_impl}
+\section{Baseline Implementation Details} \label{sec:baseline_impl}
 
 We used public implementations of prior methods (DAPG, AWR) when available. We implemented the remaining algorithms in our framework, which also allows us to understand the effects of changing individual components of the method. In the section, we describe the implementation details. The full overview of algorithms is given in Figure~\ref{fig:algo_table}.
 
@@ -233,7 +233,7 @@ Additionally, for this method, actions for the update are sampled from a behavio
 
 % \pagebreak
 
-\subsection{Gym Benchmark Results From Prior Data}
+\section{Gym Benchmark Results From Prior Data}
 \label{sec:gym}
 
 In this section, we provide a comparative evaluation on MuJoCo benchmark tasks for analysis. These tasks are simpler, with dense rewards and relatively lower action and observation dimensionality. Thus, many prior methods can make good progress on these tasks. These experiments allow us to understand more precisely which design decisions are crucial. For each task, we collect 15 demonstration trajectories using a pre-trained expert on each task, and 100 trajectories of off-policy data by rolling out a behavioral cloned policy trained on the demonstrations. The same data is made available to all methods. The results are presented in Figure~\ref{fig:sim-learning-curves}. AWAC is consistently the best or on par with the best-performing method. No other single method consistently attains the best results -- on HalfCheetah, SAC + BC and BRAC are competitive, while on Ant-v2 ABM is competitive with AWAC.
@@ -247,7 +247,7 @@ We summarize the results according to the challenges in Section~\ref{sec:challen
 
 \pagebreak
 
-\subsection{Extra Baseline Comparisons (CQL, AlgaeDICE)}
+\section{Extra Baseline Comparisons (CQL, AlgaeDICE)}
 
 In this section, we add comparisons to constrained Q-learning (CQL)~\citep{kumar2020cql} and AlgaeDICE~\citep{nachum2019dualdice}. For CQL, we use the authors' implementation, modified for additionally online-finetuning instead of only offline training. For AlgaeDICE, we use the publicly available implementation, modified to load prior data and perform 25K pretraining steps before online RL. The results are presented in Figure~\ref{fig:cql-dice}.
 
@@ -267,7 +267,7 @@ In this section, we add comparisons to constrained Q-learning (CQL)~\citep{kumar
 
 % \pagebreak
 
-\subsection{Online Fine-Tuning From D4RL}
+\section{Online Fine-Tuning From D4RL}
 
 In this experiment, we evaluate the performance of varied data quality (random, medium, medium-expert, and expert) datasets included in D4RL~\citep{fu2020d4rl}, a dataset intended for offline RL. The results are obtained by first by training offline and then fine-tuning online on each setting for 500,000 additional steps. The performance of BEAR~\citep{kumar19bear} is attached as reference. We attempted to fine-tune BEAR online using the same protocol as AWAC but the performance did not improve and often decreased; thus we report the offline performance. All performances are scaled to 0 to 100, where 0 is the average returns of a random policy and 100 is the average returns of an expert policy (obtained by training online with SAC), as is standard for D4RL.
 
@@ -320,7 +320,7 @@ Walker2D  & random & 5.1 & 11.7 & 6.7 \\
 
 \pagebreak
 
-\subsection{Hardware Experimental Setup}
+\section{Hardware Experimental Setup}
 \label{sec:hardwaresetup}
 
 Here, we provide further details of the hardware experimental setups, which are pictured in Fig~\ref{fig:robot_setups}.
