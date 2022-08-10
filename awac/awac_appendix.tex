@@ -42,11 +42,12 @@ We implement the algorithm building on top of twin soft actor-critic~\citep{haar
 \end{align}
 
 \begin{table}[h!]
+\centering
 % {\columnwidth}
-\footnotesize
+%\footnotesize
 % \vspace{-0.5cm}
-\begin{tabular}{c|c|c}
-Env      & \shortstack{Use \\ $Z(\st)$} & \shortstack{Omit \\ $Z(\st)$} \\ \hline
+\begin{tabular}{L{3cm}|C{3cm}|C{3cm}}
+Env      & \shortstack{Use  $Z(\st)$} & \shortstack{Omit  $Z(\st)$} \\ \hline
 pen      & 84\%      & 98\%    \\
 door     & 0\%      & 95\%    \\
 relocate & 0\%      & 54\%
@@ -81,7 +82,7 @@ As rewards for the dextrous manipulation environments are non-positive, we clamp
 
 \begin{table}
     \centering
-    \begin{tabular}{c|c}
+    \begin{tabular}{L{6cm}|c}
     \hline
     \textbf{Hyper-parameter} & \textbf{Value} \\
     \hline
@@ -131,10 +132,10 @@ In~\citet{rajeswaran2018dextrous}, the episode was terminated when the pen fell 
 
 The performances of the expert data, behavior cloning (BC) on the expert data (1), and BC on the combined expert+BC data (2) are included in Table~\ref{fig:bc}. For Gym benchmarks we report average return, and expert data is collected by a trained SAC policy. For dextrous manipulation tasks we report the success rate, and the expert data consists of human demonstrations provided by~\citet{rajeswaran2018dextrous}.
 
-\begin{table}[h!]
-% [\columnwidth]
-\footnotesize
-\begin{tabular}{c|c|c|c}
+\begin{table}[ht!]
+\centering
+%\footnotesize
+\begin{tabular}{L{2cm}|C{2cm}|C{2cm}|C{2cm}}
 Env         & Expert & BC (1) & BC (2) \\ \hline
 cheetah & 9962   & 2507         & 4524      \\
 walker      & 5062   & 2040         & 1701      \\
@@ -149,11 +150,13 @@ relocate    & 1      & 0.02          & 0.01       \\
 % \vspace{-0.6cm}
 \end{table}
 
-\begin{figure}[H]
+\begin{table}[ht!]
+\centering
+\setlength{\tabcolsep}{10pt}
+\renewcommand{\arraystretch}{1.15}
     %\begin{flushleft}
     %\begin{subfigure}[t]{0.5\textwidth}
-    \begin{centering}
-        \footnotesize
+        %\footnotesize
         % \raisebox{3cm}{
         \begin{tabular}{ l||l|l|l|l  }
             Name & $\hat{Q}$ & Policy Objective & $\hat{\pi}_\beta$? & Constraint \\
@@ -171,13 +174,11 @@ relocate    & 1      & 0.02          & 0.01       \\
         \end{tabular}
         % }
     %\end{subfigure}
-    \end{centering}
     % \hfill
     %\end{flushleft}
-    
     \caption{Comparison of prior algorithms that can incorporate prior datasets. See section~\ref{sec:baseline_impl} for specific implementation details. We argue that avoiding estimating $\hat{\pi}_\beta$ (i.e., $\hat{\pi}_\beta$ is ``No'') is important when learning with complex datasets that include experience from multiple policies, as in the case of online fine-tuning, and maintaining a constraint of some sort is essential for offline training. At the same time, sample-efficient learning requires using $Q^\pi$ for the critic. Our algorithm is the only one that fulfills all of these requirements.}
     \label{fig:algo_table}
-\end{figure}
+\end{table}
 
 \section{Baseline Implementation Details} \label{sec:baseline_impl}
 
@@ -273,7 +274,9 @@ In this experiment, we evaluate the performance of varied data quality (random, 
 
 The results are presented in Figure~\ref{fig:d4rl_comparison}. First, we observe that AWAC (offline) is competitive with BEAR, a commonly used offline RL algorithm. Then, AWAC is able to make progress in solving the tasks with online fine-tuning, even when initialized from random data or “medium” quality data, as shown by the performance of AWAC (online). In almost all settings, AWAC (online) is the best performing or tied with BEAR. In four of the six lower quality (random or medium) data settings, AWAC (online) is significantly better than BEAR; it is reasonable that AWAC excels in the lower-quality data regime because there is more room for online improvement, while both offline RL methods often start at high performance when initialized from higher-quality data.
 
-\begin{figure}[H]
+\begin{figure}[ht!]
+\centering
+\setlength{\tabcolsep}{15pt}
 % \begin{table}[]
 \begin{tabular}{lllll}
  &    & \begin{tabular}[c]{@{}l@{}}AWAC\\ (offline)\end{tabular} & \begin{tabular}[c]{@{}l@{}}AWAC\\ (online)\end{tabular} & BEAR \\
@@ -341,7 +344,10 @@ Here, we provide further details of the hardware experimental setups, which are 
     \item Prior data: 10 demonstrations collected using a 3DConnexion Spacemouse device and 500 trajectories of behavior cloning data.
 \end{itemize}
 
+\vspace{3mm}
 \noindent \textbf{Dexterous Manipulation with a Robotic Hand.}
+\vspace{3mm}
+
 \begin{itemize}
     \item State space: 25 dimensions, consisting of joint angles of the hand, end effector positions of the arm, object position and target position. 
     \item Action space: 19 dimensions, consisting of desired 16 joint angles of the hand and 3 dimensions for end-effector control of the arm.

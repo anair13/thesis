@@ -45,9 +45,10 @@ We also present results on Locomotion and Ant Maze for different values of $\tau
     \label{fig:antmaze_full}
 \end{figure}
 
-\begin{table}[b]\centering
+\begin{table}[ht!]
+\centering
 \caption{Effect of $\tau$. Fitting $V(s)$ with mean squared error ($\tau=0.5$) is not sufficient to propagate the signal through recursion and fails to solve more challenging medium and large tasks.}\label{tab:antmaze-full}
-\scriptsize
+\resizebox{\textwidth}{!}{
 \begin{tabular}{l||rrrr}
 &IQL w/ $\tau=0.5$ (MSE) &IQL w/ $\tau=0.7$ &IQL w/ $\tau=0.9$ \\\hline
 antmaze-umaze-v0 &44.2$\pm$7.2 &87.0$\pm$2.3 &87.5$\pm$2.6 \\
@@ -55,9 +56,9 @@ antmaze-umaze-diverse-v0 &53.6 $\pm$12.7 &57.2$\pm$11.9 &62.2$\pm$13.8 \\
 antmaze-medium-play-v0 &0.0$\pm$0.0 &4.0$\pm$2.0 &71.2 $\pm$7.3 \\
 antmaze-medium-diverse-v0 &0.0 $\pm$0.0 &2.6$\pm$1.4 &70.0$\pm$10.9 \\
 antmaze-large-play-v0 &0.0$\pm$0.0 &0.2$\pm$0.4 &39.6 $\pm$5.8 \\
-antmaze-large-diverse-v0 &0.0 $\pm$0.0 &1.2$\pm$1.6 &47.5$\pm$9.5 \\ \hline \hline
+antmaze-large-diverse-v0 &0.0 $\pm$0.0 &1.2$\pm$1.6 &47.5$\pm$9.5 \\ \hline\hline 
 total &97.8$\pm$19.9 &152.2$\pm$19.6 &378.0$\pm$49.9 \\
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \paragraph{Results on Franca Kitchen and Adoit tasks.}
@@ -66,7 +67,7 @@ For Franca Kitchen and Adroit tasks we use $\tau=0.7$ and the inverse temperatur
 
 \begin{table}[!htp]\centering
 \caption{Evaluation on Franca Kitchen and Adroit tasks from D4RL}\label{tab:franca_adroit}
-\scriptsize
+\resizebox{\textwidth}{!}{
 \begin{tabular}{l||rrrrr|r}
 dataset &BC &BRAC-p &BEAR &Onestep RL &CQL &Ours \\ \hline
 kitchen-complete-v0 &\textbf{65.0} &0.0 &0.0 &- &43.8 &\textbf{62.5} \\
@@ -83,39 +84,39 @@ door-cloned-v0 &0.0 &-0.1 &-0.1 &0.4 &0.4 &\textbf{1.6} \\
 relocate-cloned-v0 &-0.3 &-0.3 &-0.3 &-0.1 &-0.1 &-0.2 \\ \hline
 adroit-v0 total &104.5 &9.3 &25.1 &- &93.6 &\textbf{118.1} \\ \hline \hline
 total &259 &9.3 &25.1 &- &238.2 &\textbf{277.9} \\
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \section{Finetuning experimental details}
 \label{app:finetuning}
 For finetuning experiments, we first run offline RL for 1M gradient steps. Then we continue training while collecting data actively in the environment and adding that data to the replay buffer, running 1 gradient update / environment step. All other training details are kept the same between the offline RL phase and the online RL phase. For dextrous manipulation environments~\citep{rajeswaran2018dextrous}, we use $\tau=0.8$ and $\beta=3.0$, 25000 offline training steps, and add Gaussian noise with standard deviation $\sigma=0.03$ to the policy for exploration.
 
-\begin{wraptable}[12]{r}{0.55\textwidth}
-% \begin{table}[!htp]\centering
-\scriptsize
-\begin{tabular}{ l ||p{1.5cm} | p{1.5cm}  }
+\begin{table}[!htp]\centering
+%\resizebox{\textwidth}{!}{
+\begin{tabular}{ L{6cm} ||p{2.8cm} | p{2.8cm}  }
     \centering
     Dataset & Offline & Online \\
     % Dataset & AWAC \; Offline$\rightarrow$Online & CQL Offline $\rightarrow$ Online & Ours Offline $\rightarrow$ Online \\
     \hline
-    antmaze-umaze-v0 & 70.1 \; $\rightarrow$ \textbf{99.4} & \textbf{86.7} \; $\rightarrow$ \textbf{96.0} \\
-    antmaze-umaze-diverse-v0 & 31.1 \; $\rightarrow$ \textbf{99.4} & \textbf{75.0} \; $\rightarrow$ 84.0 \\
-    antmaze-medium-play-v0 & 23.0 \; $\rightarrow$ 0.0 & \textbf{72.0} \; $\rightarrow$ \textbf{95.0} \\
-    antmaze-medium-diverse-v0 & 23.0 \; $\rightarrow$ 32.3 & \textbf{68.3} \; $\rightarrow$ \textbf{92.0} \\
-    antmaze-large-play-v0 & 1.0 \; \; $\rightarrow$ 0.0 & \textbf{25.5} \; $\rightarrow$ \textbf{46.0} \\
-    antmaze-large-diverse-v0 & 1.0 \; \; $\rightarrow$ 0.0 & \textbf{42.6} \; $\rightarrow$ \textbf{60.7} \\ \hline
+    antmaze-umaze-v0 & 70.1  $\rightarrow$ \textbf{99.4} & \textbf{86.7}  $\rightarrow$ \textbf{96.0} \\
+    antmaze-umaze-diverse-v0 & 31.1  $\rightarrow$ \textbf{99.4} & \textbf{75.0}  $\rightarrow$ 84.0 \\
+    antmaze-medium-play-v0 & 23.0  $\rightarrow$ 0.0 & \textbf{72.0}  $\rightarrow$ \textbf{95.0} \\
+    antmaze-medium-diverse-v0 & 23.0  $\rightarrow$ 32.3 & \textbf{68.3}  $\rightarrow$ \textbf{92.0} \\
+    antmaze-large-play-v0 & 1.0  $\rightarrow$ 0.0 & \textbf{25.5}  $\rightarrow$ \textbf{46.0} \\
+    antmaze-large-diverse-v0 & 1.0  $\rightarrow$ 0.0 & \textbf{42.6}  $\rightarrow$ \textbf{60.7} \\ \hline
     % antmaze-v0 total & 151.5 $\rightarrow$ 231.1 & \textbf{370.1} $\rightarrow$ \textbf{473.7} \\ \hline
-    pen-binary-v0 & 46.2 $\pm$ 6.3 & 63.3 \; $\pm$ 1.9 \\
-    door-binary-v0 & 1.3 \; $\pm$ 0.7 & 42.0 \; $\pm$ 3.2 \\
-    relocate-binary-v0 & 0.3 \; $\pm$ 0.4 & 23.3 \; $\pm$ 14.5 \\ \hline
+    pen-binary-v0 & 46.2 $\pm$ 6.3 & 63.3  $\pm$ 1.9 \\
+    door-binary-v0 & 1.3  $\pm$ 0.7 & 42.0  $\pm$ 3.2 \\
+    relocate-binary-v0 & 0.3  $\pm$ 0.4 & 23.3  $\pm$ 14.5 \\ \hline
     % hand-v0 total & 31.5 \; $\rightarrow$ 9.9 & 38.1 \; $\rightarrow$ \textbf{124.0} \\ \hline \hline
     % total & 182.8 $\rightarrow$ 241.0 & \textbf{408.2} $\rightarrow$ \textbf{597.7}
     %%SL.10.3: why is CQL offline ant maze much worse here than it is in Table 1? is that a bug?
 \end{tabular}
+%}
 \caption{Error bars for fine-tuning experiments with 20 seeds, showing one standard deviation.}
 \label{tab:finetuning}
-% \end{table}
-\end{wraptable}
+\end{table}
+
 
 For baselines we compare to the original implementations of AWAC~\citep{nair2020awac} and CQL~\citep{kumar2020conservative}. For AWAC we used \url{https://github.com/rail-berkeley/rlkit/tree/master/rlkit}. We found AWAC to overfit heavily with too many offline gradient steps, and instead used 25000 offline gradient steps as in the original paper. For the dextrous manipulation results, we report average return normalized from 0 to 100 for consistency, instead of success rate at the final timestep, as reported in~\citet{nair2020awac}. For CQL, we used \url{https://github.com/aviralkumar2907/CQL}. Our reproduced results offline are worse than the reported results, particularly on medium and large antmaze environments. We were not able to improve these results after checking for discrepancies with the CQL paper authors and running CQL with an alternative implementation (\url{https://github.com/tensorflow/agents}). Thus, although for offline experiments (Table~\ref{tab:d4rl}) we report results from the original paper, for finetuning experiments we did not have this option and report our own results running CQL in Table~\ref{tab:finetuning}.
 
@@ -145,9 +146,9 @@ We also evaluate different ways to estimate the value function $V(s)$ (\Cref{tab
 
 \begin{table}[!htp]\centering
 \caption{Different estimators of $V(s)$}\label{tab:abm}
-\scriptsize
-\begin{tabular}{l|rrr}
-&IQL & $V(s)=\sum_{i=1}^N Q(s,a_i) / N$ \\\hline
+%\scriptsize
+\begin{tabular}{L{7cm}|rrr}
+& IQL & $V(s)=\sum_{i=1}^N Q(s,a_i) / N$ \\\hline
 hopper-medium-v2 &66.2$\pm$5.7 &69.5$\pm$3.9 \\
 hopper-medium-expert-v2 &91.5$\pm$14.3 &75.8$\pm$37.8 \\
 hopper-medium-replay-v2 &94.7$\pm$8.6 &64.7$\pm$22.6 \\
@@ -167,4 +168,4 @@ antmaze-large-diverse-v0 &47.5$\pm$9.5 &0.0$\pm$0.0 \\ \hline
 antmaze total &378.0$\pm$49.9 &153.9$\pm$8.1 \\
 \end{tabular}
 \end{table}
-\end{document}
+%\end{document}

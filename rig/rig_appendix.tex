@@ -22,7 +22,7 @@ Figure \ref{fig:relabel-ablation-all-envs} shows the effect of different relabel
     \includegraphics[height=0.185\linewidth]{rig/img/pusher_relabeling_ablation.pdf}
     \includegraphics[height=0.185\linewidth]{rig/img/multiobj_pusher_relabeling_ablation.pdf}
     \caption{Relabeling ablation simulated results, showing final distance to goal vs environment steps. RIG (red), which uses a mixture of VAE and future, consistently matches or outperforms the other methods.}
-    \vspace{-0.1in}
+    %\vspace{-0.1in}
     \label{fig:relabel-ablation-all-envs}
 \end{figure}
 
@@ -41,7 +41,6 @@ and \textit{Pixel MSE}, which computes mean-squared error (MSE) between state an
     \includegraphics[height=0.19\linewidth]{rig/img/pusher_reward_type_ablation.pdf}
     \includegraphics[height=0.19\linewidth]{rig/img/multiobj_pusher_reward_type_ablation.pdf}
     \caption{Reward type ablation simulated results, showing final distance to goal vs environment steps. RIG (red), which uses latent distance for the reward, consistently matches or outperforms the other reward types.}
-    \vspace{-0.1in}
     \label{fig:reward-ablation-all-envs}
 \end{figure}
 
@@ -56,10 +55,10 @@ In particular, the goal space is reduced to be three quarters of its original si
 
 \begin{figure}[h]
     \centering
-    \includegraphics[height=0.2\linewidth]{rig/img/reacher_online_ablation.pdf}
-    \includegraphics[height=0.2\linewidth]{rig/img/pusher_online_ablation.pdf}
+    \includegraphics[height=0.3\linewidth]{rig/img/reacher_online_ablation.pdf}
+    \hspace{15mm}
+    \includegraphics[height=0.3\linewidth]{rig/img/pusher_online_ablation.pdf}
     \caption{Online vs offline VAE training ablation simulated results, showing final distance to goal vs environment steps. Given no pre-training phase, training the VAE online (red), outperforms no training of the VAE, and also performs well.}
-    \vspace{-0.1in}
     \label{fig:online-ablation-all-envs}
 \end{figure}
 
@@ -83,7 +82,6 @@ resampling goals with probability 0.5 from the "future" strategy with $k=4$ and 
     \includegraphics[height=0.2\linewidth]{rig/img/her/slide256.pdf}
     \includegraphics[height=0.2\linewidth]{rig/img/her/pick256.pdf}
     \caption{Comparison between our relabeling strategy and HER. Each column shows a different task from the OpenAI Fetch robotics suite. The top row uses 64 gradient updates per training cycle and the bottom row uses 256 updates per cycle. Our relabeling strategy is significantly better  for both sparse and dense rewards, and for higher number of updates per cycle.}
-    \vspace{-0.1in}
     \label{fig:her64}
 \end{figure}
 
@@ -95,7 +93,8 @@ Finally, as the number of gradient updates per training cycle is increased, the 
 Table \ref{table:hyperparams} lists the hyperparameters used for the experiments.
 \begin{table}[h]
 \centering
-\begin{tabular}{c|c|c}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{L{6.5cm}|c|c}
 \hline
 \textbf{Hyperparameter} & \textbf{Value} & \textbf{Comments}\\
 \hline
@@ -119,7 +118,7 @@ Normalized Observations & False & Did not tune\\
 Gradient Clipping & False & Did not tune\\
 % Critic FC sizes & False & Did not tune\\
 \hline
-\end{tabular}
+\end{tabular}}
 \vspace{0.1cm}
 \caption{Hyper-parameters used for all experiments.}
 \label{table:hyperparams}

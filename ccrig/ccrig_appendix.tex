@@ -1,89 +1,7 @@
 
 \begin{figure}[b]
     \centering
-    \vspace{-0.5cm}
-    \begin{subfigure}[b]{0.49\textwidth}
-        \begin{subfigure}[b]{0.4\textwidth}
-            \center
-            Context $s_0$ \vspace{0.2cm}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.59\textwidth}
-            \adjustbox{trim=0 0 {0.5\width} 0,clip} {
-                \includegraphics[width=1.7\linewidth]{ccrig/img/cvae_samples/wall_pointmass1_x0.png}
-            }
-        \end{subfigure}
-
-        \vspace{0.1cm}
-
-        \begin{subfigure}[b]{0.4\textwidth}
-            \center
-            CVAE samples \vspace{1cm}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.59\textwidth}
-            \adjustbox{trim=0 0 {0.5\width} 0,clip} {
-                \includegraphics[width=1.7\linewidth]{ccrig/img/cvae_samples/wall_pointmass1_cvae_samples.png}
-            }
-        \end{subfigure}
-
-        \vspace{0.1cm}
-
-        \begin{subfigure}[b]{0.4\textwidth}
-            \center
-            VAE samples \vspace{1cm}
-        \end{subfigure}
-        \begin{subfigure}[b]{0.59\textwidth}
-            \adjustbox{trim=0 0 {0.5\width} 0,clip} {
-                \includegraphics[width=1.7\linewidth]{ccrig/img/cvae_samples/wall_pointmass1_vae_samples.png}
-            }
-        \end{subfigure}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.49\textwidth}
-        \begin{center}
-            Multi-color 2D Navigation Training Rollouts \vspace{0.1cm}
-        \end{center}
-
-        \hspace{0.2cm} $s_0$ \hspace{3.7cm} $s_H$ \hspace{0.7cm} $d(\bar{z}_g)$
-
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/0/0.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/0/1.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/0/2.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/0/3.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/0/4.png}
-        \hspace{0.3cm}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/0/goal.png}
-
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/1/0.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/1/1.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/1/2.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/1/3.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/1/4.png}
-        \hspace{0.3cm}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_vae_rollout/1/goal.png}
-
-        \begin{center}
-            Multi-color 2D Navigation Test Rollouts \vspace{0.1cm}
-        \end{center}
-
-        \hspace{0.2cm} $s_0$ \hspace{3.7cm} $s_H$ \hspace{0.8cm} $s_g$
-
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/0/0.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/0/1.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/0/2.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/0/3.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/0/4.png}
-        \hspace{0.3cm}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/0/goal.png}
-
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/1/0.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/1/1.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/1/2.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/1/3.png}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/1/4.png}
-        \hspace{0.3cm}
-        \includegraphics[width=0.14\linewidth]{ccrig/img/pointmass_env_rollout/1/goal.png}
-    \end{subfigure}
-
+   \includegraphics[width=\textwidth]{ccrig/img/cvae_samples/w_pmass1_cvae_samples.PNG}
     \caption{The pointmass environment is shown. Left, we compare samples from our CC-VAE model to a standard VAE. The initial image $s_0$ is shown on the top row, and samples conditioned on $s_0$ are shown below. Our model coherently maintains object color and geometry in its samples, suggesting that the context conditioned model can successfully factor out the scene-specific object identity from the variable object position. This enables the use of the CC-VAE for goal proposals in visually diverse scenes. Right, rollouts from CC-RIG are shown. We see that during collecting training rollouts, the policy succeeds in coherent exploration by generating reachable goals. Then, given a goal image at test time, the policy successfully reaches the goal. 
     Videos of rollouts on all environments, both simulation and real-world, can be found at  \url{https://ccrig.github.io/}
     }
@@ -106,11 +24,11 @@ Because we use off-policy RL methods, one major benefit is that we can bootstrap
 
 In our simulated experiments, we first collect 100,000 samples (1000 trajectories) with random actions. This data is used both to train the CC-VAE and as off-policy data. When we begin RL, we load these samples into the replay buffer and perform 100,000 gradient updates of RL. As shown in Figure \ref{fig:offpolicy}, this allows us to begin online data collection with a reasonably good policy. But we see that online data collection does improve slightly beyond this initial policy. In dynamically sensitive environments or environments where random actions do not provide meaningful interaction, this online data collection may still be very valuable.
 
-\begin{figure}[t]
+\begin{figure}[ht!]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
         \center
-        \includegraphics[height=3.8cm]{ccrig/img/offpolicy_pusher_camera_ready-crop.pdf}
+        \includegraphics[height=4cm]{ccrig/img/offpolicy_pusher_camera_ready-crop.pdf}
     \end{subfigure}
     \hspace{0.3cm}
     \begin{subfigure}[b]{0.48\textwidth}

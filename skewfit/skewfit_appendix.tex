@@ -224,7 +224,7 @@ In \autoref{fig:rl-sweep}, we see that \METHOD performs consistently well with b
   We see that \METHOD works consistently well with both SAC and TD3, demonstrating that \METHOD may be used with various RL algorithms.
   For the experiments presented in \autoref{sec:experiments}, we used SAC.
   }
-  \vspace{-0.05 cm}
+  %\vspace{-0.05 cm}
   \label{fig:rl-sweep}
 \end{figure}
 
@@ -234,10 +234,10 @@ The results are included in \Figref{fig:alpha-sweep} and shows that our method i
 Also, the method consistently outperform $\alpha=0$, which is equivalent to sampling uniformly from the replay buffer.
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=1\linewidth]{skewfit/figures/plots/power_ablation_square_with_inset.pdf}
+  \includegraphics[width=.7\linewidth]{skewfit/figures/plots/power_ablation_square_with_inset.pdf}
   \vspace{-.05in}
   \label{fig:door-alpha-sweep}
-  \vspace{-.1in}
+  %\vspace{-.1in}
   \fcaption{
   We sweep different values of $\alpha$ on Visual Door, Visual Pusher and Visual Pickup.
   \METHOD helps the final performance on the Visual Door task, and outperforms No Skew-Fit ($\alpha=0$) as seen in the zoomed in version of the plot.
@@ -250,10 +250,10 @@ Also, the method consistently outperform $\alpha=0$, which is equivalent to samp
 \end{figure}
 
  \subsection{Variance Ablation} \label{sec:analysis-variance}
- \begin{figure}[H]
-     \vspace{0.1in}
+ \begin{figure}[ht!]
+     %\vspace{0.1in}
          \centering
-         \includegraphics[width=0.8\linewidth]{skewfit/figures/plots/variance.png}
+         \includegraphics[width=0.7\linewidth]{skewfit/figures/plots/variance.png}
          \fcaption{Gradient variance averaged across parameters in last epoch of training VAEs. Values of $\alpha$ less than $-1$ are numerically unstable for importance sampling (IS), but not for Skew-Fit.}
          \label{fig:grad-var}
      \label{fig:ul-variance-results}
@@ -265,7 +265,7 @@ We measure the gradient variance of training a VAE on an unbalanced Visual Door 
  As shown in \autoref{table:ll-ablation}, \METHOD considerably outperforms MLE, getting a much closer to oracle log likelihood score.
  \begin{table}
          \centering
-         \begin{tabular}{|l|l|}
+         \begin{tabular}{|p{5cm}|l|}
          \hline
              {\footnotesize \textbf{Method}}                 & {\footnotesize \textbf{NLL}}   \\\hline
              {\footnotesize MLE on uniform (oracle)} & {\footnotesize 20175.4}               \\\hline
@@ -283,7 +283,7 @@ As shown in \autoref{fig:vae_dump} and \autoref{fig:vae_dump_real}, the generati
 We we see in \autoref{fig:example_rollouts}, this results in a policy that more consistently reaches the goal image.
 \begin{figure*}
     \centering
-    \includegraphics[width=0.9\textwidth]{skewfit/figures/vae_samples_v3-01.png}
+    \includegraphics[width=0.8\textwidth]{skewfit/figures/vae_samples_v3-01.png}
     \fcaption{
 Proposed goals from the VAE for RIG and with \METHOD on the \textit{Visual Pickup}, \textit{Visual Pusher}, and \textit{Visual Door} environments. Standard RIG produces goals where the door is closed and the object and puck is in the same position, while RIG + \METHOD proposes goals with varied puck positions, occasional object goals in the air, and both open and closed door angles.
     }
@@ -292,17 +292,17 @@ Proposed goals from the VAE for RIG and with \METHOD on the \textit{Visual Picku
 
 \begin{figure*}
     \centering
-    \includegraphics[width=0.25\textheight]{skewfit/figures/vae_dumps/rig-real-world-v2-exp-samples.png}
+    \includegraphics[width=0.35\textheight]{skewfit/figures/vae_dumps/rig-real-world-v2-exp-samples.png}
     \hspace{.3 in}
-    \includegraphics[width=0.25\textheight]{skewfit/figures/vae_dumps/skew-fit-real-world-v2-exp-samples.png}
+    \includegraphics[width=0.35\textheight]{skewfit/figures/vae_dumps/skew-fit-real-world-v2-exp-samples.png}
     \fcaption{
 Proposed goals from the VAE for RIG (left) and with RIG + \METHOD (right) on the \textit{Real World Visual Door} environment. Standard RIG produces goals where the door is closed  while RIG + \METHOD proposes goals with both open and closed door angles.
     }
     \label{fig:vae_dump_real}
 \end{figure*}
-\begin{figure*}
+\begin{figure*}[ht!]
     \centering
-    \includegraphics[width=0.9\textwidth]{skewfit/figures/example-rollouts.jpg}
+    \includegraphics[width=0.7\textwidth]{skewfit/figures/example-rollouts.jpg}
     \fcaption{
 Example reached goals by \METHOD and RIG. The first column of each environment section specifies the target goal while the second and third columns show reached goals by \METHOD and RIG. Both methods learn how to reach goals close to the initial position, but only \METHOD learns to reach the more difficult goals.
     }
@@ -326,7 +326,7 @@ Both the encoder and decoder have 2 hidden layers with [400, 300] units,  ReLU h
 The VAE has a latent dimension of $8$ and a Gaussian decoder trained with a fixed variance, batch size of $256$, and $1000$ batches at each iteration. The VAE is trained on the exploration data buffer every 1000 rollouts.
 
 \subsection{Implementation of SAC and Prior Work}\label{sec:prior-work-implementation}
-For all experiments, we trained the goal-conditioned policy using soft actor critic (SAC)~\citep{haarnoja2018sacapp}.
+\sloppy For all experiments, we trained the goal-conditioned policy using soft actor critic (SAC)~\citep{haarnoja2018sacapp}.
 To make the method goal-conditioned, we concatenate the target XY-goal to the state vector.
 During training, we retroactively relabel the goals~\citep{kaelbling1993goals,andrychowicz2017her} by sampling from the goal distribution with probabilty $0.5$.
 Note that the original RIG~\cite{nair2018rig} paper used TD3~\cite{fujimoto2018td3}, which we also replaced with SAC in our implementation of RIG.
@@ -375,7 +375,8 @@ Instead, we simply train using MLE training for the first $5K$ timesteps, and af
 
 \begin{table*}
     \centering
-    \begin{tabular}{c|c|c}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{L{7cm}|c|c}
     \hline
     \textbf{Hyper-parameter} & \textbf{Value} & \textbf{Comments}\\
     \hline
@@ -392,7 +393,7 @@ Instead, we simply train using MLE training for the first $5K$ timesteps, and af
     Replay Buffer Size & $100000$ & Did not tune\\
     Number of Latents for Estimating Density ($N$) & $10$ & Marginal improvements beyond $10$\\
     \hline
-    \end{tabular}
+    \end{tabular}}
 \fcaption{General hyper-parameters used for all \textit{visual} experiments.}
 \label{table:general-hyperparams}
 \end{table*}
@@ -401,7 +402,8 @@ Instead, we simply train using MLE training for the first $5K$ timesteps, and af
 
 \begin{table*}
     \centering
-    \begin{tabular}{c|c|c|c|c}
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{L{4.5cm}|c|c|c|c}
     \hline
     \textbf{Hyper-parameter} & \textbf{Visual Pusher} & \textbf{Visual Door} & \textbf{Visual Pickup} & \textbf{Real World Visual Door}\\
     \hline
@@ -412,14 +414,15 @@ Instead, we simply train using MLE training for the first $5K$ timesteps, and af
     VAE Training Schedule & $2$ & $1$ & $2$ & $1$ \\
     Sample Goals From & $\pg$ & $\pskewed$ & $\pskewed$ & $\pskewed$ \\
     \hline
-    \end{tabular}
+    \end{tabular}}
 \fcaption{Environment specific hyper-parameters for the \textit{visual} experiments}
 \label{table:env-hyperparams}
 \end{table*}
 
-\begin{table*}
+\begin{table}[ht!]
     \centering
-    \begin{tabular}{c|c}
+    %\resizebox{\textwidth}{!}{
+    \begin{tabular}{L{7cm}|c}
     \hline
     \textbf{Hyper-parameter} & \textbf{Value} \\
     \hline
@@ -445,7 +448,7 @@ Instead, we simply train using MLE training for the first $5K$ timesteps, and af
     \end{tabular}
 \fcaption{Hyper-parameters used for the \textit{ant} experiment.}
 \label{table:ant-hyperparams}
-\end{table*}
+\end{table}
 
 
 \begin{algorithm}
