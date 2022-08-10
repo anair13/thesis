@@ -145,17 +145,30 @@ This is a very different statistic: our aim is not to determine how the $Q$-valu
 % After training the value function, our method must extract a policy from the value function when learning in continuous action spaces. To avoid the need to query unseen actions during policy extraction, we employ a widely used weighted behavioral cloning~\citep{peters2007reinforcement, nair2020awac, wang2020critic, peng2019advantage, siegel2020keep}. However, we do not use samples from the current learning policy to estimate the advantage in contrast to these methods.
 
 
-\section{Preliminaries}
+% \section{Preliminaries}
 
-The RL problem is formulated in the context of a Markov decision process (MDP) $(\St, \A, p_0(s), p(s'|s,a), r(s,a), \gamma)$, where $\St$ is a state space, $\A$ is an action space, $p_0(s)$ is a distribution of initial states, $p(s' | s, a)$ is the environment dynamics, $r(s,a)$ is a reward function, and $\gamma$ is a discount factor. The agent interacts with the MDP according to a policy $\pi(a|s)$. The goal is to obtain a policy that maximizes the cumulative discounted returns: 
-\vspace{-0.2cm}
-$$\pi^* = \argmax_\pi \E_\pi\left[\sum_{t=0}^\infty\gamma^t r(s_t, a_t) | \allowbreak s_0 \sim p_0(\cdot), \allowbreak  a_t \sim \pi(\cdot|s_t), \allowbreak s_{t+1} \sim p(\cdot|s_t, a_t) \right].$$
-%%SL.9.21: Maybe to make this equation a bit less imposing, you could just drop the stuff to the right of the conditioning bar in the expectation
-Off-policy RL methods based on approximate dynamic programming typically utilize a state-action value function ($Q$-function), referred to as $Q(s, a)$, which corresponds to the discounted returns obtained by starting from the state $s$ and action $a$, and then following the policy $\pi$.
+% The RL problem is formulated in the context of a Markov decision process (MDP) $(\St, \A, p_0(s), p(s'|s,a), r(s,a), \gamma)$, where $\St$ is a state space, $\A$ is an action space, $p_0(s)$ is a distribution of initial states, $p(s' | s, a)$ is the environment dynamics, $r(s,a)$ is a reward function, and $\gamma$ is a discount factor. The agent interacts with the MDP according to a policy $\pi(a|s)$. The goal is to obtain a policy that maximizes the cumulative discounted returns: 
+% \vspace{-0.2cm}
+% $$\pi^* = \argmax_\pi \E_\pi\left[\sum_{t=0}^\infty\gamma^t r(s_t, a_t) | \allowbreak s_0 \sim p_0(\cdot), \allowbreak  a_t \sim \pi(\cdot|s_t), \allowbreak s_{t+1} \sim p(\cdot|s_t, a_t) \right].$$
+% %%SL.9.21: Maybe to make this equation a bit less imposing, you could just drop the stuff to the right of the conditioning bar in the expectation
+% Off-policy RL methods based on approximate dynamic programming typically utilize a state-action value function ($Q$-function), referred to as $Q(s, a)$, which corresponds to the discounted returns obtained by starting from the state $s$ and action $a$, and then following the policy $\pi$.
 %%SL.10.3: Commenting out the sentence below for space and b/c we are not talking about our method yet
 %We make no assumptions regarding the state and action spaces, and the proposed algorithms can be applied to discrete and continuous action spaces without significant modification.
-\vspace{-0.3cm}
-\paragraph{Offline reinforcement learning.} In contrast to online (on-policy or off-policy) RL methods, offline RL uses previously collected data without any additional data collection. Like many recent offline RL methods, our work builds on approximate dynamic programming methods that minimize temporal difference error, according to the following loss:
+% \vspace{-0.3cm}
+% \paragraph{Offline reinforcement learning.} In contrast to online (on-policy or off-policy) RL methods, offline RL uses previously collected data without any additional data collection. Like many recent offline RL methods, our work builds on approximate dynamic programming methods that minimize temporal difference error, according to the following loss:
+% %%SL.9.28: I'm resisting calling these "actor-critic" to avoid confusion, since our value learning is *not* actor critic. I wonder also if it might be better to bite the bullet and just stick a "max" in the target value, and just avoid the policy all together. Our method doesn't use a policy until the end (extraction), and I feel like a lot of these concepts are much clearer when we present them as Q-learning rather than actor critic. As is, we don't actually explain how the actor is updated at all, which makes it non-obvious to the reader why overestimation would even happen. Another thing you could do, which I think will make Section 4 easier to understand, is introduce all the TD losses in the backup with a value function V(s') and then in the text say usually we take V(s') = Q(s',a') for SARSA, V(s') = E_{a' \sim \pi_\psi(a'|s')}[Q(s',a')] for actor-critic methods, and V(s') = max_{a'} Q(s',a') for Q-learning. Then it will be very natural in Section 4 to introduce your alternative way of estimating V(s'), while everything else stays unchanged.
+% \vspace{-0.1cm}
+% \begin{equation}
+% L_{TD}(\theta) = \E_{(s, a, s')\sim\D}[(r(s,a) + \gamma \max_{a'}Q_{\hat{\theta}}(s',a') - Q_\theta(s,a))^2],
+% \label{eqn:td}
+% \vspace{-0.2cm}
+% \end{equation}
+% where $\D$ is the dataset,
+% $Q_\theta(s,a)$ is a parameterized Q-function, $Q_{\hat{\theta}}(s,a)$ is a target network (e.g., with soft parameters updates defined via Polyak averaging), and the policy is defined as $\pi(s) = \argmax_a Q_\theta(s,a)$. Most recent offline RL methods modify either the value function loss (above) to regularize the value function in a way that keeps the resulting policy close to the data, or constrain the $\argmax$ policy directly. This is important because out-of-distribution actions $a'$ can produce erroneous values for $Q_{\hat{\theta}}(s',a')$ in the above objective, often leading to \emph{overestimation} as the policy is defined to maximize the (estimated) Q-value.
+
+\section{\Ournamepref Q-Learning}
+
+Like many recent offline RL methods, our work builds on approximate dynamic programming methods that minimize temporal difference error, according to the following loss:
 %%SL.9.28: I'm resisting calling these "actor-critic" to avoid confusion, since our value learning is *not* actor critic. I wonder also if it might be better to bite the bullet and just stick a "max" in the target value, and just avoid the policy all together. Our method doesn't use a policy until the end (extraction), and I feel like a lot of these concepts are much clearer when we present them as Q-learning rather than actor critic. As is, we don't actually explain how the actor is updated at all, which makes it non-obvious to the reader why overestimation would even happen. Another thing you could do, which I think will make Section 4 easier to understand, is introduce all the TD losses in the backup with a value function V(s') and then in the text say usually we take V(s') = Q(s',a') for SARSA, V(s') = E_{a' \sim \pi_\psi(a'|s')}[Q(s',a')] for actor-critic methods, and V(s') = max_{a'} Q(s',a') for Q-learning. Then it will be very natural in Section 4 to introduce your alternative way of estimating V(s'), while everything else stays unchanged.
 \vspace{-0.1cm}
 \begin{equation}
@@ -165,8 +178,6 @@ L_{TD}(\theta) = \E_{(s, a, s')\sim\D}[(r(s,a) + \gamma \max_{a'}Q_{\hat{\theta}
 \end{equation}
 where $\D$ is the dataset,
 $Q_\theta(s,a)$ is a parameterized Q-function, $Q_{\hat{\theta}}(s,a)$ is a target network (e.g., with soft parameters updates defined via Polyak averaging), and the policy is defined as $\pi(s) = \argmax_a Q_\theta(s,a)$. Most recent offline RL methods modify either the value function loss (above) to regularize the value function in a way that keeps the resulting policy close to the data, or constrain the $\argmax$ policy directly. This is important because out-of-distribution actions $a'$ can produce erroneous values for $Q_{\hat{\theta}}(s',a')$ in the above objective, often leading to \emph{overestimation} as the policy is defined to maximize the (estimated) Q-value.
-
-\section{\Ournamepref Q-Learning}
 
 In this work, we aim to entirely avoid querying \emph{out-of-sample} (unseen) actions in our TD loss.
 Although the goal of this work is to approximate the optimal $Q$-function, we start by considering fitted $Q$ evaluation with a SARSA-style objective which has been considered in prior work on Offline Reinforcement Learning~\citep{brandfonbrener2021offline, gulcehre2021regularized}. This objective  aims to learn the value of the dataset policy $\pi_\beta$ (also called the behavior policy):

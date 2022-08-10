@@ -1,6 +1,8 @@
 \section{Introduction}\label{sec:introduction}
 
-Many industrial tasks on the edge of automation require a degree of adaptability that is difficult to achieve with conventional robotic automation techniques.
+In the previous chapter, we covered a method - residual RL - for incorporating conventional feedback controllers within deep reinforcement learning. 
+In this chapter, we will use residual RL specifically for the task of industrial connector insertion.
+Many such industrial tasks are on the edge of automation but require a degree of adaptability that is difficult to achieve with conventional robotic automation techniques.
 While standard control methods, such as PID controllers, are heavily employed to automate many tasks in the context of positioning, tasks that require significant adaptability or tight visual perception-control loops are often beyond the capabilities of such methods, and therefore are typically performed manually.
 Standard control methods can struggle in presence of complex dynamical phenomena that are hard to model analytically, such as complex contacts.
 Reinforcement learning (RL) offers a different solution, relying on trial and error learning instead of accurate modeling to construct an effective controller.

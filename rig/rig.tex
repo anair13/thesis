@@ -137,13 +137,41 @@ We use a method based on variational autoencoders, but these prior techniques ar
 Our method combines reinforcement learning with goal-conditioned value functions and unsupervised representation learning. Here, we briefly review the techniques that we build on in our method.
 
 \vspace{-0.1in}
+
+% \paragraph{Reinforcement learning.}
+
+% We consider the standard Markov Decision Process framework for picking optimal actions to maximize rewards over discrete timesteps in an environment $E$. We assume that the environment is fully observable. At every timestep $t$, an agent is in a state $x_t$, takes an action $a_t$, receives a reward $r_t$, and $E$ evolves to state $x_{t+1}$. In reinforcement learning, the agent must learn a policy $a_t = \pi(x_t)$ to maximize expected returns.  We denote the return by $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$ where $T$ is the horizon that the agent optimizes over and $\gamma$ is a discount factor for future rewards. The agent's objective is to maximize expected return from the start distribution $J = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]$. 
+
+% A variety of reinforcement learning algorithms have been developed to solve this problem. Many involve constructing an estimate of the expected return from a given state after taking an action:
+% \begin{align}
+%     Q^\pi & (s_t, a_t) = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_t|s_t, a_t] \label{eqn:Q} \\
+%                    & = \E_{r_t, s_{t+1} \sim E}[r_t + \gamma \E_{a_{t+1} \sim \pi}[Q^\pi(s_{t+1}, a_{t+1})]] \label{eqn:bellman}
+% \end{align}
+
+% \noindent We call $Q^\pi$ the action-value function. Equation \ref{eqn:bellman} is a recursive version of equation \ref{eqn:Q}, and is known as the Bellman equation. The Bellman equation allows for methods to estimate $Q$ that resemble dynamic programming.
+
+\paragraph{Reinforcement learning.}
+
+We consider the standard Markov Decision Process framework for picking optimal actions to maximize rewards over discrete timesteps in an environment $E$. We assume that the environment is fully observable. At every timestep, an agent is in a state $s$, takes an action $a$, receives a reward $r$, and $E$ evolves to state $s'$ according to the environment dynamics $p(s'|s, a)$. The state, action, and reward at timestep $t$ may also be denoted $s_t$, $a_t$, and $r_t$ respectively but we will drop the subscript when considering individual transitions $(s, a, r, s')$. In reinforcement learning, the agent must learn a policy $a = \pi(s)$ to maximize expected returns.  We denote the return starting at timestep $t$ by $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$ where $T$ is the horizon that the agent optimizes over and $\gamma$ is a discount factor for future rewards. The agent's objective is to maximize expected return from the start distribution $J = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]$. 
+
+% In reinforcement learning, the goal is to learn a policy $\pi(s_t) = a_t$ that maximizes expected return, which we denote as 
+% \mbox{
+% $R_t = \E[ \sum_{i=t}^T \gamma^{(i - t)} r_i]$
+% }, 
+% where $r_i = r(s_i, a_i, s_{i+1})$ and the expectation is under the current policy and environment dynamics.
+% Here, $s \in \mathcal S$ is a state observation, $a \in \mathcal A$ is an action, and $\gamma$ is a discount factor.
+
+A variety of reinforcement learning algorithms have been developed to solve this problem. Many involve constructing an estimate of the expected return from a given state after taking an action:
+\begin{align}
+    Q^\pi & (s, a) = \E[R_t|s_t=s, a_t=a] \label{eqn:Q} \\
+                   & = \E[r + \gamma \E_{a' \sim \pi}[Q^\pi(s', a')]] \label{eqn:bellman},
+\end{align}
+where the outer expectation is taken over the policy and environment dynamics.
+
+\noindent We call $Q^\pi$ the action-value function. Equation \ref{eqn:bellman} is a recursive version of equation \ref{eqn:Q}, and is known as the Bellman equation. The Bellman equation allows for methods to estimate $Q$ that resemble dynamic programming, enabling data re-use and sample efficiency.
+% Because data re-use and sample efficiency is extremely important for real-world robot learning, methods that use Bellman bootstrapping will be used throughout this thesis.
+
 \paragraph{Goal-conditioned reinforcement learning.}
-In reinforcement learning, the goal is to learn a policy $\pi(s_t) = a_t$ that maximizes expected return, which we denote as 
-\mbox{
-$R_t = \E[ \sum_{i=t}^T \gamma^{(i - t)} r_i]$
-}, 
-where $r_i = r(s_i, a_i, s_{i+1})$ and the expectation is under the current policy and environment dynamics.
-Here, $s \in \mathcal S$ is a state observation, $a \in \mathcal A$ is an action, and $\gamma$ is a discount factor.
 Standard model-free RL learns policies that achieve a single task.
 If our aim is instead to obtain a policy that can accomplish a variety of tasks, we can construct a goal-conditioned policy and reward, and optimize the expected return with respect to a goal distribution: $\E_{g \sim G} [\E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]]$, where $\mathcal G$ is the set of goals and the reward is also a function of $g$.
 A variety of algorithms can learn goal-conditioned policies, but to enable sample-efficient learning, we focus on algorithms that acquire goal-conditioned Q-functions, which can be trained off-policy.

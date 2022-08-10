@@ -33,16 +33,6 @@ Another difficulty for directly designing feedback controllers is due to the fac
 This is often the case when we only know the final goal rather than a full trajectory.
 
 Instead of directly designing a feedback control system, we can instead specify the goal via a reward function. These reward functions can depend on both $s_\text{m}$ and $s_\text{o}$, where the terms that depend on $s_\text{m}$ are position related objectives.
-
-\subsection{Interpretation as a Reinforcement Learning Problem}
- 
-In reinforcement learning, we consider the standard Markov decision process framework for picking optimal actions to maximize rewards over discrete timesteps in an environment $E$. At every timestep $t$, an agent is in a state $s_t$, takes an action $u_t$, receives a reward $r_t$, and $E$ evolves to state $s_{t+1}$. In reinforcement learning, the agent must learn a policy $u_t = \pi(s_t)$ to maximize expected returns.  We denote the return by $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$, where $T$ is the horizon that the agent optimizes over and $\gamma$ is a discount factor for future rewards. The agent's objective is to maximize expected return from the start distribution $J = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]$. 
-
-Unlike the previous section, RL does not attempt to model the unknown coupled dynamics of the agent and the object. Instead, it finds actions that maximizes rewards, without making any assumptions about the system dynamics.
-In this paper, we use value-based RL methods. These methods estimate the state-action value function:
-\begin{align}
-    Q^\pi & (s_t, u_t) = \E_{r_i, s_i \sim E, u_i \sim \pi}[R_t|s_t, u_t] \label{eqn:Q} \\
-                   & = \E_{r_t, s_{t+1} \sim E}[r_t + \gamma \E_{u_{t+1} \sim \pi}[Q^\pi(s_{t+1}, u_{t+1})]] \label{eqn:bellman}
-\end{align}
-
-\noindent Equation \ref{eqn:bellman} is a recursive version of Equation \ref{eqn:Q}, and is known as the Bellman equation. The Bellman equation allows us to estimate $Q$ via approximate dynamic programming. Value-based methods can be learned off-policy, making them very sample efficient, which is vital for real-world robot learning.
+% \subsection{Interpretation as a Reinforcement Learning Problem}
+% In reinforcement learning, we consider the standard Markov decision process framework for picking optimal actions to maximize rewards over discrete timesteps in an environment $E$. At every timestep $t$, an agent is in a state $s_t$, takes an action $u_t$, receives a reward $r_t$, and $E$ evolves to state $s_{t+1}$. In reinforcement learning, the agent must learn a policy $u_t = \pi(s_t)$ to maximize expected returns.  We denote the return by $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$, where $T$ is the horizon that the agent optimizes over and $\gamma$ is a discount factor for future rewards. The agent's objective is to maximize expected return from the start distribution $J = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]$. 
+Reinforcement learning can be used to maximize the reward function in a model-free way. In reinforcement learning, we simply attempt to maximize expected return. Unlike the previous section, RL does not attempt to model the unknown coupled dynamics of the agent and the object. Instead, it finds actions that maximizes rewards, without making any assumptions about the system dynamics. The final objective is to learn a policy $u_t = \pi(s_t)$ to maximize expected returns $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$.

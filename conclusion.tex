@@ -32,6 +32,7 @@ But more generally, the recipe of goal-conditioned reinforcement learning combin
 This could enable more convenient task specification modalities such as language commands, demonstrations, or human feedback of policy executions, with significant sharing of the underlying RL algorithm when accommodating new modalities.
 
 Even more generally, the recurring theme of machine learning -- the ``bitter lesson'' according to~\citet{sutton2019bitter} -- is that general methods that leverage computation and data excel in the long run as opposed to methods that limit themselves by embedding domain-specific assumptions.
-Realizing this vision in robotics is difficult due to all the unscalable components of real-world robotics systems: hardware costs, bespoke robot controllers, physical resets, instrumentation for reward and state estimation, and safety.
-Operating in the usual reinforcement learning formalism - maximizing a reward function - hides this complexity.
-Self-supervised goal-conditioned RL combined with the ability to use offline datasets has the potential to address many of these questions in a scalable way.
+Realizing this vision in robotics is difficult due to all the unscalable components of real-world robotics systems: bespoke robot controllers, physical resets, instrumentation for reward and state estimation, and safety.
+Operating in the usual single-task reinforcement learning formalism hides this complexity.
+Self-supervised goal-conditioned RL combined with the ability to use offline datasets has the potential to address many of these questions in a scalable way: autonomous goal setting for resets, obviating the need for reward engineering with self-supervised reward functions, operating from raw sensor input without state estimation, and maintaining safe exploration by using offline learned policies.
+With these obstacles solved, goal-conditioned RL from prior data can be a data sponge that can take advantage of large-scale robot data to learn generalizble policies and create robust, adaptable robotic systems.

@@ -77,6 +77,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+In Part II, we turn to improving the underlying reinforcement learning algorithm itself for practical, real-world robot learning.
 RL has found significant success in decision making for solving games, so what makes it more challenging to apply in robotics? A key difference is the difficulty of exploration, which comes from  the choice of reward function and complicated environment dynamics. In games, the reward function is usually given and can be directly optimized. In robotics, we often desire behavior to achieve some binary objective (e.g., move an object to a desired location or achieve a certain state of the system) which naturally induces a sparse reward. Sparse reward functions are easier to specify and recent work suggests that learning with a sparse reward results in learned policies that perform the desired objective instead of getting stuck in local optima \citep{andrychowicz2017her, vecerik17ddpgfd}. However, exploration in an environment with sparse reward is difficult since with random exploration, the agent rarely sees a reward signal.
 
 The difficulty posed by a sparse reward is exacerbated by the complicated environment dynamics in robotics. For example, system dynamics around contacts are difficult to model and induce a sensitivity in the system to small errors. Many robotics tasks also require executing multiple steps successfully over a long horizon, involve high dimensional control, and require generalization to varying task instances. These conditions further result in a situation where the agent so rarely sees a reward initially that it is not able to learn at all.
@@ -105,19 +106,20 @@ By effectively incorporating demonstrations into RL, we short-circuit the random
 
 \section{Background}
 
-\subsection{Reinforcement Learning}
+% \subsection{Reinforcement Learning}
 
-We consider the standard Markov Decision Process framework for picking optimal actions to maximize rewards over discrete timesteps in an environment $E$. We assume that the environment is fully observable. At every timestep $t$, an agent is in a state $x_t$, takes an action $a_t$, receives a reward $r_t$, and $E$ evolves to state $x_{t+1}$. In reinforcement learning, the agent must learn a policy $a_t = \pi(x_t)$ to maximize expected returns.  We denote the return by $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$ where $T$ is the horizon that the agent optimizes over and $\gamma$ is a discount factor for future rewards. The agent's objective is to maximize expected return from the start distribution $J = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]$. 
+% We consider the standard Markov Decision Process framework for picking optimal actions to maximize rewards over discrete timesteps in an environment $E$. We assume that the environment is fully observable. At every timestep $t$, an agent is in a state $x_t$, takes an action $a_t$, receives a reward $r_t$, and $E$ evolves to state $x_{t+1}$. In reinforcement learning, the agent must learn a policy $a_t = \pi(x_t)$ to maximize expected returns.  We denote the return by $R_t = \sum_{i=t}^T \gamma^{(i - t)} r_i$ where $T$ is the horizon that the agent optimizes over and $\gamma$ is a discount factor for future rewards. The agent's objective is to maximize expected return from the start distribution $J = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_0]$. 
 
-A variety of reinforcement learning algorithms have been developed to solve this problem. Many involve constructing an estimate of the expected return from a given state after taking an action:
+\subsection{DDPG}
+
+Recall that many RL algorithms involve estimating the expected return from a given state after taking an action:
 \begin{align}
     Q^\pi & (s_t, a_t) = \E_{r_i, s_i \sim E, a_i \sim \pi}[R_t|s_t, a_t] \label{eqn:Q} \\
                    & = \E_{r_t, s_{t+1} \sim E}[r_t + \gamma \E_{a_{t+1} \sim \pi}[Q^\pi(s_{t+1}, a_{t+1})]] \label{eqn:bellman}
 \end{align}
 
-\noindent We call $Q^\pi$ the action-value function. Equation \ref{eqn:bellman} is a recursive version of equation \ref{eqn:Q}, and is known as the Bellman equation. The Bellman equation allows for methods to estimate $Q$ that resemble dynamic programming.
-
-\subsection{DDPG}
+\noindent We call $Q^\pi$ the action-value function. Equation \ref{eqn:bellman} is a recursive version of equation \ref{eqn:Q}, and is known as the Bellman equation. The Bellman equation allows for methods to estimate $Q$ that resemble dynamic programming. The Bellman equation allows for methods to estimate $Q$ that resemble dynamic programming, enabling data re-use and sample efficiency.
+Because data re-use and sample efficiency is extremely important for real-world robot learning, methods that use Bellman bootstrapping will be used throughout this thesis.
 
 Our method combines demonstrations with one such method: Deep Deterministic Policy Gradients (DDPG) \citep{lillicrap2015continuous}. 
 DDPG is an off-policy model-free reinforcement learning algorithm for continuous control which can utilize large function approximators such as neural networks. DDPG is an actor-critic method, which bridges the gap between policy gradient methods and value approximation methods for RL. At a high level, DDPG learns an action-value function (critic) by minimizing the Bellman error, while simultaneously learning a policy (actor) by directly maximizing the estimated action-value function with respect to the parameters of the policy.

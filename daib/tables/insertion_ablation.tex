@@ -4,6 +4,7 @@
 \setlength{\tabcolsep}{3pt}
 
 \begin{table}[]
+\centering
 \begin{tabular}{l|ll|rr}
          & Reward & Policy & \multicolumn{1}{l}{Offline} & \multicolumn{1}{l}{Online} \\ \hline \hline
 DT12-1   & DAIB   & DAIB   & 0/20                           & 18/20                         \\
@@ -19,5 +20,5 @@ Europlug & DAIB   & DAIB   & 2/20                           & 15/20             
          & DAIB   & -      & 1/20                           & 12/20                         \\
          & -      & -      & 0/20                           & 15/20                        
 \end{tabular}
-\caption{Ablation}
+\caption{Ablation of using the domain adversarial information bottleneck (DAIB) for the reward and for the policy across all four test connectors. The only consistent setting where finetuning occurs across all four connectors is using the DAIB for both reward and policy. Removing the bottleneck for the policy significantly reduces finetuning performance on two tasks, but still finetunes on the other two. Removing the bottleneck for the reward prevents finetuning except for the Europlug connector. }
 \end{table}

@@ -1,4 +1,4 @@
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %2345678901234567890123456789012345678901234567890123456789012345678901234567890
 % %        1         2         3         4         5         6         7         8
 
@@ -148,23 +148,24 @@
 % % We show that we can finetune to a novel unseen connector from only vision input without any state information.
 % % %%SL.5.25: "state information" is a bit of jargon, it's not really clear what it means in context (a likely misunderstanding is that someone will think it means "without arm position", and it's not clear why that's relevant)
 % \end{abstract}
-%%SL.5.25: I would recommend somewhat rewriting the abstact to make sure that it hits on the main points that are critical to introduce the work: (1) what is the problem; (2) why is it important and difficult; (3) how do we solve this. Right now it's quite clear esp what the answers to (1) and (2) are.
-%%AVN.6.1 Rewritten to start with insertion
+% %%SL.5.25: I would recommend somewhat rewriting the abstact to make sure that it hits on the main points that are critical to introduce the work: (1) what is the problem; (2) why is it important and difficult; (3) how do we solve this. Right now it's quite clear esp what the answers to (1) and (2) are.
+% %%AVN.6.1 Rewritten to start with insertion
 
-% Two or three meaningful keywords should be added here
-% \keywords{Reinforcement Learning, Robotics, Offline RL} 
+% % Two or three meaningful keywords should be added here
+% % \keywords{Reinforcement Learning, Robotics, Offline RL} 
 
-%=============================================================================== SECTIONS
+% %=============================================================================== SECTIONS
 
 \section{Introduction}
 
+The previous chaper demonstrated industrial insertion for single connectors from vision, but the true promise of learning-based robotics is generalization beyond the training data for robust policies in novel scenarios.
 Generalizable policies require broad and diverse datasets, but for realistic applications, learning policies that can always generalize in zero shot to new objects and environments is often infeasible -- indeed, even humans do not exhibit such universal generalization capabilities. Instead, when faced with a task that we don't precisely know how to do, we can quickly learn the task by leveraging our prior knowledge and a little bit of practice. Reinforcement learning provides us with a way to implement this kind of \textit{learning on the job}, using online finetuning in the new domain or task, and potentially even extending it into a lifelong learning system where the robot improves its generalization capacity continually with each new task it masters.
 
 However, instantiating this concept in a practical robotics setting requires overcoming a number of obstacles. The robot must be able to combine large amounts of diverse offline data with small amounts of targeted online experience, and do so in a way that doesn't require revisiting previously learned tasks or domains, which means that we need an offline RL algorithm that supports online finetuning. Perhaps more importantly, the entire finetuning process must be supported by the robot's own sensors, without privileged information or environment instrumentation, so as to retain the benefits of autonomous learning. In particular, this means that when adapting to a new task, the robot must be able to evaluate on its own whether it is making progress on the task, using a learned reward function.
 
-\begin{figure}[th!]
+\begin{figure}
     \centering
-    \begin{subfigure}[b]{0.8\linewidth}
+    \begin{subfigure}[b]{0.99\linewidth}
         \center
         \includegraphics[width=0.99\textwidth]{daib/imgs/fig1_v2-crop.pdf}
     \end{subfigure}
@@ -175,8 +176,6 @@ However, instantiating this concept in a practical robotics setting requires ove
     % \vspace{-0.5cm}
 % \end{wrapfigure}
 \end{figure}
-
-\FloatBarrier
 
 We study this problem in the setting of learning a policy from vision for performing industrial insertion tasks.
 This family of assembly tasks, including plugging in connectors into sockets, screwdrivers into screw intrusions, setting screws, and so on, are found in many stages of manufacturing.
@@ -560,7 +559,7 @@ InsertionNet 2.0 incorporates contrastive representation learning to improve per
 These prior works collect data on a single connector and then show robust insertion of that connector.
 In contrast, our work focuses on what can be done to leverage prior experience for a novel connector without having access to localization of the socket for supervision.
 Our work also demonstrates robustness to significantly larger variation in initial connector pose, up to 20mm error, than prior work.
-For visual generalization to a test connector from our offline dataset of training 50 connectors, a suitable representation learning method is vital.
+For visual generalization to a test connector from our offline dataset of \numconnectors{} training connectors, a suitable representation learning method is vital.
 %%SL.5.25: I think it will be hard to sell "doesn't require arm position" as a notable strength to a robotics audience (it's always there, why not use it?)
 %%AVN.6.2: not arm position but rather localization of the socket and/or connector grasp. Hopefully the changes in the intro have addressed this better
 %%SL.6.2: need to state this explicitly then -- but insertionnet doesn't require known position of the socket, does it?
@@ -602,7 +601,19 @@ A variety of algorithms have been developed for this purpose. In many practical 
 
 \section{Problem Setting}
 
-Explain prior data, domains
+In this paper, we focus on learning ``on the job'' when an offline learned RL policy does not solve a task fully.
+To do so, our problem setup reflects the problem of domain generalization.
+We assume access to a prior dataset of $n_d$ domains drawn from a distribution of domains $p(\mathcal{D})$, with each domain $\mathcal{D}^d = \{\tau_i^d\}_{d=1}^{n_d}$ containing trajectories of transitions $\tau_i^d = \{(s_t, a_t, r_t, s_{t+1})^d\}$.
+These trajectories can be of arbitrary quality as in the offline RL literature.
+The challenge is to extract artifacts - in our case, a policy, value function, and reward model - from this data that successfully maximize reward in a test domain $\mathcal{D}_\text{test}$.
+Since data from the test domain is not available for offline reinforcement learning, we must assume some structural similarity between the training domain and test domain.
+As shown in the domain generalization and adaptation literature, different assumptions result in different algorithms.
+
+In our case, we study the family of industrial insertion tasks.
+At a coarse level, these tasks are all variants of peg insertion.
+However, at a finer level, the structural similarity of the reward function and expert policy to solve these tasks is clustered into groups of connectors - for instance, NEMA connectors or Deutsch DT series as shown in figure~\ref{fig:connectortable}.
+Within each group of connectors, there is similarity between the visual features required to align the connector and socket, the depth at which a success is achieved.
+
 
 \section{Method}
 
@@ -636,7 +647,7 @@ The auxiliary loss imposes a cost for any domain specific information in $Z_I$, 
 
 Following Alemi et al.~\cite{alemi2017vib}, we can turn this into an unconstrained problem and compute the evidence lower bound:
 \begin{eqnarray}
-\mathcal{L_R} = \E_{\epsilon \sim p(\epsilon)} \mathcal{L}(Z) + \mathcal{L}_{adv} + \beta[KL(p(Z|X)||p(Z))] 
+\mathcal{L_R} = \E_{\epsilon \sim p(\epsilon)} \mathcal{L}(Z) + \underbrace{\mathcal{L}_{adv} + \beta[KL(p(Z|X)||p(Z))]}_{\mathcal{L}_\text{DAIB}(Z)}
 \end{eqnarray}
 
 In the following sections, we will describe how we utilize this objective in an offline RL and online finetuning framework.
@@ -651,8 +662,8 @@ We want each model: policy, Q-function, and value function, to be trained with a
 
 IQL learns a Q function and value function by quantile regression, optimizing:
 \begin{eqnarray}
-    \mathcal{L}_{Q} &=&  \mathbb{E}_{(s, a, s') \sim \mathcal{D}} \left[(r(s, g) + \gamma \bar{V}(s') - Q(s, a))^2 \right],  \\
-    \mathcal{L}_{V} &=& \mathbb{E}_{(s, a) \sim \mathcal{D}} \left[L_2^\tau(\bar{Q}(s, a) - V(s))^2 \right] 
+    \mathcal{L}_{Q} &=&  \mathbb{E}_{(s, a, s') \sim \mathcal{D}} \left[(r(s, g) + \gamma \bar{V}(s') - Q(s, a))^2 \right] \label{eqn:loss_q}  \\
+    \mathcal{L}_{V} &=& \mathbb{E}_{(s, a) \sim \mathcal{D}} \left[L_2^\tau(\bar{Q}(s, a) - V(s))^2 \right] \label{eqn:loss_v}
 \end{eqnarray}.
 % $\mathcal{L}_{\pi} =
 %     \mathbb{E}_{(s, a, g) \sim \mathcal{D}} \left[\log \pi(a|z_t, z_g) \exp(\bar{A}(z_s, a)/\beta) \right],
@@ -663,22 +674,39 @@ where $L_2^\tau(u) = |\tau-\mathbbm{1}(u < 0)|u^2$, and $\overline{\cdot}$ indic
 \begin{eqnarray}
     \mathcal{L}_{\pi} &=& 
     \enspace 
-    \mathbb{E}_{(s, a) \sim \mathcal{D}} \left[\log \pi(a|s) \exp(\bar{A}(s, a)/\beta) \right]
+    \mathbb{E}_{(s, a) \sim \mathcal{D}} \left[\log \pi(a|s) \exp(\bar{A}(s, a)/\beta) \right] \label{eqn:loss_pi}
 \end{eqnarray}
 where $A(s, a) = Q(s, a) - V(s)$.
 
-We modify each of these losses to incorporate a domain adversarial information bottleneck.
-Let $Z^\pi = \phi^\pi(X)$, $Z^V = \phi^\pi(V)$, and $Z^Q = \phi^\pi(Q)$ represent the output of a \methodabbrv{} layer of images.
-
-
+We incorporate a domain adversarial information bottleneck to the policy to enable domain generalization.
+Let $Z^\pi = \phi^\pi(X)$ represent the output of a convolutional neural network representation of the input image.
+We optimize the following policy loss:
+\begin{eqnarray}
+    \mathcal{L'}_{\pi} &=& 
+    \enspace 
+    \mathcal{L}_{\pi} + \mathcal{L}_\text{DAIB}(Z) \label{eqn:loss_pi_daib}.
+\end{eqnarray}
+We find that using DAIB for the policy bottleneck enables consistent performance across connectors, as explained further in section~\ref{sec:finetuningexps}.
 
 \subsection{Online finetuning}
 
-When finetuning, we use $25\%$ of online data and the remaining offline data per batch.
+When faced with a new connector, the offline RL trained policy may not generalize zero-shot.
+In these instances, we want to be able to actively finetune the policy to solve the task.
+We rely on the pretrained reward model and value function to do so, using online interaction in the test environment.
+In the online finetuning phase, we collect trajectories using the pretrained policy with additional exploration noise.
+In this phase, we do not assume a ground truth reward, as this requires accurate state estimation and localization.
+Instead, we evaluate the reward from the reward model.
+For a transition $(s, a, s')$, we compute the predicted reward $\hat{r} = R(F(s'))$ and append $(s, a, s', \hat{r})$ to the replay buffer.
+We then run the batch gradient descent updates of the policy, Q function, and value function according to equations~\ref{eqn:loss_q},~\ref{eqn:loss_v}, and~\ref{eqn:loss_pi_daib}.
+In each batch we use $25\%$ online data, with no data augmentations, and $75\%$ offline data with data augmentations.
+
+% implementation details
+For this phase, both the policy and value function use a deterministic encoding in the information bottleneck, using the mean of the output distribution as the sampled value.
+We freeze the representation and do not train it further in the online finetuning phase.
 
 \section{Robot Setup}
 
-\begin{figure}[th!]
+\begin{figure}[t]
     \centering
     \begin{subfigure}[b]{0.99\linewidth}
         \center
@@ -690,8 +718,6 @@ When finetuning, we use $25\%$ of online data and the remaining offline data per
     \vspace{-0.5cm}
 % \end{wrapfigure}
 \end{figure}
-
-\FloatBarrier
 
 Our robot setup for connector insertion is pictured in Fig~\ref{fig:connectortable}. We use two 7 DoF Sawyer robots from Rethink Robotics for collecting data and running experiments. The robot is commanded with an end-effector controller, where the action $a$ corresponds to relative end-effector movement in Cartesian coordinates. The resulting desired joint angles are computed via inverse kinematics, and then executed with a joint-space velocity controller with force limits for safety and to prevent dislodging connectors from a grasped position.
 
@@ -714,7 +740,7 @@ We design our experiments to answer the following questions.
     \item Can offline reinforcement learning followed by online fine-tuning be a solution for industrial insertion of novel connectors, and does it outperform a supervised localization model combined with a manually scripted control strategy?
     % \item Does vision-based RL outperform state-based methods in the presence of noise?
     % \item Is offline reinforcement required (as opposed to behavior cloning)?
-    \item What is the model paying attention to?
+    % \item What is the model paying attention to?
     % \item Can the learned features transfer to a new robot?
 \end{itemize}
 
@@ -774,6 +800,7 @@ The VIB alone slightly improves performance over ERM because of a regularizing e
 % \end{figure*}
 
 \subsection{Self-Supervised Fine-tuning}
+\label{sec:finetuningexps}
 
 For insertion of a novel connector, we first run offline training of RL on a set of connectors excluding that connector or close variants (eg. same connector on a different robot), to obtain a policy, Q function, and value function.
 Then, we run online finetuning of RL on the novel connector.
@@ -786,7 +813,7 @@ The results are reported in Table~\ref{table:easy}. We see that the performance 
 
 In the harder $10-20mm$ setting, we compare against similar baselines but straight down, random search, and spiral search from the initial position always fail because the initial position is too far away from the socket. Instead, for these three methods, we first execute the localization model and move to that goal position, then run the corresponding strategy.
 
-The results for the harder insertion scenario is reported in Table~\ref{table:hard}. In this case, the performance of most methods, including DAIB offline, on most connectors, is poor. However, DAIB online is able to solve these tasks after 200 trials of finetuning. Importantly, even when the initial performance is 0/20 as in the DT 12-way connector, DAIB can improve because of well-shaped value functions guiding the policy towards the correct solution. In practice, we see that even when the initial policy is poor and does not get close to the socket, the finetuned policy quickly makes contact with the socket within a few trials. Then more trials are required to actually observe successes through stochastic exploration to perfect the policy.
+The results for the harder insertion scenario is reported in Table~\ref{table:hard}. In this case, the performance of most methods, including DAIB offline, on most connectors, is poor. However, DAIB online is able to solve these tasks after 200 trials of finetuning. Importantly, even when the initial performance is 0/20 as in the DT 12-way connector, DAIB can improve because of well-shaped value functions guiding the policy towards the correct solution. In practice, we see that even when the initial policy is poor and does not get close to the socket, the finetuned policy quickly makes contact with the socket within a few trials. Further trials are required for finetuning to actually observe successes through stochastic exploration to perfect the policy.
 
 % \subsection{Effect of Vision}
 
@@ -846,9 +873,13 @@ The results for the harder insertion scenario is reported in Table~\ref{table:ha
 % % \end{wrapfigure}
 % \end{figure}
 
-% \section{Discussion}
+\section{Discussion}
 
+We have discussed utilizing a novel domain generalization method, the domain adversarial information bottleneck (DAIB), for enabling fast online finetuning of RL policies.
+We applied this method combined with IQL on a family of industrial insertion tasks and demonstrated how the system can learn on the job to finetune to test connectors with minimal human supervision.
+This scheme can generally be incorporated in many scenarios where robot datasets contain highly correlated data from related domains - a common scenario due to hardware and environment setup costs.
 
+One main limitation of the method is its strong reliance on the reward model. If the reward model predicts false positives in a region, that can cause the finetuning process to wrongly cause the policy to visit that region, especially if the false positive occurs at a dynamically easier to reach state. Combining classifiers with reinforcement learning is prone to this kind of failure mode, as discussed previously in~\cite{fu2018vice}. More careful application of domain adaptation methods that incorporate statistics of the online finetuning process might alleviate this issue.
 
 % \IEEEtriggeratref{28} % \newpage after bib reference 28
 

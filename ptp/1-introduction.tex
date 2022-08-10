@@ -2,17 +2,17 @@
 
 % %% What is the problem?
 % Utilizing large datasets for robotics -> GCRL from offline data
-Developing controllers that can solve a range of tasks and generalize broadly in real-world settings is a long-standing challenge in robotics.
-Such generalization in other domains such as computer vision and natural language processing has been attributed to training large machine learning models on massive datasets~\citep{krizhevsky2012imagenet}.
-Consequently, one promising approach to robustly handle a wide variety of potential situations that a robot might encounter is to train on a large dataset of robot behaviors.
-Prior work in robotics has demonstrated effectively generalization from training on large datasets for individual tasks, such as grasping~\citep{levine2017grasping, yu2021conservative}.
-%%SL.3.1: It would be good to cite more non-conflicted papers, such as Lerrel's grasping paper, the Dieter Fox IRIS paper, and as many other relevant non-conflicted papers as you can find.
-However, a general-purpose robot should be able to perform a wide range of skills, and should also be \textit{taskable}.
-That is, it must be able to complete a specific task when specified by a human, including temporally extended tasks that require sequencing many skills together to complete.
-This topic has been studied in prior work on goal-conditioned reinforcement learning, where a robot aims to perform a task given a desired end state~\citep{Khazatsky2021WhatCI, chebotar2021actionable, kalashnikov2021mtopt}.
-%%SL.3.1: My suggestion: add many more citations, and also add "or other type of command~\citep{}" and add a bunch more citations. Don't skimp on citations, and definitely make sure to cite plenty of non-conflicted papers.
-What remains to make these methods widely applicable for real-world robotics?
-%%SL.3.1: It's good to pose questions, but it's not good to pose very open-ended questions, because this encourages lateral thinking (i.e., the reader will try to answer the question, and possibly not in the way that you expect). Perhaps a better organization would be to delete the above sentence and move the beginning of the next para (which explains the issues with GCRL) into the above para, and then start the next para by talking about the solution?
+% Developing controllers that can solve a range of tasks and generalize broadly in real-world settings is a long-standing challenge in robotics.
+% Such generalization in other domains such as computer vision and natural language processing has been attributed to training large machine learning models on massive datasets~\citep{krizhevsky2012imagenet}.
+% Consequently, one promising approach to robustly handle a wide variety of potential situations that a robot might encounter is to train on a large dataset of robot behaviors.
+% Prior work in robotics has demonstrated effectively generalization from training on large datasets for individual tasks, such as grasping~\citep{levine2017grasping, yu2021conservative}.
+% %%SL.3.1: It would be good to cite more non-conflicted papers, such as Lerrel's grasping paper, the Dieter Fox IRIS paper, and as many other relevant non-conflicted papers as you can find.
+% However, a general-purpose robot should be able to perform a wide range of skills, and should also be \textit{taskable}.
+% That is, it must be able to complete a specific task when specified by a human, including temporally extended tasks that require sequencing many skills together to complete.
+% This topic has been studied in prior work on goal-conditioned reinforcement learning, where a robot aims to perform a task given a desired end state~\citep{Khazatsky2021WhatCI, chebotar2021actionable, kalashnikov2021mtopt}.
+% %%SL.3.1: My suggestion: add many more citations, and also add "or other type of command~\citep{}" and add a bunch more citations. Don't skimp on citations, and definitely make sure to cite plenty of non-conflicted papers.
+% What remains to make these methods widely applicable for real-world robotics?
+% %%SL.3.1: It's good to pose questions, but it's not good to pose very open-ended questions, because this encourages lateral thinking (i.e., the reader will try to answer the question, and possibly not in the way that you expect). Perhaps a better organization would be to delete the above sentence and move the beginning of the next para (which explains the issues with GCRL) into the above para, and then start the next para by talking about the solution?
 % Can the same approach, which has the benefit of requiring little human supervision, also be used to learn temporally extended tasks?
 
 % % What is the problem? Long-horizon self-supervised RL OR Scaffolding long horizon policies
