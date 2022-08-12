@@ -881,6 +881,10 @@ This scheme can generally be incorporated in many scenarios where robot datasets
 
 One main limitation of the method is its strong reliance on the reward model. If the reward model predicts false positives in a region, that can cause the finetuning process to wrongly cause the policy to visit that region, especially if the false positive occurs at a dynamically easier to reach state. Combining classifiers with reinforcement learning is prone to this kind of failure mode, as discussed previously in~\cite{fu2018vice}. More careful application of domain adaptation methods that incorporate statistics of the online finetuning process might alleviate this issue.
 
+\section{Contribution Statement}
+
+This work is in preparation for submission, done in collaboration with Brian Zhu, Gokul Narayanan, Eugen Solowjow, and Sergey Levine. AN led the project, proposed the idea, and designed the experiments. The implementation and experiments were shared between AN and BZ. The writing was done by AN primarily. GN, ES, and SL advised and assisted with writing.
+
 % \IEEEtriggeratref{28} % \newpage after bib reference 28
 
 % { \small

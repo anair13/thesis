@@ -178,7 +178,17 @@
 %\pagestyle{simple}
 
 \include{FrontBackmatter/Titlepage}
-\afterpage{\blankpage}
+% \afterpage{\blankpage}
+
+\null
+\begin{center}
+    \thispagestyle{empty}
+    \vspace*{\fill}
+    Copyright \copyright \; 2022 -- Ashvin Nair\\
+All rights reserved.
+    \vspace*{\fill}
+\end{center}
+\newpage
 
 % according to style guide, abstract must have arabic page # 1
 \setcounter{page}{1}
@@ -186,6 +196,16 @@
 \pdfbookmark[0]{Abstract}{Abstract}
 \section*{Abstract}
 \input{abstract}
+
+\clearpage
+\begin{center}
+    \thispagestyle{empty}
+    \vspace*{\fill}
+    To my parents.
+    \vspace*{\fill}
+\end{center}
+\clearpage
+
 \newpage
 
 % the rest of the prelim pages are numbered with roman numerals
@@ -214,7 +234,7 @@
 \chapter{Introduction}\label{chapter:intro}
 \input{introduction}
 
-%%%%%%%%%%%%% START OF PAPER CONTENT
+%%%%%%%%%%%% START OF PAPER CONTENT
 
 \part{Reinforcement Learning with Imagined Goals}
 
