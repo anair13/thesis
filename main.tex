@@ -167,6 +167,7 @@
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
+\pagestyle{plain}
 
 \begin{document}
 \frenchspacing
@@ -193,13 +194,19 @@ All rights reserved.
 % according to style guide, abstract must have arabic page # 1
 \setcounter{page}{1}
 \pagenumbering{arabic}
+% \pagestyle{simple}
 \pdfbookmark[0]{Abstract}{Abstract}
-\section*{Abstract}
+% \section*{Abstract}
 \input{abstract}
 
 \clearpage
+
+% the rest of the prelim pages are numbered with roman numerals
+\setcounter{page}{1}%
+\pagenumbering{roman}
+
 \begin{center}
-    \thispagestyle{empty}
+    % \thispagestyle{empty}
     \vspace*{\fill}
     To my parents.
     \vspace*{\fill}
@@ -207,10 +214,6 @@ All rights reserved.
 \clearpage
 
 \newpage
-
-% the rest of the prelim pages are numbered with roman numerals
-\setcounter{page}{1}%
-\pagenumbering{roman}
 
 \pdfbookmark[0]{Acknowledgements}{Acknowledgements}
 \begingroup
