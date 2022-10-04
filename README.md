@@ -1,1 +1,3 @@
-# dissertation
+# Dissertation
+
+UC Berkeley EECS dissertation
